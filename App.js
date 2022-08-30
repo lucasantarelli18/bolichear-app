@@ -4,35 +4,11 @@ import { StyleSheet, Text, TextInput, View, Button, Image } from 'react-native';
 import { supabase } from './supabase';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SplashScreen } from './Screens/SplashScreen'
+import { HomeScreen } from './Screens/HomeScreen'
+import { DetailsScreen } from './Screens/DetailsScreen'
 
 const AuthContext = React.createContext();
-
-function SplashScreen(){
-  return(
-    <View>
-      <Text>Cargando...</Text>
-    </View>
-  );
-}
-
-function HomeScreen({navigation}) {
-  const {signOut} = React.useContext(AuthContext);
-
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
-      <Button 
-        title="Ir a Detalles"
-        onPress={() => { navigation.navigate('Details', {
-          itemId: 86,
-          nombre: 'Pepe',
-        });
-      }}
-      />
-      <Button title="Cerrar sesion" onPress={signOut}/>
-    </View>
-  );
-}
 
 function SignInScreen() {
   const [username, setUsername] = React.useState('');
@@ -54,19 +30,6 @@ function SignInScreen() {
         secureTextEntry
       />
       <Button title="Ingresar" onPress={() => signIn({ username, password })} />
-    </View>
-  );
-}
-
-
-function DetailsScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Details Screen</Text>
-      <Button 
-        title="Ir al Inicio"
-        onPress={() => navigation.navigate('Home')}
-      />
     </View>
   );
 }
@@ -149,7 +112,8 @@ export default function App({navigation}) {
     }),
     []
   );
-
+    //const {signOut} = React.useContext(AuthContext);
+    //<Button title="Cerrar sesion" onPress={signOut}/>
     return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
