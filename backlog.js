@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Text, View, Button } from 'react-native';
 import { supabase } from './supabase';
+import 'react-native-url-polyfill/auto';
 
 //Gets all
 
