@@ -107,6 +107,118 @@ export const insertProvincia = async (nombreProv) => {
   ])
 }
 
+export const insertLocalidad = async (nombreLoc, codPostal, idProv) => {  
+  const { data, error } = await supabase
+  .from('Localidad')
+  .insert([
+    { nombre: nombreLoc,
+      codigoPostal: codPostal,
+      idProvincia: idProv
+    },
+  ])
+}
+
+export const insertDomicilio = async (calle,num, piso, dpto, idLocalidad) => {  
+  const { data, error } = await supabase
+  .from('Domicilio')
+  .insert([
+    { calle: calle,
+      numero: num,
+      piso: piso,
+      dpto: dpto,
+      idLocalidad: idLocalidad
+    },
+  ])
+}
+
+export const insertPromocion = async (nombrePromo, descrip, fHInicio, fHFin, idLocal) => {  
+  const { data, error } = await supabase
+  .from('Promocion')
+  .insert([
+    { nombre: nombrePromo,
+      descripcion: descrip,
+      fechaHoraInicio: fHInicio,
+      fechaHoraFin: fHFin,
+      idLocal: idLocal
+    },
+  ])
+}
+
+export const insertLocal = async (nombreLocal, lat, long, idDueno, idDomicilio) => {  
+  const { data, error } = await supabase
+  .from('Local')
+  .insert([
+    { nombre: nombreLocal,
+      latitud: lat,
+      longitud: long,
+      idDueno: idDueno,
+      idDomicilio: idDomicilio
+    },
+  ])
+}
+
+export const insertAsistencia = async (fecha, idLocal, idUsuario) => {  
+  const { data, error } = await supabase
+  .from('Asistencia')
+  .insert([
+    { fecha: fecha,
+      idLocal: idLocal,
+      idUsuario: idUsuario
+    
+    },
+  ])
+}
+
+export const insertFoto = async (path, idLocal, idEvento, idPromo) => {  
+  const { data, error } = await supabase
+  .from('Foto')
+  .insert([
+    { path: path,
+      idLocal: idLocal,
+      idEvento: idEvento,
+      idPromocion: idPromo
+    },
+  ])
+}
+
+export const insertEvento = async (fecha, nombreEvento, horaInicio, horaFin, idEvento, idLocal) => {  
+  const { data, error } = await supabase
+  .from('Evento')
+  .insert([
+    { fecha: fecha,
+      nombre: nombreEvento,
+      horaInicio: horaInicio,
+      horaFin: horaFin,
+      idEvento: idEvento,
+      idLocal: idLocal
+    },
+  ])
+}
+
+export const insertTipoEvento = async (tipo) => {  
+  const { data, error } = await supabase
+  .from('TipoEvento')
+  .insert([
+    { tipo: tipo},
+  ])
+}
+
+export const insertUsuario = async (nombreUsuario, contraseña) => {  
+  const { data, error } = await supabase
+  .from('Usuario')
+  .insert([
+    { nombre: nombreUsuario,
+      contraseña: contraseña
+    },
+  ])
+}
+
+
+
+
+
+
+
 
 //Updates
 
@@ -125,6 +237,15 @@ export const updateProvincia = async (idProv, nombreProv) => {
   .from('Provincia')
   .update({ nombre: nombreProv })
   .eq('id', idProv)
+}
+
+export const updateLocalidad = async (idLoc, nombreLoc, codPostal) => {  
+  const { data, error } = await supabase
+  .from('Localidad')
+  .update({ nombre: nombreLoc,
+            codigoPostal: codPostal
+  })
+  .eq('id', idLoc)
 }
 
 
