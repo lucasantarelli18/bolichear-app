@@ -34,7 +34,7 @@ function SignInScreen() {
         placeholder="Rango de cobertura"
         value={password}
         onChangeText={setPassword}
-        secureTextEntry
+        //secureTextEntry
       />
       <Button style = {styles.input} title="Buscar" onPress={() => signIn({ username, password })} />
 
