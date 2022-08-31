@@ -8,6 +8,7 @@ import { SplashScreen } from './Screens/SplashScreen'
 import { HomeScreen } from './Screens/HomeScreen'
 import { DetailsScreen } from './Screens/DetailsScreen'
 
+
 const AuthContext = React.createContext();
 
 function SignInScreen() {
