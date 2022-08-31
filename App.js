@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SplashScreen } from './Screens/SplashScreen'
 import { HomeScreen } from './Screens/HomeScreen'
 import { DetailsScreen } from './Screens/DetailsScreen'
+import 'react-native-url-polyfill/auto';
 
 
 const AuthContext = React.createContext();
