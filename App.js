@@ -19,19 +19,27 @@ function SignInScreen() {
   const { signIn } = React.useContext(AuthContext);
 
   return (
-    <View>
+    <View style = {styles.container}>
+      
+      <Image style = {styles.imagen} source={require('./assets/logo.png')} />
+      <View style = {styles.container2}>
       <TextInput
-        placeholder="Nombre de usuario"
+        style = {styles.input}
+        placeholder="Ingresa tu ubicacion"
         value={username}
         onChangeText={setUsername}
+        
       />
       <TextInput
-        placeholder="Contraseña"
+        style = {styles.input}
+        placeholder="Rango de cobertura"
         value={password}
         onChangeText={setPassword}
-        secureTextEntry
+        //secureTextEntry
       />
-      <Button title="Ingresar" onPress={() => signIn({ username, password })} />
+      <Button style = {styles.input} title="Buscar" onPress={() => signIn({ username, password })} />
+
+      </View>
     </View>
   );
 }
@@ -152,5 +160,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    alignContent: "space-between",
+  },
+  container2: {
+    width: '50%',
+    height: '17%',
+    backgroundColor: '#fff',
+  },
+  imagen: {
+    width: 300,
+    height: 300,
+  },
+  input: {
+    marginBottom: 10,
+    paddingLeft: 10,
+    borderWidth: 1,
+    borderRadius: 4,
   },
 });
