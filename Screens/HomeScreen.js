@@ -1,20 +1,55 @@
 import * as React from 'react';
-import { Text, View, Button } from 'react-native';
+import { Text, View, Button, ScrollView, StyleSheet, Alert } from 'react-native';
 import * as Backend from '../backlog';
 
 export function HomeScreen({navigation}) {
 
+const [locales, setLocales] = React.useState([]);
+
   React.useEffect(() => {
     //Tomo provincias
-    Backend.getUsuarios()
+    Backend.getLocales()
     .then((items) => {
       console.log(items)
+      setLocales(items)
     })
   }, [])
 
+  console.log(locales)
+
+  const list = () => {
+    return locales.map((element) => {
+      console.log(element)
+      return (
+        <View style={styles.boliches}>
+          <View style={styles.boliches2}>
+            <Text style={styles.titulos} key="{element.id}">{element.nombre}</Text>
+            <Text style={styles.titulos} > 1km</Text>
+          </View>
+          
+          <View style={styles.boliches2}>
+            <View>
+              <Text >Longitud: {element.longitud}</Text>
+              <Text >Latitud: {element.latitud}</Text>
+            </View>
+            <View>
+            
+            <Button
+              style={styles.botones}
+              title="Ver info"
+              onPress={() => Alert.alert('Proximamente')}
+              />
+            </View>
+          </View>
+        </View>
+      );
+    });
+  };
+
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
+      <Text >Boliches cercanos...</Text>
+      <View style={styles.container}>{list()}</View>
       <Button 
         title="Ir a Detalles"
         onPress={() => { navigation.navigate('Details', {
@@ -23,6 +58,45 @@ export function HomeScreen({navigation}) {
         });
       }}
       />
+      
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    borderRadius: 1,
+    padding: 10,
+    width: '50%',
+    //height: 500,
+
+    //flexWrap: 'wrap',
+    //flexDirection: 'column',
+    //flexWrap: 'no-wrap',
+  },
+  boliches: {
+    flex: 0.1,
+    backgroundColor: "lightgrey",
+    borderWidth: 1,
+    marginBottom: .5,
+    padding: 5,
+    flexWrap: 'no-wrap',
+  },
+  boliches2: {
+    flex: .5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexWrap: 'no-wrap',
+    //marginTop: 9,
+  },
+  titulos: {
+    //width: 500,
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+  botones: {
+    //width: 200,
+  },
+});
