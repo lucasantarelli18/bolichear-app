@@ -1,18 +1,28 @@
 import * as React from 'react';
 import { Text, View, Button, ScrollView, StyleSheet, Alert } from 'react-native';
 import * as Backend from '../backlog';
-import 'react-native-url-polyfill/auto';
+//import SearchableDropdown from 'react-native-searchable-dropdown';
 
-export function HomeScreen({navigation}) {
-
-const [locales, setLocales] = React.useState([]);
-
+export function LocalesScreen({ navigation }) {
+  const [provincias, setProvincias] = React.useState([]);
+  const [provinciaSeleccionada, setProvinciaSeleccionada] = React.useState([]);
+  const [locales, setLocales] = React.useState([]);
+  const [cant, setCant] = React.useState([]); 
   React.useEffect(() => {
-    //Tomo provincias
-    Backend.getLocales()
+    //Tomo los locales del user
+    Backend.getLocalesXUser(1)
     .then((items) => {
-      console.log(items)
       setLocales(items)
+      if (items.length > 0) {
+        setCant(true)
+      } else {
+        setCant(false)
+      }
+      
+    })
+    Backend.getProvincias()
+    .then((items) => {
+      setProvincias(items)
     })
   }, [])
 
@@ -44,26 +54,29 @@ const [locales, setLocales] = React.useState([]);
     });
   };
 
+
   return (
+    <>
+    {cant ? (
+    //Tiene locales
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text >Boliches cercanos...</Text>
+      <Text>Locales Screen</Text>
       <View style={styles.container}>{list()}</View>
-      <Button 
-        title="Ir a Detalles"
-        onPress={() => { navigation.navigate('Details', {
-          itemId: 86,
-          nombre: 'Pepe',
-        });
-      }}
-      />
-      <Button 
-        title="Ir a Mi Local"
-        onPress={() => { navigation.navigate('Locales');
-      }}
-      />
     </View>
+      
+    ) : (
+    //No tiene locales
+    <>
+
+      <Text>Alta de locales</Text>
+ 
+        </>
+    )
+    }
+    </>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

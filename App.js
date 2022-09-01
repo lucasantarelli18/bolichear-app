@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SplashScreen } from './Screens/SplashScreen'
 import { HomeScreen } from './Screens/HomeScreen'
 import { DetailsScreen } from './Screens/DetailsScreen'
+import { LocalesScreen } from './Screens/LocalesScreen'
 import 'react-native-url-polyfill/auto';
 
 
@@ -145,8 +146,9 @@ export default function App({navigation}) {
           ) : ( 
             // User is signed in
           <>
-            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Home" component={HomeScreen} options={{title:'Inicio'}}/>
             <Stack.Screen name="Details" component={DetailsScreen} />
+            <Stack.Screen name="Locales" component={LocalesScreen} options={{title:'Mi Local'}}/>
           </> )}
         </Stack.Navigator>
       </NavigationContainer>

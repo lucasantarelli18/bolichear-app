@@ -3,6 +3,15 @@ import { Text, View, Button } from 'react-native';
 import { supabase } from './supabase';
 import 'react-native-url-polyfill/auto';
 
+export const getLocalesXUser = async (idDueno) => {  
+  console.log(idDueno) 
+  let { data: Local, error } = await supabase
+  .from('Local')
+  .select('*')
+  .eq('idDueño', idDueno)
+  return Local
+}
+
 //Gets all
 
 /*
@@ -213,11 +222,6 @@ export const insertUsuario = async (nombreUsuario, contraseña) => {
     },
   ])
 }
-
-
-
-
-
 
 
 
