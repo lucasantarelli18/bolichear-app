@@ -4,7 +4,6 @@ import { supabase } from './supabase';
 import 'react-native-url-polyfill/auto';
 
 export const getLocalesXUser = async (idDueno) => {  
-  console.log(idDueno) 
   let { data: Local, error } = await supabase
   .from('Local')
   .select('*')
@@ -12,6 +11,13 @@ export const getLocalesXUser = async (idDueno) => {
   return Local
 }
 
+export const getLocalidadesXProv = async (idProv) => {  
+  let { data: Localidad, error } = await supabase
+  .from('Localidad')
+  .select('*')
+  .eq('idProvincia', idProv)
+  return Localidad
+}
 //Gets all
 
 /*
@@ -155,6 +161,7 @@ export const insertPromocion = async (nombrePromo, descrip, fHInicio, fHFin, idL
 }
 
 export const insertLocal = async (nombreLocal, lat, long, idDueno, idDomicilio) => {  
+  console.log(nombreLocal, lat, long, idDueno, idDomicilio);
   const { data, error } = await supabase
   .from('Local')
   .insert([

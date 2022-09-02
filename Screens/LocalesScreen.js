@@ -1,16 +1,32 @@
 import * as React from 'react';
-import { Text, View, Button, ScrollView, StyleSheet, Alert } from 'react-native';
+import { Text, TextInput, View, Button, ScrollView, StyleSheet, Alert } from 'react-native';
 import * as Backend from '../backlog';
-//import SearchableDropdown from 'react-native-searchable-dropdown';
+import DropDownPicker from 'react-native-dropdown-picker';
+import Constants from 'expo-constants';
 
 export function LocalesScreen({ navigation }) {
-  const [provincias, setProvincias] = React.useState([]);
-  const [provinciaSeleccionada, setProvinciaSeleccionada] = React.useState([]);
+
+  //traer del login
+  const idDueno = 5;
+
+  //traer del home
+  const lat = -34.921296;
+  const long = -57.954208;
+  const idDomicilio = 3;
+
+  const [faltaIngresoNombre, setFaltaIngresoNombre] = React.useState(true);
+//  const [faltaIngresoLoc, setFaltaIngresoLoc] = React.useState(true);
+
+//  const [openLoc, setOpenLoc] = React.useState(false);
+//  const [valueLoc, setValueLoc] = React.useState(null); //para el picker
+//  const [localidadSeleccionada, setLocalidadSeleccionada] = React.useState([]);
   const [locales, setLocales] = React.useState([]);
+  const [nombreLocal, setNombreLocal] = React.useState([]);
   const [cant, setCant] = React.useState([]); 
+
   React.useEffect(() => {
     //Tomo los locales del user
-    Backend.getLocalesXUser(1)
+    Backend.getLocalesXUser(idDueno)
     .then((items) => {
       setLocales(items)
       if (items.length > 0) {
@@ -20,11 +36,14 @@ export function LocalesScreen({ navigation }) {
       }
       
     })
-    Backend.getProvincias()
-    .then((items) => {
-      setProvincias(items)
-    })
   }, [])
+
+// const itemsLoc = [
+//  {label:"La Plata", value:1},
+//  {label:"Quilmes", value:2},
+//  {label:"Bernal", value:3}
+//  ]
+
 
   const list = () => {
     return locales.map((element) => {
@@ -67,9 +86,44 @@ export function LocalesScreen({ navigation }) {
     ) : (
     //No tiene locales
     <>
-
       <Text>Alta de locales</Text>
- 
+
+      <TextInput
+        onChangeText={text=>{setNombreLocal(text),
+          setFaltaIngresoNombre(false)
+        }}
+        placeholder="Ingrese nombre del local"
+      />
+
+ {/*     <Text>Localidad:</Text>
+      <DropDownPicker
+        open={openLoc}
+        value={valueLoc}
+        items={itemsLoc}
+        setOpen={setOpenLoc}
+        closeAfterSelecting={true}
+        disabled={faltaIngresoProv}
+        setValue={setValueLoc}
+        searchable={true}
+        searchPlaceholder="Buscar..."
+        onSelectItem={(value)=>{setLocalidadSeleccionada(value),
+          setFaltaIngresoLoc(false)
+    }}
+        placeholder="Seleccione una localidad"
+        />
+*/}
+        <Button 
+        title="Dar de Alta"
+        onPress={() => { 
+//          console.log(faltaIngresoNombre, faltaIngresoLoc);
+          if(faltaIngresoNombre/*||faltaIngresoLoc*/){
+            Alert.alert('Complete los datos')
+          }else{
+          Backend.insertLocal(nombreLocal, lat, long, idDueno, idDomicilio) }}
+
+          }
+        />
+
         </>
     )
     }
