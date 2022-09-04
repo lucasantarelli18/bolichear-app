@@ -63,8 +63,13 @@ export function LocalesScreen({ navigation }) {
       <Text>Locales Screen</Text>
       <View style={styles.container}>{list()}</View>
       <Button 
-        title="Mis promociones"
+        title="Nueva Promocion"
         onPress={() => { navigation.navigate('Promociones');
+      }}
+      />
+      <Button 
+        title="Mis Promociones"
+        onPress={() => { navigation.navigate('VerPromociones');
       }}
       />
     </View>

@@ -9,6 +9,7 @@ import { HomeScreen } from './Screens/HomeScreen'
 import { DetailsScreen } from './Screens/DetailsScreen'
 import { LocalesScreen } from './Screens/LocalesScreen'
 import { PromocionesScreen } from './Screens/PromocionesScreen';
+import { VerPromocionesScreen } from './Screens/VerPromocionesScreen';
 import 'react-native-url-polyfill/auto';
 
 
@@ -151,6 +152,7 @@ export default function App({navigation}) {
             <Stack.Screen name="Details" component={DetailsScreen} />
             <Stack.Screen name="Locales" component={LocalesScreen} options={{title:'Mi Local'}}/>
             <Stack.Screen name="Promociones" component={PromocionesScreen} options={{title:'Nueva Promocion'}}/>
+            <Stack.Screen name="VerPromociones" component={VerPromocionesScreen} options={{title:'Promociones'}}/>
           </> )}
         </Stack.Navigator>
       </NavigationContainer>

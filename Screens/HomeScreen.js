@@ -35,7 +35,7 @@ const [locales, setLocales] = React.useState([]);
             <Button
               style={styles.botones}
               title="Ver info"
-              onPress={() => Alert.alert('Proximamente')}
+              onPress={() => { navigation.navigate('VerPromociones');}}
               />
             </View>
           </View>
