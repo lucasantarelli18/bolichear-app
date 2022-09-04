@@ -255,7 +255,7 @@ export const updateLocalidad = async (idLoc, nombreLoc, codPostal) => {
 
 export const updatePromocion = async (nombrePromo, descrip, fHInicio, fHFin, idLocal) => {  
   const { data, error } = await supabase
-  .from('Localidad')
+  .from('Promocion')
   .update({ 
     nombre: nombrePromo,
     descripcion: descrip,
@@ -267,4 +267,13 @@ export const updatePromocion = async (nombrePromo, descrip, fHInicio, fHFin, idL
 }
 
 
+
+//DELETES
+
+export const deletePromocion = async (idPromo) =>{
+  const { data, error } = await supabase
+  .from('Promocion')
+  .delete()
+  .match({ id: idPromo })
+}
 
