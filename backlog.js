@@ -3,6 +3,30 @@ import { Text, View, Button } from 'react-native';
 import { supabase } from './supabase';
 import 'react-native-url-polyfill/auto';
 
+
+
+//Get Filtrado
+export const getLocalxDomicilio = async () => { 
+const { data, error } = await supabase.from('Local').select(`
+    *,
+    Domicilio (
+      *
+    )
+  `)
+  return data
+    }
+
+//Obtiene domicilio pasado como param
+/*
+export const getLocalxDomicilio = async () => {  
+  let { data: Local, error } = await supabase
+  .from('Local')
+  .select('*, Domicilio!inner(*)')
+  .eq('Domicilio.id', 'Local.idDomicilio')
+  return Local
+}
+
+*/
 //Gets all
 
 /*
@@ -37,6 +61,7 @@ export const getDomicilios = async () => {
   .select('*')
   return Domicilio
 }
+
 
 export const getPromociones = async () => {  
   let { data: Promocion, error } = await supabase

@@ -1,16 +1,26 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TextInput, View, Button, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, Image, ImageBackground, Pressable } from 'react-native';
 import { supabase } from './supabase';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SplashScreen } from './Screens/SplashScreen'
 import { HomeScreen } from './Screens/HomeScreen'
+import { UbicationScreen } from './Screens/UbicationScreen'
 import { DetailsScreen } from './Screens/DetailsScreen'
 import 'react-native-url-polyfill/auto';
+import MapView, { Marker, Polyline } from 'react-native-maps';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import ImageBlurShadow from 'react-native-image-blur-shadow';
+import * as Font from 'expo-font';
+
 
 
 const AuthContext = React.createContext();
+const image = { uri: "./assets/FondoDesenfocado.jpg" };
+
+
+
 
 function SignInScreen() {
   const [username, setUsername] = React.useState('');
@@ -18,37 +28,44 @@ function SignInScreen() {
 
   const { signIn } = React.useContext(AuthContext);
 
+
   return (
-    <View style = {styles.container}>
-      
-      <Image style = {styles.imagen} source={require('./assets/logo.png')} />
-      <View style = {styles.container2}>
-      <TextInput
-        style = {styles.input}
-        placeholder="Ingresa tu ubicacion"
-        value={username}
-        onChangeText={setUsername}
-        
-      />
-      <TextInput
-        style = {styles.input}
-        placeholder="Rango de cobertura"
-        value={password}
-        onChangeText={setPassword}
+
+    <ImageBackground source={require('./assets/fondoLogIn7.jpg')} style={styles.container}>
+
+
+      <Image style={styles.imagen} source={require('./assets/logo.png')} />
+      <View style={styles.container2}>
+        <TextInput
+          style={styles.input}
+          placeholder="Usuario"
+          value={username}
+          onChangeText={setUsername}
         //secureTextEntry
-      />
-      <Button style = {styles.input} title="Buscar" onPress={() => signIn({ username, password })} />
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Contraseña"
+          value={password}
+          onChangeText={setPassword}
+        //secureTextEntry
+        />
+        <Pressable style={styles.button} onPress={() => signIn({ username, password })}>
+          <Text style={styles.text}>LOG IN</Text>
+        </Pressable>
 
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 
 const Stack = createNativeStackNavigator();
 
-export default function App({navigation}) {
+export default function App({ navigation }) {
 
-    const [state, dispatch] = React.useReducer(
+  const [fontsLoaded, setFontsLoaded] = React.useState(false);
+
+  const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
         case 'RESTORE_TOKEN':
@@ -97,6 +114,11 @@ export default function App({navigation}) {
       dispatch({ type: 'RESTORE_TOKEN', token: userToken });
     };
 
+    if (!fontsLoaded){
+      Font.loadAsync({
+        'Roboto-Medium': require('./assets/fonts/Roboto-Medium.ttf'),
+      });
+    }
     bootstrapAsync();
   }, []);
 
@@ -122,9 +144,9 @@ export default function App({navigation}) {
     }),
     []
   );
-    //const {signOut} = React.useContext(AuthContext);
-    //<Button title="Cerrar sesion" onPress={signOut}/>
-    return (
+  //const {signOut} = React.useContext(AuthContext);
+  //<Button title="Cerrar sesion" onPress={signOut}/>
+  return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
         <Stack.Navigator>
@@ -142,12 +164,13 @@ export default function App({navigation}) {
                 animationTypeForReplace: state.isSignout ? 'pop' : 'push',
               }}
             />
-          ) : ( 
+          ) : (
             // User is signed in
-          <>
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Details" component={DetailsScreen} />
-          </> )}
+            <>
+              <Stack.Screen name="Ubication" component={UbicationScreen} />
+              <Stack.Screen name="Home" component={HomeScreen} />
+              <Stack.Screen name="Details" component={DetailsScreen} />
+            </>)}
         </Stack.Navigator>
       </NavigationContainer>
     </AuthContext.Provider>
@@ -155,26 +178,65 @@ export default function App({navigation}) {
 }
 
 const styles = StyleSheet.create({
+  test: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    //backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
-    alignContent: "space-between",
+    //justifyContent: 'center',
+    //alignContent: "space-between",
   },
   container2: {
     width: '50%',
-    height: '17%',
-    backgroundColor: '#fff',
+    height: 132,
+    //backgroundColor: '#fff',
+    elevation: 10,
   },
   imagen: {
     width: 300,
     height: 300,
   },
   input: {
+    height: 39,
     marginBottom: 10,
     paddingLeft: 10,
     borderWidth: 1,
     borderRadius: 4,
+    fontSize: 16,
+    fontFamily: 'Roboto-Medium',
+    //borderColor: 'white',
+  },
+  places: {
+    //flex: 0,
+    //position: "absolute",
+    width: "50%",
+    //zIndex: 1,
+    //backgroundColor: "black",
+  },
+  image: {
+    //flex: 1,
+    //justifyContent: "center"
+    alignItems: 'center',
+    flexGrow: 1,
+    height: '100%',
+  },
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: 'black',
+    fontFamily: 'Roboto-Medium',
+  },
+  text: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
   },
 });
