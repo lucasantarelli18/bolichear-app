@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import { Button, View, Text, StyleSheet, Pressable, Image,Modal} from "react-native";
+import { Button, View, Text, StyleSheet, Pressable, Image} from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as Backend from '../backlog';
-import Moment from 'moment';
 import 'moment-timezone';
 import 'react-native-url-polyfill/auto';
 import { Input, Block} from "galio-framework";
-import { TextInput } from "react-native-web";
 import * as ImagePicker from 'expo-image-picker';
-import {  Card } from 'react-native-elements';
+import {  Card, Icon } from 'react-native-elements';
+import { ButtonGroup } from "@rneui/themed";
 
 
 export function PromocionesScreen({navigation}) {
@@ -45,12 +44,11 @@ export function PromocionesScreen({navigation}) {
     setFechaYHoraIncio(false);
   };
 
-  const handleConfirm = (e) => {
-    console.log("A date has been picked: ", e);
-    setfechaYHoraFin(e);
+  const handleConfirm = (datetime) => {
+    console.log("A date has been picked: ", datetime);
     hideDateTimePicker();
   };
-  const handleFormSubmit = (e) =>{
+/*   const handleFormSubmit = (e) =>{
     Backend.insertPromocion(promociones.nombre, promociones.descripcion)
   }
  
@@ -65,7 +63,7 @@ export function PromocionesScreen({navigation}) {
       idLocal: 'idLocal'
     })
     console.log(promociones)
-  }
+  } */
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -88,29 +86,30 @@ export function PromocionesScreen({navigation}) {
         <Card>
           <Input style={styles.INPUT} placeholder="Nombre" name="nombre"onChange={handleConfirm}></Input>
           <Input style={styles.INPUT} placeholder="Inserte la descripcion" name="descripcion" onChange={handleConfirm}></Input>
-          <Block alignSelf='center'>
-          <Button style = {styles.input} title="Fecha y hora de inicio" onPress={showDateTimePicker} />
+          
+          <View alignSelf='center' style={styles.fixToText}>
+
+          
+          <Button style = {styles.input} title="Inicio" onPress={showDateTimePicker}/> 
           <DateTimePickerModal
             isVisible={fechaYHoraIncio}
             mode="datetime"
             onConfirm={handleConfirm}
             onCancel={hideDateTimePicker}
           />
-          </Block>
-          <Block alignSelf='center'>
-          <Button style = {styles.input} title="Fecha y hora de fin" onPress={showDateTimePicker} />
+          <Button style = {styles.input} title="Fin" onPress={showDateTimePicker} />
           <DateTimePickerModal
             isVisible={fechaYHoraFin}
             mode="datetime"
             onConfirm={handleConfirm}
             onCancel={hideDateTimePicker}
           />
-          </Block>     
+          </View> 
           <Button title="Cargar imagen" onPress={pickImage} />
           {image && <Image source={{ uri: image }} style={{ width: 350, height: 200 }} />}
 
-          <Pressable style={styles.button} onPress={nuevaPromo}>
-              <Text style={styles.text}>Cargar</Text>
+          <Pressable style={styles.button}>
+              <Text style={styles.text}>CARGAR</Text>
           </Pressable>
         </Card>
 
@@ -162,5 +161,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
     paddingVertical: 110
   },
-
+  fixToText: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding:10,
+    
+  }
 });
