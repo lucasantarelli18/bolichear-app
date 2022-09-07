@@ -1,45 +1,46 @@
-import * as React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TextInput, View, Button, Image } from 'react-native';
-import { supabase } from './supabase';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { SplashScreen } from './Screens/SplashScreen'
-import { HomeScreen } from './Screens/HomeScreen'
-import { DetailsScreen } from './Screens/DetailsScreen'
-import { LocalesScreen } from './Screens/LocalesScreen'
-import 'react-native-url-polyfill/auto';
-
+import * as React from "react";
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, TextInput, View, Button, Image } from "react-native";
+import { supabase } from "./supabase";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { SplashScreen } from "./Screens/SplashScreen";
+import { HomeScreen } from "./Screens/HomeScreen";
+import { DetailsScreen } from "./Screens/DetailsScreen";
+import { LocalesScreen } from "./Screens/LocalesScreen";
+import { EventosScreen } from "./Screens/EventosScreen";
+import "react-native-url-polyfill/auto";
 
 const AuthContext = React.createContext();
 
 function SignInScreen() {
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
   const { signIn } = React.useContext(AuthContext);
 
   return (
-    <View style = {styles.container}>
-      
-      <Image style = {styles.imagen} source={require('./assets/logo.png')} />
-      <View style = {styles.container2}>
-      <TextInput
-        style = {styles.input}
-        placeholder="Ingresa tu ubicacion"
-        value={username}
-        onChangeText={setUsername}
-        
-      />
-      <TextInput
-        style = {styles.input}
-        placeholder="Rango de cobertura"
-        value={password}
-        onChangeText={setPassword}
-        //secureTextEntry
-      />
-      <Button style = {styles.input} title="Buscar" onPress={() => signIn({ username, password })} />
-
+    <View style={styles.container}>
+      <Image style={styles.imagen} source={require("./assets/logo.png")} />
+      <View style={styles.container2}>
+        <TextInput
+          style={styles.input}
+          placeholder="Ingresa tu ubicacion"
+          value={username}
+          onChangeText={setUsername}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Rango de cobertura"
+          value={password}
+          onChangeText={setPassword}
+          //secureTextEntry
+        />
+        <Button
+          style={styles.input}
+          title="Buscar"
+          onPress={() => signIn({ username, password })}
+        />
       </View>
     </View>
   );
@@ -47,24 +48,23 @@ function SignInScreen() {
 
 const Stack = createNativeStackNavigator();
 
-export default function App({navigation}) {
-
-    const [state, dispatch] = React.useReducer(
+export default function App({ navigation }) {
+  const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
-        case 'RESTORE_TOKEN':
+        case "RESTORE_TOKEN":
           return {
             ...prevState,
             userToken: action.token,
             isLoading: false,
           };
-        case 'SIGN_IN':
+        case "SIGN_IN":
           return {
             ...prevState,
             isSignout: false,
             userToken: action.token,
           };
-        case 'SIGN_OUT':
+        case "SIGN_OUT":
           return {
             ...prevState,
             isSignout: true,
@@ -95,7 +95,7 @@ export default function App({navigation}) {
 
       // This will switch to the App screen or Auth screen and this loading
       // screen will be unmounted and thrown away.
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+      dispatch({ type: "RESTORE_TOKEN", token: userToken });
     };
 
     bootstrapAsync();
@@ -109,23 +109,23 @@ export default function App({navigation}) {
         // After getting token, we need to persist the token using `SecureStore` or any other encrypted storage
         // In the example, we'll use a dummy token
 
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+        dispatch({ type: "SIGN_IN", token: "dummy-auth-token" });
       },
-      signOut: () => dispatch({ type: 'SIGN_OUT' }),
+      signOut: () => dispatch({ type: "SIGN_OUT" }),
       signUp: async (data) => {
         // In a production app, we need to send user data to server and get a token
         // We will also need to handle errors if sign up failed
         // After getting token, we need to persist the token using `SecureStore` or any other encrypted storage
         // In the example, we'll use a dummy token
 
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+        dispatch({ type: "SIGN_IN", token: "dummy-auth-token" });
       },
     }),
     []
   );
-    //const {signOut} = React.useContext(AuthContext);
-    //<Button title="Cerrar sesion" onPress={signOut}/>
-    return (
+  //const {signOut} = React.useContext(AuthContext);
+  //<Button title="Cerrar sesion" onPress={signOut}/>
+  return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
         <Stack.Navigator>
@@ -138,18 +138,32 @@ export default function App({navigation}) {
               name="SignIn"
               component={SignInScreen}
               options={{
-                title: 'Sign in',
+                title: "Sign in",
                 // When logging out, a pop animation feels intuitive
-                animationTypeForReplace: state.isSignout ? 'pop' : 'push',
+                animationTypeForReplace: state.isSignout ? "pop" : "push",
               }}
             />
-          ) : ( 
+          ) : (
             // User is signed in
-          <>
-            <Stack.Screen name="Home" component={HomeScreen} options={{title:'Inicio'}}/>
-            <Stack.Screen name="Details" component={DetailsScreen} />
-            <Stack.Screen name="Locales" component={LocalesScreen} options={{title:'Mi Local'}}/>
-          </> )}
+            <>
+              <Stack.Screen
+                name="Home"
+                component={HomeScreen}
+                options={{ title: "Inicio" }}
+              />
+              <Stack.Screen name="Details" component={DetailsScreen} />
+              <Stack.Screen
+                name="Locales"
+                component={LocalesScreen}
+                options={{ title: "Mi Local" }}
+              />
+              <Stack.Screen
+                name="Eventos"
+                component={EventosScreen}
+                options={{ title: "Mis Eventos" }}
+              />
+            </>
+          )}
         </Stack.Navigator>
       </NavigationContainer>
     </AuthContext.Provider>
@@ -159,15 +173,15 @@ export default function App({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
     alignContent: "space-between",
   },
   container2: {
-    width: '50%',
-    height: '17%',
-    backgroundColor: '#fff',
+    width: "50%",
+    height: "17%",
+    backgroundColor: "#fff",
   },
   imagen: {
     width: 300,
