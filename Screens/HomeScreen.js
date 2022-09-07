@@ -2,20 +2,21 @@ import * as React from 'react';
 import { Text, View, Button, ScrollView, StyleSheet, Alert, ImageBackground, Pressable } from 'react-native';
 import * as Backend from '../backlog';
 import 'react-native-url-polyfill/auto';
-import MapView, { Marker, Polyline } from 'react-native-maps';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
+//import MapView, { Marker, Polyline } from 'react-native-maps';
+//import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+//import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 
 export function HomeScreen({ route, navigation }) {
 
   const [locales, setLocales] = React.useState([]);
-  const { latitud, longitud, rango } = route.params;
+  const { calle, numero, localidad, latitud, longitud, rango } = route.params;
 
+  const [idLocalidad, setIdLocalidad] = React.useState([]);
 
   React.useEffect(() => {
     Backend.getLocalxDomicilio()
       .then((items) => {
-        console.log(items)
+//        console.log(items)
 
         const arr = []
         for (const i in items) {
@@ -27,15 +28,18 @@ export function HomeScreen({ route, navigation }) {
 
           if (dist < rango) {
             //console.log("dentro del rango")
-            console.log(items[i].dist = distkm)
+//            console.log(items[i].dist = distkm)
             arr.push(items[i])
           } else {
             //console.log("fuera del rango")
           }
         }
         setLocales(arr)
-
       })
+      Backend.getLocalidadXNombre(localidad).then((items)=>{
+        setIdLocalidad(items[0].id);
+      })
+
   }, [])
 
   const filtradoLocales = (query) => {
@@ -45,9 +49,9 @@ export function HomeScreen({ route, navigation }) {
   };
   const list = () => {
     return locales.map((element) => {
-      console.log(element)
-      console.log(element.id)
-      console.log(element.nombre)
+//      console.log(element)
+//      console.log(element.id)
+//      console.log(element.nombre)
 
       return (
         <ImageBackground source={require('../assets/fondoBoliches3.jpg')} blurRadius={3} style={styles.boliches}>
@@ -79,8 +83,11 @@ export function HomeScreen({ route, navigation }) {
       <View style={styles.container}>{list()}</View>
       <Pressable style={styles.button} onPress={() => {
         navigation.navigate('Locales', {
-          itemId: 86,
-          nombre: 'Pepe',
+          latitud: latitud,
+          longitud: longitud,
+          idLocalidad: idLocalidad,
+          calle: calle,
+          numero: numero,
         });
 
       }}>

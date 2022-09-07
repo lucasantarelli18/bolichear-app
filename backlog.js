@@ -3,7 +3,6 @@ import { Text, View, Button } from 'react-native';
 import { supabase } from './supabase';
 import 'react-native-url-polyfill/auto';
 
-<<<<<<< HEAD
 export const getLocalesXUser = async (idDueno) => {  
   let { data: Local, error } = await supabase
   .from('Local')
@@ -19,8 +18,14 @@ export const getLocalidadesXProv = async (idProv) => {
   .eq('idProvincia', idProv)
   return Localidad
 }
-=======
 
+export const getLocalidadXNombre = async (nombre) => {  
+  let { data: Localidad, error } = await supabase
+  .from('Localidad')
+  .select('*')
+  .eq('nombre', nombre)
+  return Localidad
+}
 
 //Get Filtrado
 export const getLocalxDomicilio = async () => { 
@@ -33,6 +38,14 @@ const { data, error } = await supabase.from('Local').select(`
   return data
     }
 
+export const getUltimoDomicilio = async () => { 
+const { data, error, count } = await supabase.from('Domicilio')
+  .select('id')
+  .order('id', {ascending:false})
+  return data
+    }
+
+
 //Obtiene domicilio pasado como param
 /*
 export const getLocalxDomicilio = async () => {  
@@ -44,7 +57,7 @@ export const getLocalxDomicilio = async () => {
 }
 
 */
->>>>>>> master
+
 //Gets all
 
 /*
@@ -162,7 +175,7 @@ export const insertLocalidad = async (nombreLoc, codPostal, idProv) => {
   ])
 }
 
-export const insertDomicilio = async (calle,num, piso, dpto, idLocalidad) => {  
+export const insertDomicilio = async (calle, num, piso, dpto, idLocalidad) => {  
   const { data, error } = await supabase
   .from('Domicilio')
   .insert([
@@ -170,6 +183,17 @@ export const insertDomicilio = async (calle,num, piso, dpto, idLocalidad) => {
       numero: num,
       piso: piso,
       dpto: dpto,
+      idLocalidad: idLocalidad
+    },
+  ])
+}
+
+export const insertDomicilioSinPiso = async (calle, num, idLocalidad) => {  
+  const { data, error } = await supabase
+  .from('Domicilio')
+  .insert([
+    { calle: calle,
+      numero: num,
       idLocalidad: idLocalidad
     },
   ])
@@ -188,18 +212,19 @@ export const insertPromocion = async (nombrePromo, descrip, fHInicio, fHFin, idL
   ])
 }
 
-export const insertLocal = async (nombreLocal, lat, long, idDueno, idDomicilio) => {  
-  console.log(nombreLocal, lat, long, idDueno, idDomicilio);
+export const insertLocal = async (nombreLocal, lat, long, idDuen, idDomicili) => {  
+  console.log(nombreLocal, lat, long, idDuen, idDomicili);
   const { data, error } = await supabase
   .from('Local')
   .insert([
     { nombre: nombreLocal,
       latitud: lat,
       longitud: long,
-      idDueno: idDueno,
-      idDomicilio: idDomicilio
+      idDueño: parseInt(idDuen),
+      idDomicilio: parseInt(idDomicili),
     },
   ])
+  if(error){console.log(error)}
 }
 
 export const insertAsistencia = async (fecha, idLocal, idUsuario) => {  

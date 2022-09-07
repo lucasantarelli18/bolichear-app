@@ -2,13 +2,16 @@ import * as React from 'react';
 import { Text, View, Button, ScrollView, StyleSheet, Alert, Image, TextInput, Pressable, ImageBackground } from 'react-native';
 import * as Backend from '../backlog';
 import 'react-native-url-polyfill/auto';
-import MapView, { Marker, Polyline } from 'react-native-maps';
+//import MapView, { Marker, Polyline } from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { RealtimeClient } from '@supabase/supabase-js';
 
 export function UbicationScreen({ navigation }) {
 
   const [ubicacion, setUbicacion] = React.useState({
+    calle:"Sarmiento",
+    numero: 420,
+    localidad: "La Plata",
     latitude: -34.934941,
     longitude: -57.967533,
     latitudeDelta: 0.0922,
@@ -19,6 +22,9 @@ export function UbicationScreen({ navigation }) {
 
   const onPress = () => {
     navigation.navigate('Home', {
+      calle: ubicacion.calle,
+      numero: ubicacion.numero,
+      localidad: ubicacion.localidad,
       latitud: ubicacion.latitude,
       longitud: ubicacion.longitude,
       rango: rango,
@@ -38,14 +44,29 @@ export function UbicationScreen({ navigation }) {
             placeholder='Ubicacion'
             fetchDetails={true}
             onPress={(data, details = null) => {
-              console.log(data, details);
-              setUbicacion({
+              //console.log(data, details);
+              if (details.address_components[0].long_name == "AGN"){
+                setUbicacion({
+                calle: details.address_components[2].long_name,
+                numero: details.address_components[1].long_name,
+                localidad: details.address_components[3].long_name,
                 latitude: details.geometry.location.lat,
                 longitude: details.geometry.location.lng,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421
               })
-              console.log(ubicacion)
+              }else{
+               setUbicacion({
+                calle: details.address_components[1].long_name,
+                numero: details.address_components[0].long_name,
+                localidad: details.address_components[2].long_name,
+                latitude: details.geometry.location.lat,
+                longitude: details.geometry.location.lng,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421
+              }) 
+              }
+              
             }}
             query={{
               key: process.env.GOOGLE_MAPS_KEY,

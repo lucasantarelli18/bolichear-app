@@ -1,18 +1,19 @@
 import * as React from 'react';
-import { Text, TextInput, View, Button, ScrollView, StyleSheet, Alert } from 'react-native';
+import { Text, View, Button, ScrollView, StyleSheet, Alert, ImageBackground, Pressable } from 'react-native';
 import * as Backend from '../backlog';
-import DropDownPicker from 'react-native-dropdown-picker';
-import Constants from 'expo-constants';
+//import DropDownPicker from 'react-native-dropdown-picker';
+//import Constants from 'expo-constants';
 
-export function LocalesScreen({ navigation }) {
+export function LocalesScreen({ route, navigation }) {
+
+  const { latitud, longitud, idLocalidad, calle, numero } = route.params;
 
   //traer del login
   const idDueno = 5;
 
   //traer del home
-  const lat = -34.921296;
-  const long = -57.954208;
-  const idDomicilio = 3;
+//  const lat = -34.921296;
+//  const long = -57.954208;
 
   const [faltaIngresoNombre, setFaltaIngresoNombre] = React.useState(true);
 //  const [faltaIngresoLoc, setFaltaIngresoLoc] = React.useState(true);
@@ -21,6 +22,7 @@ export function LocalesScreen({ navigation }) {
 //  const [valueLoc, setValueLoc] = React.useState(null); //para el picker
 //  const [localidadSeleccionada, setLocalidadSeleccionada] = React.useState([]);
   const [locales, setLocales] = React.useState([]);
+  const [idDomicilio, setIdDomicilio] = React.useState([]);
   const [nombreLocal, setNombreLocal] = React.useState([]);
   const [cant, setCant] = React.useState([]); 
 
@@ -34,6 +36,14 @@ export function LocalesScreen({ navigation }) {
       } else {
         setCant(false)
       }
+
+    Backend.insertDomicilioSinPiso(calle, numero, idLocalidad)
+    .then((items)=>{})
+
+    Backend.getUltimoDomicilio()
+    .then((items)=>{
+      setIdDomicilio(items[0].id);
+    })
       
     })
   }, [])
@@ -48,27 +58,25 @@ export function LocalesScreen({ navigation }) {
   const list = () => {
     return locales.map((element) => {
       return (
-        <View style={styles.boliches}>
+        <ImageBackground source={require('../assets/fondoBoliches3.jpg')} blurRadius={3} style={styles.boliches}>
+
           <View style={styles.boliches2}>
             <Text style={styles.titulos} key="{element.id}">{element.nombre}</Text>
-            <Text style={styles.titulos} > 1km</Text>
+            <Text style={styles.km} > {element.dist} km</Text>
           </View>
-          
-          <View style={styles.boliches2}>
+
+          <View style={styles.boliches3}>
             <View>
-              <Text >Longitud: {element.longitud}</Text>
-              <Text >Latitud: {element.latitud}</Text>
+              <Text style={styles.info}> Direccion: {element.Domicilio.calle} {element.Domicilio.numero}</Text>
             </View>
             <View>
-            
-            <Button
-              style={styles.botones}
-              title="Ver info"
-              onPress={() => Alert.alert('Proximamente')}
-              />
+
+              <Pressable style={styles.button2} onPress={() => Alert.alert('Proximamente')}>
+                <Text style={styles.text}>VER INFO</Text>
+              </Pressable>
             </View>
           </View>
-        </View>
+        </ImageBackground>
       );
     });
   };
@@ -78,51 +86,26 @@ export function LocalesScreen({ navigation }) {
     <>
     {cant ? (
     //Tiene locales
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Locales Screen</Text>
+    <ImageBackground source={require('../assets/fondoLogIn3.jpg')} blurRadius={3} style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <View style={styles.container}>{list()}</View>
-    </View>
+      
+    </ImageBackground>
       
     ) : (
     //No tiene locales
     <>
-      <Text>Alta de locales</Text>
+      <Text style={styles.titulos}>Todavía no tenes registrado un local</Text>
+      <Pressable style={styles.button} onPress={() => {
+        navigation.navigate('AltaLocal', {
+          latitud: latitud,
+          longitud: longitud,
+          idDomicilio: idDomicilio,
+          idDueno: idDueno,
+        });
 
-      <TextInput
-        onChangeText={text=>{setNombreLocal(text),
-          setFaltaIngresoNombre(false)
-        }}
-        placeholder="Ingrese nombre del local"
-      />
-
- {/*     <Text>Localidad:</Text>
-      <DropDownPicker
-        open={openLoc}
-        value={valueLoc}
-        items={itemsLoc}
-        setOpen={setOpenLoc}
-        closeAfterSelecting={true}
-        disabled={faltaIngresoProv}
-        setValue={setValueLoc}
-        searchable={true}
-        searchPlaceholder="Buscar..."
-        onSelectItem={(value)=>{setLocalidadSeleccionada(value),
-          setFaltaIngresoLoc(false)
-    }}
-        placeholder="Seleccione una localidad"
-        />
-*/}
-        <Button 
-        title="Dar de Alta"
-        onPress={() => { 
-//          console.log(faltaIngresoNombre, faltaIngresoLoc);
-          if(faltaIngresoNombre/*||faltaIngresoLoc*/){
-            Alert.alert('Complete los datos')
-          }else{
-          Backend.insertLocal(nombreLocal, lat, long, idDueno, idDomicilio) }}
-
-          }
-        />
+      }}>
+        <Text style={styles.text}>DAR DE ALTA UN LOCAL</Text>
+      </Pressable>
 
         </>
     )
@@ -166,7 +149,28 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "bold",
   },
-  botones: {
-    //width: 200,
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: 'black',
+  },
+  button2: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 4,
+    backgroundColor: 'black',
+  },
+    text: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
   },
 });

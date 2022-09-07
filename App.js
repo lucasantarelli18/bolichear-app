@@ -9,10 +9,11 @@ import { HomeScreen } from './Screens/HomeScreen'
 import { UbicationScreen } from './Screens/UbicationScreen'
 import { DetailsScreen } from './Screens/DetailsScreen'
 import { LocalesScreen } from './Screens/LocalesScreen'
+import { AltaLocalScreen } from './Screens/AltaLocalScreen'
 import 'react-native-url-polyfill/auto';
-import MapView, { Marker, Polyline } from 'react-native-maps';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import ImageBlurShadow from 'react-native-image-blur-shadow';
+//import MapView, { Marker, Polyline } from 'react-native-maps';
+//import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+//import ImageBlurShadow from 'react-native-image-blur-shadow';
 import * as Font from 'expo-font';
 
 
@@ -173,6 +174,7 @@ export default function App({ navigation }) {
               <Stack.Screen name="Home" component={HomeScreen} options={{title:'Inicio'}}/>
               <Stack.Screen name="Details" component={DetailsScreen} />
               <Stack.Screen name="Locales" component={LocalesScreen} options={{title:'Mi Local'}}/>
+              <Stack.Screen name="AltaLocal" component={AltaLocalScreen} options={{title:'Alta de Local'}}/>
             </>)}
         </Stack.Navigator>
       </NavigationContainer>
