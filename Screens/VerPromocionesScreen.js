@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Alert, StyleSheet} from 'react-native';
 import * as Backend from '../backlog';
 import { View, Text, Image, ScrollView, Dimensions } from 'react-native';
 import React, { useState } from "react";
@@ -6,35 +6,50 @@ import {  Card } from 'react-native-elements';
 import Moment from 'moment';
 import 'moment/locale/es';
 
-export function VerPromocionesScreen({navigation}) {
+export function VerPromocionesScreen({route, navigation}) {
     
     const [promociones, setPromociones] = React.useState([]);
-    const [locales, setLocales] = React.useState([]);
-
+    const [promocionXLocal, setPromocionXLocal] = React.useState([]);
+    const [image, setImage] = useState(null);
+    const [cant, setCant] = React.useState([]); 
+    const { idLocal } = route.params;
+console.log(idLocal)
 
     React.useEffect(() => {
         Backend.getPromociones()
         .then((items) => {
-          console.log(items)
           setPromociones(items)
+          
+              promociones.map((element) =>{
+                if(element.idLocal == idLocal){
+                    if (items.length > 0) {
+                    console.log(element.idLocal, idLocal)
+                    setCant(true)
+                  } else {
+                    setCant(false)
+                  }}
+              })
+              
+            
+          
         }),
-        Backend.getLocales()
+        Backend.getFotos()
         .then((items) => {
-            console.log(items)
-            setLocales(items)
+            //console.log(items)
+            setImage(items)
         })
         }, [])
-
 
     const list = () => {
               
         return promociones.map((element) => {
-            const fechaHoraInicio = Moment(element.fechaHoraInicio).format('DD/MM/YYYY [a las] HH:mm ');
-            const fechaHoraFin = Moment(element.fechaHoraFin).format('DD/MM/YYYY [a las] HH:mm ');
+            if(idLocal == element.idLocal){
+                const fechaHoraInicio = Moment(element.fechaHoraInicio).format('DD/MM/YYYY [a las] HH:mm ');
+                const fechaHoraFin = Moment(element.fechaHoraFin).format('DD/MM/YYYY [a las] HH:mm ');
 
             return(
-                
-                <Card style={styles.card}>
+
+                    <Card style={styles.card}>
                     <Image
                         source={{ uri: "https://images.unsplash.com/photo-1497802176320-541c8e8de98d?&w=1600&h=900&fit=crop&crop=entropy&q=300" }}
                         style={{ width: 350, height: 200 }}
@@ -50,16 +65,21 @@ export function VerPromocionesScreen({navigation}) {
                 </Card>
             
             );
+            }
         
         });
     }
 
     return (
+
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <ScrollView>
-                <View style={{backgroundColor: "#000000"}}>{list()}</View>
+                
+                <View >{list()}</View>
+              
             </ScrollView>
         </View>
+   
     );
     };
 
@@ -74,6 +94,19 @@ const styles = StyleSheet.create({
     descriptionText: {
         fontSize: 15,
         fontWeight: "bold",
-    }
+    },
+    container: {
+        flex: 1,
+        backgroundColor: '#A1A1A1',
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignContent: "space-between",
+      },
+      container2: {
+        width: '90%',
+        height: '100%',
+        backgroundColor: '#fff',
+        paddingVertical: 110
+      },
 
   });

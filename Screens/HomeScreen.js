@@ -35,7 +35,7 @@ const [locales, setLocales] = React.useState([]);
             <Button
               style={styles.botones}
               title="Ver info"
-              onPress={() => { navigation.navigate('VerPromociones');}}
+              onPress={() => { navigation.navigate('VerPromociones', {idLocal: element.id});}}
               />
             </View>
           </View>

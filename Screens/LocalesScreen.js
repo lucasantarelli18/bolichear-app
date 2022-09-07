@@ -45,7 +45,7 @@ export function LocalesScreen({ navigation }) {
             <Button
               style={styles.botones}
               title="Ver info"
-              onPress={() => Alert.alert('Proximamente')}
+              onPress={() => { navigation.navigate('Promociones',{idLocal: element.id})}}
               />
             </View>
           </View>
@@ -63,11 +63,6 @@ export function LocalesScreen({ navigation }) {
       <Text>Locales Screen</Text>
       <View style={styles.container}>{list()}</View>
       <Button 
-        title="Nueva Promocion"
-        onPress={() => { navigation.navigate('Promociones');
-      }}
-      />
-      <Button 
         title="Mis Promociones"
         onPress={() => { navigation.navigate('VerPromociones');
       }}
@@ -78,7 +73,7 @@ export function LocalesScreen({ navigation }) {
     //No tiene locales
     <>
 
-      <Text>Alta de locales</Text>
+      <Text>Alta de locales</Text>S
  
         </>
     )

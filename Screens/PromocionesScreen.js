@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, View, Text, StyleSheet, Pressable, Image} from "react-native";
+import { Button, View, Text, StyleSheet, Pressable, Image, Alert} from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as Backend from '../backlog';
 import 'moment-timezone';
@@ -8,65 +8,34 @@ import { Input, Block} from "galio-framework";
 import * as ImagePicker from 'expo-image-picker';
 import {  Card, Icon } from 'react-native-elements';
 import { ButtonGroup } from "@rneui/themed";
+import { Form, FormItem } from 'react-native-form-component';
+import Moment from 'moment';
+import 'moment/locale/es';
 
 
-export function PromocionesScreen({navigation}) {
+export function PromocionesScreen({route, navigation}) {
 
-  const [promociones, setPromociones] = React.useState({
-    nombre:'', 
-    descripcion:'', 
-    fechaHoraInicio:'',
-    fechaHoraFin: '',
-    idLocal: 'idLocal'});
-  const [fechaYHoraIncio, setFechaYHoraIncio] = useState(false);
-  const [fechaYHoraFin, setfechaYHoraFin] = useState(false);
+  const [fechaYHoraIncioMuestra, setFechaYHoraIncioMuestra] = useState(false);
+  const [fechaYHoraFinMuestra, setfechaYHoraFinMuestra] = useState(false);
   const [image, setImage] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false);
-
+  const [nombre, setNombre] = useState(null);
+  const [descripcion, setDescripcion] = useState(null);
+  const [fechaYHoraIncio, setFechaYHoraIncio] = useState(null);
+  const [fechaYHoraFin, setFechaYHoraFin] = useState(null);
+  const { idLocal } = route.params;
  
-  React.useEffect(() => {
-  Backend.getPromociones()
-  .then((items) => {
-    //console.log(items)
-    setPromociones(items)
-  })
-  }, [])
 
-  Backend.insertPromocion()
-  .then((items) => {
-    console.log(items)
-    setPromociones(items)
-  })
   const showDateTimePicker = () => {
-    setFechaYHoraIncio(true);
+    setFechaYHoraIncioMuestra(true);
+    setfechaYHoraFinMuestra(true);
   };
   const hideDateTimePicker = () => {
-    setFechaYHoraIncio(false);
+    setFechaYHoraIncioMuestra(false);
+    setfechaYHoraFinMuestra(false);
   };
 
-  const handleConfirm = (datetime) => {
-    console.log("A date has been picked: ", datetime);
-    hideDateTimePicker();
-  };
-/*   const handleFormSubmit = (e) =>{
-    Backend.insertPromocion(promociones.nombre, promociones.descripcion)
-  }
- 
-  const nuevaPromocion =Backend.insertPromocion([{ nombre: 'The Shire', descripcion: 554 }])
-  console.log(nuevaPromocion)
-  const nuevaPromo=(fechaYHoraFin) => {
-    setPromociones({
-      nombre: '', 
-      descripcion:'', 
-      fechaHoraInicio:'',
-      fechaHoraFin: fechaYHoraFin,
-      idLocal: 'idLocal'
-    })
-    console.log(promociones)
-  } */
-
+  
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -75,63 +44,71 @@ export function PromocionesScreen({navigation}) {
     });
 
     console.log(result);
-
     if (!result.cancelled) {
       setImage(result.uri);
+      Backend.insertFoto(result.uri)
+      .then((items) => {items})
     }
   };
+ 
   return (
-    <View style ={styles.container}>
-      <View style = {styles.container2}>
-        <Card>
-          <Input style={styles.INPUT} placeholder="Nombre" name="nombre"onChange={handleConfirm}></Input>
-          <Input style={styles.INPUT} placeholder="Inserte la descripcion" name="descripcion" onChange={handleConfirm}></Input>
-          
-          <View alignSelf='center' style={styles.fixToText}>
-
-          
-          <Button style = {styles.input} title="Inicio" onPress={showDateTimePicker}/> 
-          <DateTimePickerModal
-            isVisible={fechaYHoraIncio}
+    <Card>
+      <Form onButtonPress={() =>Backend.insertPromocion(
+        nombre,
+        descripcion, 
+        fechaYHoraIncio, 
+        fechaYHoraFin,
+        idLocal)
+        .then((items) => {items})}>
+      <FormItem 
+        label="Nombre"
+        isRequired
+        value={nombre}
+        onChangeText={(nombre) => setNombre(nombre)}
+        asterik
+      />
+      <FormItem 
+      label="Descripcion"
+      value={descripcion}
+      onChangeText={(descripcion) => setDescripcion(descripcion)}
+      />
+     
+      <Button  style = {styles.button} title="Inicio" onPress={showDateTimePicker}/> 
+      <DateTimePickerModal
+            isVisible={fechaYHoraIncioMuestra}
             mode="datetime"
-            onConfirm={handleConfirm}
+            onConfirm={(datetime)=>{hideDateTimePicker(); setFechaYHoraIncio(Moment(datetime).format('YYYY-MM-DD HH:mm:ss'))}}
             onCancel={hideDateTimePicker}
-          />
-          <Button style = {styles.input} title="Fin" onPress={showDateTimePicker} />
-          <DateTimePickerModal
-            isVisible={fechaYHoraFin}
+            
+      />
+      <Button style = {styles.button} title="Fin" onPress={showDateTimePicker}/> 
+      <DateTimePickerModal
+            isVisible={fechaYHoraFinMuestra}
             mode="datetime"
-            onConfirm={handleConfirm}
+            onConfirm={(datetime)=>{hideDateTimePicker(); setFechaYHoraFin(Moment(datetime).format('YYYY-MM-DD HH:mm:ss'))}}
             onCancel={hideDateTimePicker}
-          />
-          </View> 
-          <Button title="Cargar imagen" onPress={pickImage} />
-          {image && <Image source={{ uri: image }} style={{ width: 350, height: 200 }} />}
+      />
 
-          <Pressable style={styles.button}>
-              <Text style={styles.text}>CARGAR</Text>
-          </Pressable>
-        </Card>
 
-      </View>
+
+      <Button title="Cargar imagen" onPress={pickImage} />
+          {image && <Image source={{ uri: image }} style={{ width: 350, height: 200 }}/>}
+ 
+
+    </Form>
+    </Card>
       
-    </View>
+  
+      
+
+
+    
+     
   );
 
 };
 
 const styles = StyleSheet.create({
-  INPUT:{
-    INPUT_BORDER_RADIUS: 16 * 0.5,
-    INPUT_BORDER_WIDTH:	16 * 0.05,
-    INPUT_HEIGHT:	16 * 2.75,
-    INPUT_HORIZONTAL:	16,
-    INPUT_TEXT:	16 * 0.875,
-    INPUT_LABEL_TEXT:	16 * 0.9,
-    INPUT_LABEL_BOTTOM:	16 / 4,
-    INPUT_HELP_TEXT: 16 * 0.8,
-    INPUT_ROUNDED:	16 * 1.7
-  },
   button: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -140,6 +117,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     elevation: 3,
     backgroundColor: 'black',
+    flexDirection: 'row',
   },
   text: {
     fontSize: 16,
@@ -150,7 +128,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: '#A1A1A1',
     alignItems: 'center',
     justifyContent: 'center',
     alignContent: "space-between",
@@ -158,10 +136,11 @@ const styles = StyleSheet.create({
   container2: {
     width: '90%',
     height: '100%',
-    backgroundColor: '#000',
+    backgroundColor: '#fff',
     paddingVertical: 110
   },
   fixToText: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding:10,

@@ -12,6 +12,20 @@ export const getLocalesXUser = async (idDueno) => {
   return Local
 }
 
+export const getPromocionXLocal = async () => { 
+  
+    const { data, error } = await supabase.from('Promocion').select(`
+        *,
+        Local (
+          id, idDueño
+        ),
+        Foto(
+          path, idPromocion
+        )
+      `)
+      return data
+        
+}
 //Gets all
 
 /*
