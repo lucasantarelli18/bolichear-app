@@ -62,11 +62,6 @@ export function LocalesScreen({ navigation }) {
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Locales Screen</Text>
       <View style={styles.container}>{list()}</View>
-      <Button 
-        title="Mis Promociones"
-        onPress={() => { navigation.navigate('VerPromociones');
-      }}
-      />
     </View>
       
     ) : (

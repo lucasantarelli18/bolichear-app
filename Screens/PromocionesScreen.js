@@ -11,19 +11,20 @@ import { ButtonGroup } from "@rneui/themed";
 import { Form, FormItem } from 'react-native-form-component';
 import Moment from 'moment';
 import 'moment/locale/es';
+import { v4 as uuid } from 'uuid';
 
 
 export function PromocionesScreen({route, navigation}) {
 
   const [fechaYHoraIncioMuestra, setFechaYHoraIncioMuestra] = useState(false);
   const [fechaYHoraFinMuestra, setfechaYHoraFinMuestra] = useState(false);
-  const [image, setImage] = useState(null);
+  const [idPromocion, setImage] = useState(null);
   const [nombre, setNombre] = useState(null);
   const [descripcion, setDescripcion] = useState(null);
   const [fechaYHoraIncio, setFechaYHoraIncio] = useState(null);
   const [fechaYHoraFin, setFechaYHoraFin] = useState(null);
   const { idLocal } = route.params;
- 
+  //const idPromocion = uuid();
 
   const showDateTimePicker = () => {
     setFechaYHoraIncioMuestra(true);
@@ -58,8 +59,10 @@ export function PromocionesScreen({route, navigation}) {
         descripcion, 
         fechaYHoraIncio, 
         fechaYHoraFin,
-        idLocal)
-        .then((items) => {items})}>
+        idLocal,
+        idPromocion)
+        .then((items) => {Alert.alert("Promoción creada");
+        navigation.navigate("Locales");})}>
       <FormItem 
         label="Nombre"
         isRequired
@@ -92,7 +95,7 @@ export function PromocionesScreen({route, navigation}) {
 
 
       <Button title="Cargar imagen" onPress={pickImage} />
-          {image && <Image source={{ uri: image }} style={{ width: 350, height: 200 }}/>}
+          {idPromocion && <Image source={{ uri: idPromocion }} style={{ width: 350, height: 200 }}/>}
  
 
     </Form>

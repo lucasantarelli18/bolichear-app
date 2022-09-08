@@ -6,6 +6,7 @@ import {  Card } from 'react-native-elements';
 import Moment from 'moment';
 import 'moment/locale/es';
 
+
 export function VerPromocionesScreen({route, navigation}) {
     
     const [promociones, setPromociones] = React.useState([]);
@@ -13,7 +14,8 @@ export function VerPromocionesScreen({route, navigation}) {
     const [image, setImage] = useState(null);
     const [cant, setCant] = React.useState([]); 
     const { idLocal } = route.params;
-console.log(idLocal)
+
+    console.log(idLocal)
 
     React.useEffect(() => {
         Backend.getPromociones()
@@ -26,6 +28,7 @@ console.log(idLocal)
                     console.log(element.idLocal, idLocal)
                     setCant(true)
                   } else {
+                      console.log(idLocal)
                     setCant(false)
                   }}
               })
@@ -51,7 +54,7 @@ console.log(idLocal)
 
                     <Card style={styles.card}>
                     <Image
-                        source={{ uri: "https://images.unsplash.com/photo-1497802176320-541c8e8de98d?&w=1600&h=900&fit=crop&crop=entropy&q=300" }}
+                        source={{ uri: element.idPromocion }}
                         style={{ width: 350, height: 200 }}
                     />
                     <Text style={styles.titleText}>{element.nombre}</Text>
