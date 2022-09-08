@@ -1,69 +1,90 @@
-import * as React from 'react';
-import { Text, View, Button, ScrollView, StyleSheet, Alert, ImageBackground, Pressable } from 'react-native';
-import * as Backend from '../backlog';
-import 'react-native-url-polyfill/auto';
-import MapView, { Marker, Polyline } from 'react-native-maps';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
+import * as React from "react";
+import {
+  Text,
+  View,
+  Button,
+  ScrollView,
+  StyleSheet,
+  Alert,
+  ImageBackground,
+  Pressable,
+} from "react-native";
+import * as Backend from "../backlog";
+import "react-native-url-polyfill/auto";
+import MapView, { Marker, Polyline } from "react-native-maps";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { SafeAreaInsetsContext } from "react-native-safe-area-context";
 
 export function HomeScreen({ route, navigation }) {
-
   const [locales, setLocales] = React.useState([]);
   const { latitud, longitud, rango } = route.params;
 
-
   React.useEffect(() => {
-    Backend.getLocalxDomicilio()
-      .then((items) => {
-        console.log(items)
+    Backend.getLocalxDomicilio().then((items) => {
+      console.log(items);
 
-        const arr = []
-        for (const i in items) {
-          const latMts = ((parseFloat(items[i].latitud) * 111120) - (latitud * 111120))
-          const lonMts = ((parseFloat(items[i].longitud) * 111100) - (longitud * 111100))
-          const val = (Math.pow(latMts, 2) + Math.pow(lonMts, 2))
-          const dist = Math.sqrt(val)
-          const distkm = (dist / 1000).toFixed(2)
+      const arr = [];
+      for (const i in items) {
+        const latMts = parseFloat(items[i].latitud) * 111120 - latitud * 111120;
+        const lonMts =
+          parseFloat(items[i].longitud) * 111100 - longitud * 111100;
+        const val = Math.pow(latMts, 2) + Math.pow(lonMts, 2);
+        const dist = Math.sqrt(val);
+        const distkm = (dist / 1000).toFixed(2);
 
-          if (dist < rango) {
-            //console.log("dentro del rango")
-            console.log(items[i].dist = distkm)
-            arr.push(items[i])
-          } else {
-            //console.log("fuera del rango")
-          }
+        if (dist < rango) {
+          //console.log("dentro del rango")
+          console.log((items[i].dist = distkm));
+          arr.push(items[i]);
+        } else {
+          //console.log("fuera del rango")
         }
-        setLocales(arr)
-
-      })
-  }, [])
+      }
+      setLocales(arr);
+    });
+  }, []);
 
   const filtradoLocales = (query) => {
-    const arr = [[]]
-    return query.map((i) => {
-    });
+    const arr = [[]];
+    return query.map((i) => {});
   };
   const list = () => {
     return locales.map((element) => {
-      console.log(element)
-      console.log(element.id)
-      console.log(element.nombre)
+      console.log(element);
+      console.log(element.id);
+      console.log(element.nombre);
       return (
-        <ImageBackground source={require('../assets/fondoBoliches3.jpg')} blurRadius={3} style={styles.boliches}>
-
+        <ImageBackground
+          source={require("../assets/fondoBoliches3.jpg")}
+          blurRadius={3}
+          style={styles.boliches}
+        >
           <View style={styles.boliches2}>
-            <Text style={styles.titulos} key="{element.id}">{element.nombre}</Text>
-            <Text style={styles.km} > {element.dist} km</Text>
+            <Text style={styles.titulos} key="{element.id}">
+              {element.nombre}
+            </Text>
+            <Text style={styles.km}> {element.dist} km</Text>
           </View>
 
           <View style={styles.boliches3}>
             <View>
-              <Text style={styles.info}> Direccion: {element.Domicilio.calle} {element.Domicilio.numero}</Text>
+              <Text style={styles.info}>
+                {" "}
+                Direccion: {element.Domicilio.calle} {element.Domicilio.numero}
+              </Text>
               <Text style={styles.info}> Asistiran 300 personas </Text>
             </View>
             <View>
-
-              <Pressable style={styles.button2} onPress={() => Alert.alert('Proximamente')}>
+              <Pressable
+                style={styles.button2}
+                onPress={() =>
+                  navigation.navigate("VerInfo", {
+                    idLocal: element.id,
+                    latitud: latitud,
+                    longitud: longitud,
+                  })
+                }
+              >
                 <Text style={styles.text}>VER INFO</Text>
               </Pressable>
             </View>
@@ -74,14 +95,21 @@ export function HomeScreen({ route, navigation }) {
   };
 
   return (
-    <ImageBackground source={require('../assets/fondoLogIn3.jpg')} blurRadius={3} style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <ImageBackground
+      source={require("../assets/fondoLogIn3.jpg")}
+      blurRadius={3}
+      style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+    >
       <View style={styles.container}>{list()}</View>
-      <Pressable style={styles.button} onPress={() => {
-        navigation.navigate('Details', {
-          itemId: 86,
-          nombre: 'Pepe',
-        });
-      }}>
+      <Pressable
+        style={styles.button}
+        onPress={() => {
+          navigation.navigate("Details", {
+            itemId: 86,
+            nombre: "Pepe",
+          });
+        }}
+      >
         <Text style={styles.text}>IR A DETALLES</Text>
       </Pressable>
     </ImageBackground>
@@ -92,68 +120,68 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     borderRadius: 1,
-    width: '100%',
+    width: "100%",
   },
   boliches: {
     flex: 0.2,
     backgroundColor: "lightgrey",
-    marginBottom: .5,
+    marginBottom: 0.5,
     padding: 0,
     paddingRight: 12,
     paddingLeft: 12,
-    fontFamily: 'Roboto-Medium',
+    fontFamily: "Roboto-Medium",
   },
   boliches2: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    fontFamily: 'Roboto-Medium',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    fontFamily: "Roboto-Medium",
   },
   boliches3: {
     flex: 1.4,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    fontFamily: 'Roboto-Medium',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    fontFamily: "Roboto-Medium",
   },
   titulos: {
     fontSize: 25,
-    textTransform: 'uppercase',
+    textTransform: "uppercase",
     fontWeight: "bold",
-    fontFamily: 'Roboto-Medium',
+    fontFamily: "Roboto-Medium",
   },
   km: {
     fontSize: 15,
     fontWeight: "bold",
-    fontFamily: 'Roboto-Medium',
+    fontFamily: "Roboto-Medium",
   },
   info: {
     fontSize: 15,
     fontWeight: "bold",
   },
   button: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: 'black',
+    backgroundColor: "black",
   },
   button2: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 4,
-    backgroundColor: 'black',
+    backgroundColor: "black",
   },
   text: {
     fontSize: 16,
     lineHeight: 21,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     letterSpacing: 0.25,
-    color: 'white',
+    color: "white",
   },
 });
