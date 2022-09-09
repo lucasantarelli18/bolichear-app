@@ -11,11 +11,11 @@ import { DetailsScreen } from './Screens/DetailsScreen'
 import { LocalesScreen } from './Screens/LocalesScreen'
 import { AltaLocalScreen } from './Screens/AltaLocalScreen'
 import { VerInfoScreen } from "./Screens/VerInfoScreen";
+import { EventosScreen } from "./Screens/EventosScreen";
 import 'react-native-url-polyfill/auto';
 //import MapView, { Marker, Polyline } from 'react-native-maps';
 //import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 //import ImageBlurShadow from 'react-native-image-blur-shadow';
-import * as Font from 'expo-font';
 
 const AuthContext = React.createContext();
 const image = { uri: "./assets/FondoDesenfocado.jpg" };
@@ -27,6 +27,7 @@ function SignInScreen() {
   const { signIn } = React.useContext(AuthContext);
 
   return (
+
     <ImageBackground
       source={require("./assets/fondoLogIn7.jpg")}
       style={styles.container}
@@ -47,12 +48,14 @@ function SignInScreen() {
           onChangeText={setPassword}
           //secureTextEntry
         />
+
         <Pressable
           style={styles.button}
           onPress={() => signIn({ username, password })}
         >
           <Text style={styles.text}>LOG IN</Text>
         </Pressable>
+
       </View>
     </ImageBackground>
   );
@@ -61,6 +64,7 @@ function SignInScreen() {
 const Stack = createNativeStackNavigator();
 
 export default function App({ navigation }) {
+
   const [fontsLoaded, setFontsLoaded] = React.useState(false);
 
   const [state, dispatch] = React.useReducer(
@@ -172,7 +176,9 @@ export default function App({ navigation }) {
               <Stack.Screen name="VerInfo" component={VerInfoScreen} />
               <Stack.Screen name="Locales" component={LocalesScreen} options={{title:'Mi Local'}}/>
               <Stack.Screen name="AltaLocal" component={AltaLocalScreen} options={{title:'Alta de Local'}}/>
+              <Stack.Screen name="Eventos" component={EventosScreen} options={{ title: "Mis Eventos" }}/>
             </>)}
+
 
         </Stack.Navigator>
       </NavigationContainer>
@@ -196,6 +202,7 @@ const styles = StyleSheet.create({
     height: 132,
     //backgroundColor: '#fff',
     elevation: 10,
+
   },
   imagen: {
     width: 300,

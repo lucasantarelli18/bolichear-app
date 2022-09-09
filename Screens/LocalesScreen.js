@@ -16,26 +16,26 @@ export function LocalesScreen({ route, navigation }) {
 //  const long = -57.954208;
 
   const [faltaIngresoNombre, setFaltaIngresoNombre] = React.useState(true);
-//  const [faltaIngresoLoc, setFaltaIngresoLoc] = React.useState(true);
+  //  const [faltaIngresoLoc, setFaltaIngresoLoc] = React.useState(true);
 
-//  const [openLoc, setOpenLoc] = React.useState(false);
-//  const [valueLoc, setValueLoc] = React.useState(null); //para el picker
-//  const [localidadSeleccionada, setLocalidadSeleccionada] = React.useState([]);
+  //  const [openLoc, setOpenLoc] = React.useState(false);
+  //  const [valueLoc, setValueLoc] = React.useState(null); //para el picker
+  //  const [localidadSeleccionada, setLocalidadSeleccionada] = React.useState([]);
   const [locales, setLocales] = React.useState([]);
   const [idDomicilio, setIdDomicilio] = React.useState([]);
   const [nombreLocal, setNombreLocal] = React.useState([]);
-  const [cant, setCant] = React.useState([]); 
+  const [cant, setCant] = React.useState([]);
 
   React.useEffect(() => {
     //Tomo los locales del user
-    Backend.getLocalesXUser(idDueno)
-    .then((items) => {
-      setLocales(items)
+    Backend.getLocalesXUser(idDueno).then((items) => {
+      setLocales(items);
       if (items.length > 0) {
-        setCant(true)
+        setCant(true);
       } else {
-        setCant(false)
+        setCant(false);
       }
+
 console.log(locales);
     Backend.insertDomicilioSinPiso(calle, numero, idLocalidad)
     .then((items)=>{})
@@ -54,6 +54,11 @@ console.log(locales);
 //  {label:"Bernal", value:3}
 //  ]
 
+  // const itemsLoc = [
+  //  {label:"La Plata", value:1},
+  //  {label:"Quilmes", value:2},
+  //  {label:"Bernal", value:3}
+  //  ]
 
   const list = () => {
     return locales.map((element) => {
@@ -73,6 +78,7 @@ console.log(locales);
               <Pressable style={styles.button2} onPress={() => Alert.alert('Proximamente')}>
                 <Text style={styles.text}>VER INFO</Text>
               </Pressable>
+
             </View>
           </View>
         </ImageBackground>
@@ -80,14 +86,19 @@ console.log(locales);
     });
   };
 
-
   return (
     <>
+    
     {cant ? (
     //Tiene locales
     <ImageBackground source={require('../assets/fondoLogIn3.jpg')} blurRadius={3} style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <View style={styles.container}>{list()}</View>
       
+       <Pressable style={styles.button} onPress={() => {
+        navigation.navigate("Eventos");
+       }}>
+        <Text style={styles.text}>MIS EVENTOS</Text>
+      </Pressable>
     </ImageBackground>
       
     ) : (
@@ -105,20 +116,25 @@ console.log(locales);
       }}>
         <Text style={styles.text}>DAR DE ALTA UN LOCAL</Text>
       </Pressable>
+      <Pressable style={styles.button} onPress={() => {
+        navigation.navigate("Eventos");
+       }}>
+        <Text style={styles.text}>MIS EVENTOS</Text>
+      </Pressable>
+    </ImageBackground>
 
         </>
-    )
-    }
+      )}
     </>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     borderRadius: 1,
     width: '100%',
+
   },
   boliches: {
     flex: 0.2,

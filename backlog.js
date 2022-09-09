@@ -1,9 +1,9 @@
-import * as React from 'react';
-import { Text, View, Button } from 'react-native';
-import { supabase } from './supabase';
-import 'react-native-url-polyfill/auto';
+import * as React from "react";
+import { Text, View, Button } from "react-native";
+import { supabase } from "./supabase";
+import "react-native-url-polyfill/auto";
 
-export const getLocalesXUser = async (idDueno) => {  
+export const getLocalesXUser = async (idDueno) => {
   let { data: Local, error } = await supabase
   .from('Local')
   .select(`
@@ -16,7 +16,7 @@ export const getLocalesXUser = async (idDueno) => {
   return Local
 }
 
-export const getLocalidadesXProv = async (idProv) => {  
+export const getLocalidadesXProv = async (idProv) => {
   let { data: Localidad, error } = await supabase
   .from('Localidad')
   .select('*')
@@ -183,6 +183,7 @@ export const insertDomicilio = async (calle, num, piso, dpto, idLocalidad) => {
   .from('Domicilio')
   .insert([
     { calle: calle,
+
       numero: num,
       piso: piso,
       dpto: dpto,
@@ -198,15 +199,21 @@ export const insertDomicilioSinPiso = async (calle, num, idLocalidad) => {
     { calle: calle,
       numero: num,
       idLocalidad: idLocalidad
-    },
-  ])
-}
 
-export const insertPromocion = async (nombrePromo, descrip, fHInicio, fHFin, idLocal) => {  
-  const { data, error } = await supabase
-  .from('Promocion')
-  .insert([
-    { nombre: nombrePromo,
+    },
+  ]);
+};
+
+export const insertPromocion = async (
+  nombrePromo,
+  descrip,
+  fHInicio,
+  fHFin,
+  idLocal
+) => {
+  const { data, error } = await supabase.from("Promocion").insert([
+    {
+      nombre: nombrePromo,
       descripcion: descrip,
       fechaHoraInicio: fHInicio,
       fechaHoraFin: fHFin,
@@ -214,7 +221,6 @@ export const insertPromocion = async (nombrePromo, descrip, fHInicio, fHFin, idL
     },
   ]);
 };
-
 
 export const insertLocal = async (nombreLocal, lat, long, idDuen, idDomicili) => {  
   console.log(nombreLocal, lat, long, idDuen, idDomicili);
@@ -249,20 +255,20 @@ export const insertFoto = async (path, idLocal, idEvento, idPromo) => {
 };
 
 export const insertEvento = async (
-  fecha,
   nombreEvento,
-  horaInicio,
-  horaFin,
-  idEvento,
+  descripcion,
+  fHoraInicio,
+  fHoraFin,
+  idTipoEvento,
   idLocal
 ) => {
   const { data, error } = await supabase.from("Evento").insert([
     {
-      fecha: fecha,
       nombre: nombreEvento,
-      horaInicio: horaInicio,
-      horaFin: horaFin,
-      idEvento: idEvento,
+      descripcion: descripcion,
+      fechaHoraInicio: fHoraInicio,
+      fechaHoraFin: fHoraFin,
+      idTipoEvento: idTipoEvento,
       idLocal: idLocal,
     },
   ]);
@@ -283,7 +289,6 @@ export const insertUsuario = async (nombreUsuario, contraseña) => {
     },
   ])
 }
-
 
 //Updates
 
