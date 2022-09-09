@@ -1,7 +1,36 @@
-import * as React from "react";
-import { Text, View, Button } from "react-native";
-import { supabase } from "./supabase";
-import "react-native-url-polyfill/auto";
+import * as React from 'react';
+import { Text, View, Button } from 'react-native';
+import { supabase } from './supabase';
+import 'react-native-url-polyfill/auto';
+
+export const getLocalesXUser = async (idDueno) => {  
+  let { data: Local, error } = await supabase
+  .from('Local')
+  .select(`
+    *,
+    Domicilio (
+      *
+    )
+  `)
+  .eq('idDueño', idDueno)
+  return Local
+}
+
+export const getLocalidadesXProv = async (idProv) => {  
+  let { data: Localidad, error } = await supabase
+  .from('Localidad')
+  .select('*')
+  .eq('idProvincia', idProv)
+  return Localidad
+}
+
+export const getLocalidadXNombre = async (nombre) => {  
+  let { data: Localidad, error } = await supabase
+  .from('Localidad')
+  .select('*')
+  .eq('nombre', nombre)
+  return Localidad
+}
 
 //Get Filtrado
 export const getLocalxDomicilio = async () => {
@@ -35,6 +64,14 @@ export const getFotoxIdLocal = async (idLocal) => {
   return Foto;
 };
 
+export const getUltimoDomicilio = async () => { 
+const { data, error, count } = await supabase.from('Domicilio')
+  .select('id')
+  .order('id', {ascending:false})
+  return data
+    }
+
+
 //Obtiene domicilio pasado como param
 /*
 export const getLocalxDomicilio = async () => {  
@@ -46,6 +83,7 @@ export const getLocalxDomicilio = async () => {
 }
 
 */
+
 //Gets all
 
 /*
@@ -140,10 +178,11 @@ export const insertLocalidad = async (nombreLoc, codPostal, idProv) => {
     ]);
 };
 
-export const insertDomicilio = async (calle, num, piso, dpto, idLocalidad) => {
-  const { data, error } = await supabase.from("Domicilio").insert([
-    {
-      calle: calle,
+export const insertDomicilio = async (calle, num, piso, dpto, idLocalidad) => {  
+  const { data, error } = await supabase
+  .from('Domicilio')
+  .insert([
+    { calle: calle,
       numero: num,
       piso: piso,
       dpto: dpto,
@@ -152,16 +191,22 @@ export const insertDomicilio = async (calle, num, piso, dpto, idLocalidad) => {
   ]);
 };
 
-export const insertPromocion = async (
-  nombrePromo,
-  descrip,
-  fHInicio,
-  fHFin,
-  idLocal
-) => {
-  const { data, error } = await supabase.from("Promocion").insert([
-    {
-      nombre: nombrePromo,
+export const insertDomicilioSinPiso = async (calle, num, idLocalidad) => {  
+  const { data, error } = await supabase
+  .from('Domicilio')
+  .insert([
+    { calle: calle,
+      numero: num,
+      idLocalidad: idLocalidad
+    },
+  ])
+}
+
+export const insertPromocion = async (nombrePromo, descrip, fHInicio, fHFin, idLocal) => {  
+  const { data, error } = await supabase
+  .from('Promocion')
+  .insert([
+    { nombre: nombrePromo,
       descripcion: descrip,
       fechaHoraInicio: fHInicio,
       fechaHoraFin: fHFin,
@@ -170,23 +215,21 @@ export const insertPromocion = async (
   ]);
 };
 
-export const insertLocal = async (
-  nombreLocal,
-  lat,
-  long,
-  idDueno,
-  idDomicilio
-) => {
-  const { data, error } = await supabase.from("Local").insert([
-    {
-      nombre: nombreLocal,
+
+export const insertLocal = async (nombreLocal, lat, long, idDuen, idDomicili) => {  
+  console.log(nombreLocal, lat, long, idDuen, idDomicili);
+  const { data, error } = await supabase
+  .from('Local')
+  .insert([
+    { nombre: nombreLocal,
       latitud: lat,
       longitud: long,
-      idDueno: idDueno,
-      idDomicilio: idDomicilio,
+      idDueño: parseInt(idDuen),
+      idDomicilio: parseInt(idDomicili),
     },
-  ]);
-};
+  ])
+  if(error){console.log(error)}
+}
 
 export const insertAsistencia = async (fecha, idLocal, idUsuario) => {
   const { data, error } = await supabase
@@ -233,9 +276,14 @@ export const insertTipoEvento = async (tipo) => {
 
 export const insertUsuario = async (nombreUsuario, contraseña) => {
   const { data, error } = await supabase
-    .from("Usuario")
-    .insert([{ nombre: nombreUsuario, contraseña: contraseña }]);
-};
+  .from('Usuario')
+  .insert([
+    { nombre: nombreUsuario,
+      contraseña: contraseña
+    },
+  ])
+}
+
 
 //Updates
 

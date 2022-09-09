@@ -1,27 +1,21 @@
-import * as React from "react";
-import {
-  Text,
-  View,
-  Button,
-  ScrollView,
-  StyleSheet,
-  Alert,
-  ImageBackground,
-  Pressable,
-} from "react-native";
-import * as Backend from "../backlog";
-import "react-native-url-polyfill/auto";
-import MapView, { Marker, Polyline } from "react-native-maps";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { SafeAreaInsetsContext } from "react-native-safe-area-context";
+import * as React from 'react';
+import { Text, View, Button, ScrollView, StyleSheet, Alert, ImageBackground, Pressable } from 'react-native';
+import * as Backend from '../backlog';
+import 'react-native-url-polyfill/auto';
+//import MapView, { Marker, Polyline } from 'react-native-maps';
+//import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+//import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 
 export function HomeScreen({ route, navigation }) {
   const [locales, setLocales] = React.useState([]);
-  const { latitud, longitud, rango } = route.params;
+  const { calle, numero, localidad, latitud, longitud, rango } = route.params;
+
+  const [idLocalidad, setIdLocalidad] = React.useState([]);
 
   React.useEffect(() => {
-    Backend.getLocalxDomicilio().then((items) => {
-      console.log(items);
+    Backend.getLocalxDomicilio()
+      .then((items) => {
+//        console.log(items)
 
       const arr = [];
       for (const i in items) {
@@ -32,17 +26,22 @@ export function HomeScreen({ route, navigation }) {
         const dist = Math.sqrt(val);
         const distkm = (dist / 1000).toFixed(2);
 
-        if (dist < rango) {
-          //console.log("dentro del rango")
-          console.log((items[i].dist = distkm));
-          arr.push(items[i]);
-        } else {
-          //console.log("fuera del rango")
+          if (dist < rango) {
+            //console.log("dentro del rango")
+           console.log(items[i].dist = distkm)
+            arr.push(items[i])
+          } else {
+            //console.log("fuera del rango")
+          }
         }
-      }
-      setLocales(arr);
-    });
-  }, []);
+        setLocales(arr)
+      })
+      Backend.getLocalidadXNombre(localidad).then((items)=>{
+        setIdLocalidad(items[0].id);
+      })
+
+  }, [])
+
 
   const filtradoLocales = (query) => {
     const arr = [[]];
@@ -50,9 +49,11 @@ export function HomeScreen({ route, navigation }) {
   };
   const list = () => {
     return locales.map((element) => {
-      console.log(element);
-      console.log(element.id);
-      console.log(element.nombre);
+
+//      console.log(element)
+//      console.log(element.id)
+//        console.log(element.dist)
+
       return (
         <ImageBackground
           source={require("../assets/fondoBoliches3.jpg")}
@@ -101,16 +102,18 @@ export function HomeScreen({ route, navigation }) {
       style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
     >
       <View style={styles.container}>{list()}</View>
-      <Pressable
-        style={styles.button}
-        onPress={() => {
-          navigation.navigate("Details", {
-            itemId: 86,
-            nombre: "Pepe",
-          });
-        }}
-      >
-        <Text style={styles.text}>IR A DETALLES</Text>
+
+      <Pressable style={styles.button} onPress={() => {
+        navigation.navigate('Locales', {
+          latitud: latitud,
+          longitud: longitud,
+          idLocalidad: idLocalidad,
+          calle: calle,
+          numero: numero,
+        });
+
+      }}>
+        <Text style={styles.text}>IR A MI LOCAL</Text>
       </Pressable>
     </ImageBackground>
   );

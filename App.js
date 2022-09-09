@@ -1,28 +1,21 @@
-import * as React from "react";
-import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  Button,
-  Image,
-  ImageBackground,
-  Pressable,
-} from "react-native";
-import { supabase } from "./supabase";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { SplashScreen } from "./Screens/SplashScreen";
-import { HomeScreen } from "./Screens/HomeScreen";
-import { UbicationScreen } from "./Screens/UbicationScreen";
-import { DetailsScreen } from "./Screens/DetailsScreen";
+import * as React from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, TextInput, View, Button, Image, ImageBackground, Pressable } from 'react-native';
+import { supabase } from './supabase';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SplashScreen } from './Screens/SplashScreen'
+import { HomeScreen } from './Screens/HomeScreen'
+import { UbicationScreen } from './Screens/UbicationScreen'
+import { DetailsScreen } from './Screens/DetailsScreen'
+import { LocalesScreen } from './Screens/LocalesScreen'
+import { AltaLocalScreen } from './Screens/AltaLocalScreen'
 import { VerInfoScreen } from "./Screens/VerInfoScreen";
-import "react-native-url-polyfill/auto";
-import MapView, { Marker, Polyline } from "react-native-maps";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import ImageBlurShadow from "react-native-image-blur-shadow";
-import * as Font from "expo-font";
+import 'react-native-url-polyfill/auto';
+//import MapView, { Marker, Polyline } from 'react-native-maps';
+//import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+//import ImageBlurShadow from 'react-native-image-blur-shadow';
+import * as Font from 'expo-font';
 
 const AuthContext = React.createContext();
 const image = { uri: "./assets/FondoDesenfocado.jpg" };
@@ -171,13 +164,16 @@ export default function App({ navigation }) {
             />
           ) : (
             // User is signed in
+
             <>
-              <Stack.Screen name="Ubication" component={UbicationScreen} />
-              <Stack.Screen name="Home" component={HomeScreen} />
+              <Stack.Screen name="Ubication" component={UbicationScreen} options={{title:'Ubicación'}}/>
+              <Stack.Screen name="Home" component={HomeScreen} options={{title:'Inicio'}}/>
               <Stack.Screen name="Details" component={DetailsScreen} />
               <Stack.Screen name="VerInfo" component={VerInfoScreen} />
-            </>
-          )}
+              <Stack.Screen name="Locales" component={LocalesScreen} options={{title:'Mi Local'}}/>
+              <Stack.Screen name="AltaLocal" component={AltaLocalScreen} options={{title:'Alta de Local'}}/>
+            </>)}
+
         </Stack.Navigator>
       </NavigationContainer>
     </AuthContext.Provider>
