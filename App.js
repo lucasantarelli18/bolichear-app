@@ -1,17 +1,24 @@
-import * as React from "react";
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, TextInput, View, Button, Image } from "react-native";
-import { supabase } from "./supabase";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { SplashScreen } from "./Screens/SplashScreen";
-import { HomeScreen } from "./Screens/HomeScreen";
-import { DetailsScreen } from "./Screens/DetailsScreen";
-import { LocalesScreen } from "./Screens/LocalesScreen";
+import * as React from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, TextInput, View, Button, Image, ImageBackground, Pressable } from 'react-native';
+import { supabase } from './supabase';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SplashScreen } from './Screens/SplashScreen'
+import { HomeScreen } from './Screens/HomeScreen'
+import { UbicationScreen } from './Screens/UbicationScreen'
+import { DetailsScreen } from './Screens/DetailsScreen'
+import { LocalesScreen } from './Screens/LocalesScreen'
+import { AltaLocalScreen } from './Screens/AltaLocalScreen'
+import { VerInfoScreen } from "./Screens/VerInfoScreen";
 import { EventosScreen } from "./Screens/EventosScreen";
-import "react-native-url-polyfill/auto";
+import 'react-native-url-polyfill/auto';
+//import MapView, { Marker, Polyline } from 'react-native-maps';
+//import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+//import ImageBlurShadow from 'react-native-image-blur-shadow';
 
 const AuthContext = React.createContext();
+const image = { uri: "./assets/FondoDesenfocado.jpg" };
 
 function SignInScreen() {
   const [username, setUsername] = React.useState("");
@@ -20,35 +27,46 @@ function SignInScreen() {
   const { signIn } = React.useContext(AuthContext);
 
   return (
-    <View style={styles.container}>
+
+    <ImageBackground
+      source={require("./assets/fondoLogIn7.jpg")}
+      style={styles.container}
+    >
       <Image style={styles.imagen} source={require("./assets/logo.png")} />
       <View style={styles.container2}>
         <TextInput
           style={styles.input}
-          placeholder="Ingresa tu ubicacion"
+          placeholder="Usuario"
           value={username}
           onChangeText={setUsername}
+          //secureTextEntry
         />
         <TextInput
           style={styles.input}
-          placeholder="Rango de cobertura"
+          placeholder="Contraseña"
           value={password}
           onChangeText={setPassword}
           //secureTextEntry
         />
-        <Button
-          style={styles.input}
-          title="Buscar"
+
+        <Pressable
+          style={styles.button}
           onPress={() => signIn({ username, password })}
-        />
+        >
+          <Text style={styles.text}>LOG IN</Text>
+        </Pressable>
+
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 
 const Stack = createNativeStackNavigator();
 
 export default function App({ navigation }) {
+
+  const [fontsLoaded, setFontsLoaded] = React.useState(false);
+
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -98,6 +116,11 @@ export default function App({ navigation }) {
       dispatch({ type: "RESTORE_TOKEN", token: userToken });
     };
 
+    if (!fontsLoaded) {
+      Font.loadAsync({
+        "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
+      });
+    }
     bootstrapAsync();
   }, []);
 
@@ -145,25 +168,18 @@ export default function App({ navigation }) {
             />
           ) : (
             // User is signed in
+
             <>
-              <Stack.Screen
-                name="Home"
-                component={HomeScreen}
-                options={{ title: "Inicio" }}
-              />
+              <Stack.Screen name="Ubication" component={UbicationScreen} options={{title:'Ubicación'}}/>
+              <Stack.Screen name="Home" component={HomeScreen} options={{title:'Inicio'}}/>
               <Stack.Screen name="Details" component={DetailsScreen} />
-              <Stack.Screen
-                name="Locales"
-                component={LocalesScreen}
-                options={{ title: "Mi Local" }}
-              />
-              <Stack.Screen
-                name="Eventos"
-                component={EventosScreen}
-                options={{ title: "Mis Eventos" }}
-              />
-            </>
-          )}
+              <Stack.Screen name="VerInfo" component={VerInfoScreen} />
+              <Stack.Screen name="Locales" component={LocalesScreen} options={{title:'Mi Local'}}/>
+              <Stack.Screen name="AltaLocal" component={AltaLocalScreen} options={{title:'Alta de Local'}}/>
+              <Stack.Screen name="Eventos" component={EventosScreen} options={{ title: "Mis Eventos" }}/>
+            </>)}
+
+
         </Stack.Navigator>
       </NavigationContainer>
     </AuthContext.Provider>
@@ -171,26 +187,66 @@ export default function App({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  test: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    //backgroundColor: '#fff',
     alignItems: "center",
-    justifyContent: "center",
-    alignContent: "space-between",
+    //justifyContent: 'center',
+    //alignContent: "space-between",
   },
   container2: {
     width: "50%",
-    height: "17%",
-    backgroundColor: "#fff",
+    height: 132,
+    //backgroundColor: '#fff',
+    elevation: 10,
+
   },
   imagen: {
     width: 300,
     height: 300,
   },
   input: {
+    height: 39,
     marginBottom: 10,
     paddingLeft: 10,
     borderWidth: 1,
     borderRadius: 4,
+    fontSize: 16,
+    fontFamily: "Roboto-Medium",
+    //borderColor: 'white',
+  },
+  places: {
+    //flex: 0,
+    //position: "absolute",
+    width: "50%",
+    //zIndex: 1,
+    //backgroundColor: "black",
+  },
+  image: {
+    //flex: 1,
+    //justifyContent: "center"
+    alignItems: "center",
+    flexGrow: 1,
+    height: "100%",
+  },
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: "black",
+    fontFamily: "Roboto-Medium",
+  },
+  text: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: "bold",
+    letterSpacing: 0.25,
+    color: "white",
   },
 });
