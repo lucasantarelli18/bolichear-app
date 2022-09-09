@@ -6,7 +6,12 @@ import 'react-native-url-polyfill/auto';
 export const getLocalesXUser = async (idDueno) => {  
   let { data: Local, error } = await supabase
   .from('Local')
-  .select('*')
+  .select(`
+    *,
+    Domicilio (
+      *
+    )
+  `)
   .eq('idDueño', idDueno)
   return Local
 }

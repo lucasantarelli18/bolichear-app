@@ -28,7 +28,7 @@ export function HomeScreen({ route, navigation }) {
 
           if (dist < rango) {
             //console.log("dentro del rango")
-//            console.log(items[i].dist = distkm)
+           console.log(items[i].dist = distkm)
             arr.push(items[i])
           } else {
             //console.log("fuera del rango")
@@ -51,7 +51,7 @@ export function HomeScreen({ route, navigation }) {
     return locales.map((element) => {
 //      console.log(element)
 //      console.log(element.id)
-//      console.log(element.nombre)
+        console.log(element.dist)
 
       return (
         <ImageBackground source={require('../assets/fondoBoliches3.jpg')} blurRadius={3} style={styles.boliches}>

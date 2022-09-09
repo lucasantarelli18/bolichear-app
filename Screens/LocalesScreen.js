@@ -36,7 +36,7 @@ export function LocalesScreen({ route, navigation }) {
       } else {
         setCant(false)
       }
-
+console.log(locales);
     Backend.insertDomicilioSinPiso(calle, numero, idLocalidad)
     .then((items)=>{})
 
@@ -62,12 +62,11 @@ export function LocalesScreen({ route, navigation }) {
 
           <View style={styles.boliches2}>
             <Text style={styles.titulos} key="{element.id}">{element.nombre}</Text>
-            <Text style={styles.km} > {element.dist} km</Text>
           </View>
 
           <View style={styles.boliches3}>
             <View>
-              <Text style={styles.info}> Direccion: {element.Domicilio.calle} {element.Domicilio.numero}</Text>
+             <Text style={styles.info}> Direccion: {element.Domicilio.calle} {element.Domicilio.numero}</Text> 
             </View>
             <View>
 
@@ -119,33 +118,43 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     borderRadius: 1,
-    //padding: 10,
     width: '100%',
-    //height: 500,
-
-    //flexWrap: 'wrap',
-    //flexDirection: 'column',
-    //flexWrap: 'no-wrap',
   },
   boliches: {
     flex: 0.2,
     backgroundColor: "lightgrey",
-    borderBottomWidth: 1,
-    //borderWidth: 1,
     marginBottom: .5,
-    padding: 5,
-    //flexWrap: 'no-wrap',
+    padding: 0,
+    paddingRight: 12,
+    paddingLeft: 12,
+    fontFamily: 'Roboto-Medium',
   },
   boliches2: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    //flexWrap: 'no-wrap',
-    //marginTop: 9,
+    fontFamily: 'Roboto-Medium',
+  },
+  boliches3: {
+    flex: 1.4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    fontFamily: 'Roboto-Medium',
   },
   titulos: {
-    //width: 500,
+    fontSize: 25,
+    textTransform: 'uppercase',
+    fontWeight: "bold",
+    fontFamily: 'Roboto-Medium',
+  },
+  km: {
+    fontSize: 15,
+    fontWeight: "bold",
+    fontFamily: 'Roboto-Medium',
+  },
+  info: {
     fontSize: 15,
     fontWeight: "bold",
   },
@@ -166,7 +175,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: 'black',
   },
-    text: {
+  text: {
     fontSize: 16,
     lineHeight: 21,
     fontWeight: 'bold',
