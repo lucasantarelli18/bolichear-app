@@ -48,16 +48,16 @@ export function VerInfoScreen({ route, navigation }) {
           style={{ flex: 1 }}
         >
           <View>
-            <Text key="{element.id}">{element.nombre}</Text>
-            <Text> {distkm} km</Text>
+            <Text style={styles.titulos}key="{element.id}">{element.nombre}</Text>
+            <Text style={styles.km}> {distkm} km</Text>
           </View>
-          <View>
+          <View >
             <View>
-              <Text>
+              <Text style={styles.info}>
                 {" "}
                 Dirección: {element.Domicilio.calle} {element.Domicilio.numero}
               </Text>
-              <Text> Asistiran 300 personas </Text>
+              <Text style={styles.info}> Asistiran 300 personas </Text>
             </View>
           </View>
           <View style={styles.detalles}>
@@ -149,6 +149,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     fontWeight: "bold",
     fontFamily: "Roboto-Medium",
+ 
   },
   km: {
     fontSize: 15,

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, View, Text, StyleSheet, Pressable, Image, Alert} from "react-native";
+import { Button, View, Text, StyleSheet, Pressable, Image, Alert, ScrollView} from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as Backend from '../backlog';
 import 'moment-timezone';
@@ -59,7 +59,8 @@ export function PromocionesScreen({route, navigation}) {
   };
  
   return (
-    <Card>
+    <ScrollView>
+      <Card>
       <Form onButtonPress={() =>Backend.insertPromocion(
         nombre,
         descripcion, 
@@ -83,7 +84,7 @@ export function PromocionesScreen({route, navigation}) {
       />
      
       <Button  style = {styles.button} title="Inicio" onPress={showDateTimePicker}/> 
-      <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 20 }}>
+      <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical: 10 }}>
       {fechaYHoraIncio ? fechaYHoraIncio : "No selecciono la fecha inicio"}
       </Text>
       
@@ -95,7 +96,7 @@ export function PromocionesScreen({route, navigation}) {
             
       />
       <Button style = {styles.button} title="Fin" onPress={showDateTimePicker2}/> 
-      <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 20 }}>
+      <Text style={{ fontSize: 16, fontWeight: "bold",marginVertical: 10}}>
       {fechaYHoraFin ? fechaYHoraFin : "No selecciono la fecha fin"}
       </Text>
       <DateTimePickerModal
@@ -113,6 +114,8 @@ export function PromocionesScreen({route, navigation}) {
 
     </Form>
     </Card>
+    </ScrollView>
+    
       
   
       

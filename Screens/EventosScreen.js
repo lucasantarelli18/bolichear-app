@@ -87,10 +87,10 @@ export function EventosScreen({ route, navigation }) {
         value={descripcion}
       ></Input>
 
-      <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20 }}>
-        {horaInicio ? horaInicio : "No date selected"}
+      <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical: 10 }}>
+        {horaInicio ? horaInicio : "No selecciono la fecha incio"}
       </Text>
-      <Button title="Select a date inicio" onPress={showDatePicker} />
+      <Button title="Inicio" onPress={showDatePicker} />
       <DateTimePickerModal
         isVisible={datePickerVisible}
         mode="datetime"
@@ -101,10 +101,10 @@ export function EventosScreen({ route, navigation }) {
         }}
         onCancel={hideDatePicker}
       />
-      <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20 }}>
-        {horaFin ? horaFin : "No date selected"}
+      <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical: 10 }}>
+        {horaFin ? horaFin : "No selecciono la fecha fin"}
       </Text>
-      <Button title="Select a date fin" onPress={showDatePicker2} />
+      <Button title="Fin" onPress={showDatePicker2} />
       <DateTimePickerModal
         isVisible={datePickerVisible2}
         mode="datetime"

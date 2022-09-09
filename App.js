@@ -177,7 +177,7 @@ export default function App({ navigation }) {
               <Stack.Screen name="Ubication" component={UbicationScreen} options={{title:'Ubicación'}}/>
               <Stack.Screen name="Home" component={HomeScreen} options={{title:'Inicio'}}/>
               <Stack.Screen name="Details" component={DetailsScreen} />
-              <Stack.Screen name="VerInfo" component={VerInfoScreen} />
+              <Stack.Screen name="VerInfo" component={VerInfoScreen}  options={{title:'Mi Local'}}/>
               <Stack.Screen name="Locales" component={LocalesScreen} options={{title:'Mi Local'}}/>
               <Stack.Screen name="AltaLocal" component={AltaLocalScreen} options={{title:'Alta de Local'}}/>
               <Stack.Screen name="Eventos" component={EventosScreen} options={{ title: "Nuevo Evento" }}/>

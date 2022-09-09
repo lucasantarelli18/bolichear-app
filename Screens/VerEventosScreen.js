@@ -37,7 +37,7 @@ export function VerEventosScreen({ route, navigation }) {
 
                   <Card style={styles.card}>
                   <Image
-                      source={{ uri: element.idPromocion }}
+                      source={{ uri: element.path }}
                       style={{ width: 350, height: 200 }}
                   />
                   <Text style={styles.titleText}>{element.nombre}</Text>
