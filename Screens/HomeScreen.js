@@ -110,7 +110,8 @@ export function HomeScreen({ route, navigation }) {
       blurRadius={3}
       style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
     >
-      <View style={styles.container}>{list()}</View>
+
+      <ScrollView style={styles.container}>{list()}</ScrollView>
 
       <Pressable style={styles.button} onPress={() => {
         navigation.navigate('Locales', {
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   boliches: {
-    flex: 0.2,
+    flex: 0.3,
     backgroundColor: "lightgrey",
     marginBottom: 0.5,
     padding: 0,
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Medium",
   },
   boliches3: {
-    flex: 1.4,
+    flex: 1.5,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -188,6 +189,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 4,
     backgroundColor: "black",
+    marginVertical:2,
   },
   text: {
     fontSize: 16,

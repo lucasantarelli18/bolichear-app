@@ -8,7 +8,7 @@ import { Input, Block } from "galio-framework";
 import Moment from "moment";
 import "moment/locale/es";
 import DropDownPicker from "react-native-dropdown-picker";
-import { useForm } from "react-hook-form";
+//import { useForm } from "react-hook-form";
 
 export function EventosScreen({ route, navigation }) {
   const [eventos, setEventos] = React.useState([]);

@@ -28,13 +28,19 @@ export function PromocionesScreen({route, navigation}) {
 
   const showDateTimePicker = () => {
     setFechaYHoraIncioMuestra(true);
-    setfechaYHoraFinMuestra(true);
-  };
-  const hideDateTimePicker = () => {
-    setFechaYHoraIncioMuestra(false);
-    setfechaYHoraFinMuestra(false);
   };
 
+  const hideDateTimePicker = () => {
+    setFechaYHoraIncioMuestra(false);
+  };
+
+  const showDateTimePicker2 = () => {
+    setfechaYHoraFinMuestra(true);
+  };
+
+  const hideDateTimePicker2 = () => {
+    setfechaYHoraFinMuestra(false);
+  };
   
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -88,15 +94,15 @@ export function PromocionesScreen({route, navigation}) {
             onCancel={hideDateTimePicker}
             
       />
-      <Button style = {styles.button} title="Fin" onPress={showDateTimePicker}/> 
+      <Button style = {styles.button} title="Fin" onPress={showDateTimePicker2}/> 
       <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 20 }}>
       {fechaYHoraFin ? fechaYHoraFin : "No selecciono la fecha fin"}
       </Text>
       <DateTimePickerModal
             isVisible={fechaYHoraFinMuestra}
             mode="datetime"
-            onConfirm={(datetime)=>{hideDateTimePicker(); setFechaYHoraFin(Moment(datetime).format('YYYY-MM-DD HH:mm:ss'))}}
-            onCancel={hideDateTimePicker}
+            onConfirm={(datetime)=>{hideDateTimePicker2(); setFechaYHoraFin(Moment(datetime).format('YYYY-MM-DD HH:mm:ss'))}}
+            onCancel={hideDateTimePicker2}
       />
 
 
