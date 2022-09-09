@@ -1,19 +1,27 @@
-import * as React from 'react';
-import { Text, View, Button, ScrollView, StyleSheet, Alert, ImageBackground, Pressable } from 'react-native';
-import * as Backend from '../backlog';
+import * as React from "react";
+import {
+  Text,
+  View,
+  Button,
+  ScrollView,
+  StyleSheet,
+  Alert,
+  ImageBackground,
+  Pressable,
+} from "react-native";
+import * as Backend from "../backlog";
 //import DropDownPicker from 'react-native-dropdown-picker';
 //import Constants from 'expo-constants';
 
 export function LocalesScreen({ route, navigation }) {
-
   const { latitud, longitud, idLocalidad, calle, numero } = route.params;
 
   //traer del login
   const idDueno = 5;
 
   //traer del home
-//  const lat = -34.921296;
-//  const long = -57.954208;
+  //  const lat = -34.921296;
+  //  const long = -57.954208;
 
   const [faltaIngresoNombre, setFaltaIngresoNombre] = React.useState(true);
   //  const [faltaIngresoLoc, setFaltaIngresoLoc] = React.useState(true);
@@ -35,24 +43,16 @@ export function LocalesScreen({ route, navigation }) {
       } else {
         setCant(false);
       }
+      console.log(locales);
+      Backend.insertDomicilioSinPiso(calle, numero, idLocalidad).then(
+        (items) => {}
+      );
 
-console.log(locales);
-    Backend.insertDomicilioSinPiso(calle, numero, idLocalidad)
-    .then((items)=>{})
-
-    Backend.getUltimoDomicilio()
-    .then((items)=>{
-      setIdDomicilio(items[0].id);
-    })
-      
-    })
-  }, [])
-
-// const itemsLoc = [
-//  {label:"La Plata", value:1},
-//  {label:"Quilmes", value:2},
-//  {label:"Bernal", value:3}
-//  ]
+      Backend.getUltimoDomicilio().then((items) => {
+        setIdDomicilio(items[0].id);
+      });
+    });
+  }, []);
 
   // const itemsLoc = [
   //  {label:"La Plata", value:1},
@@ -63,25 +63,37 @@ console.log(locales);
   const list = () => {
     return locales.map((element) => {
       return (
-        <ImageBackground source={require('../assets/fondoBoliches3.jpg')} blurRadius={3} style={styles.boliches}>
-
+        <ImageBackground
+          source={require("../assets/fondoBoliches3.jpg")}
+          blurRadius={3}
+          style={styles.boliches}
+        >
           <View style={styles.boliches2}>
-            <Text style={styles.titulos} key="{element.id}">{element.nombre}</Text>
+            <Text style={styles.titulos} key="{element.id}">
+              {element.nombre}
+            </Text>
           </View>
 
           <View style={styles.boliches3}>
             <View>
-             <Text style={styles.info}> Direccion: {element.Domicilio.calle} {element.Domicilio.numero}</Text> 
+              <Text style={styles.info}>
+                {" "}
+                Direccion: {element.Domicilio.calle} {element.Domicilio.numero}
+              </Text>
             </View>
             <View>
-
-              <Pressable style={styles.button2} onPress={() => navigation.navigate('VerInfo',{idLocal:element.id})}>
+              <Pressable
+                style={styles.button2}
+                onPress={() =>
+                  navigation.navigate("VerInfo", {
+                    idLocal: element.id,
+                    latitud: latitud,
+                    longitud: longitud,
+                  })
+                }
+              >
                 <Text style={styles.text}>VER INFO</Text>
               </Pressable>
-              {/* <Pressable style={styles.button2} onPress={() => { navigation.navigate('Promociones',{idLocal: element.id})}}>
-                <Text style={styles.text}>VER PROMOCIONES</Text>
-              </Pressable>  */}
-
             </View>
           </View>
         </ImageBackground>
@@ -91,42 +103,34 @@ console.log(locales);
 
   return (
     <>
-    
-    {cant ? (
-    //Tiene locales
-    <ImageBackground source={require('../assets/fondoLogIn3.jpg')} blurRadius={3} style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <View style={styles.container}>{list()}</View>
-      
-       <Pressable style={styles.button} onPress={() => {
-        navigation.navigate("Eventos");
-       }}>
-        <Text style={styles.text}>MIS EVENTOS</Text>
-      </Pressable>
-    </ImageBackground>
-      
-    ) : (
-    //No tiene locales
-    <>
-    <ImageBackground source={require('../assets/fondoLogIn3.jpg')} blurRadius={3} style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text style={styles.titulos}>Todavía no tenes registrado un local</Text>
-      <Pressable style={styles.button} onPress={() => {
-        navigation.navigate('AltaLocal', {
-          latitud: latitud,
-          longitud: longitud,
-          idDomicilio: idDomicilio,
-          idDueno: idDueno,
-        });
-
-      }}>
-        <Text style={styles.text}>DAR DE ALTA UN LOCAL</Text>
-      </Pressable>
-      <Pressable style={styles.button} onPress={() => {
-        navigation.navigate("Eventos");
-       }}>
-        <Text style={styles.text}>MIS EVENTOS</Text>
-      </Pressable>
-    </ImageBackground>
-
+      {cant ? (
+        //Tiene locales
+        <ImageBackground
+          source={require("../assets/fondoLogIn3.jpg")}
+          blurRadius={3}
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <View style={styles.container}>{list()}</View>
+        </ImageBackground>
+      ) : (
+        //No tiene locales
+        <>
+          <Text style={styles.titulos}>
+            Todavía no tenes registrado un local
+          </Text>
+          <Pressable
+            style={styles.button}
+            onPress={() => {
+              navigation.navigate("AltaLocal", {
+                latitud: latitud,
+                longitud: longitud,
+                idDomicilio: idDomicilio,
+                idDueno: idDueno,
+              });
+            }}
+          >
+            <Text style={styles.text}>DAR DE ALTA UN LOCAL</Text>
+          </Pressable>
         </>
       )}
     </>
@@ -137,69 +141,68 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     borderRadius: 1,
-    width: '100%',
-
+    width: "100%",
   },
   boliches: {
     flex: 0.2,
     backgroundColor: "lightgrey",
-    marginBottom: .5,
+    marginBottom: 0.5,
     padding: 0,
     paddingRight: 12,
     paddingLeft: 12,
-    fontFamily: 'Roboto-Medium',
+    fontFamily: "Roboto-Medium",
   },
   boliches2: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    fontFamily: 'Roboto-Medium',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    fontFamily: "Roboto-Medium",
   },
   boliches3: {
     flex: 1.4,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    fontFamily: 'Roboto-Medium',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    fontFamily: "Roboto-Medium",
   },
   titulos: {
     fontSize: 25,
-    textTransform: 'uppercase',
+    textTransform: "uppercase",
     fontWeight: "bold",
-    fontFamily: 'Roboto-Medium',
+    fontFamily: "Roboto-Medium",
   },
   km: {
     fontSize: 15,
     fontWeight: "bold",
-    fontFamily: 'Roboto-Medium',
+    fontFamily: "Roboto-Medium",
   },
   info: {
     fontSize: 15,
     fontWeight: "bold",
   },
   button: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: 'black',
+    backgroundColor: "black",
   },
   button2: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 4,
-    backgroundColor: 'black',
+    backgroundColor: "black",
   },
   text: {
     fontSize: 16,
     lineHeight: 21,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     letterSpacing: 0.25,
-    color: 'white',
+    color: "white",
   },
 });

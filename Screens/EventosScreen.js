@@ -10,7 +10,7 @@ import "moment/locale/es";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useForm } from "react-hook-form";
 
-export function EventosScreen({ navigation }) {
+export function EventosScreen({ route, navigation }) {
   const [eventos, setEventos] = React.useState([]);
   const [tipoEvento, setTipoEvento] = React.useState([]);
   const [open, setOpen] = useState(false);
@@ -23,6 +23,8 @@ export function EventosScreen({ navigation }) {
   const [horaFin, setHoraFin] = useState(null);
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [datePickerVisible2, setDatePickerVisible2] = useState(false);
+
+  const { idLocal, latitud, longitud } = route.params;
 
   React.useEffect(() => {
     //Tomo eventos
@@ -123,10 +125,13 @@ export function EventosScreen({ navigation }) {
               horaInicio,
               horaFin,
               value,
-              1
+              idLocal
             ).then((items) => {
               Alert.alert("Evento creado");
-              navigation.navigate("Locales");
+              navigation.navigate("Locales", {
+                latitud: latitud,
+                longitud: longitud,
+              });
             })
           }
         >

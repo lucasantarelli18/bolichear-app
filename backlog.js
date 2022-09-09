@@ -64,6 +64,11 @@ export const getFotoxIdLocal = async (idLocal) => {
   return Foto;
 };
 
+export const getEventosxIdLocal = async (idLocal) => {
+  let { data: Evento, error } = await supabase.from("Evento").select("*").eq("idLocal", idLocal,);
+  return Evento;
+};
+
 export const getUltimoDomicilio = async () => { 
 const { data, error, count } = await supabase.from('Domicilio')
   .select('id')
