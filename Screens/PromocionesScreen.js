@@ -77,6 +77,10 @@ export function PromocionesScreen({route, navigation}) {
       />
      
       <Button  style = {styles.button} title="Inicio" onPress={showDateTimePicker}/> 
+      <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 20 }}>
+      {fechaYHoraIncio ? fechaYHoraIncio : "No selecciono la fecha inicio"}
+      </Text>
+      
       <DateTimePickerModal
             isVisible={fechaYHoraIncioMuestra}
             mode="datetime"
@@ -85,6 +89,9 @@ export function PromocionesScreen({route, navigation}) {
             
       />
       <Button style = {styles.button} title="Fin" onPress={showDateTimePicker}/> 
+      <Text style={{ fontSize: 16, fontWeight: "bold", marginBottom: 20 }}>
+      {fechaYHoraFin ? fechaYHoraFin : "No selecciono la fecha fin"}
+      </Text>
       <DateTimePickerModal
             isVisible={fechaYHoraFinMuestra}
             mode="datetime"
