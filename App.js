@@ -1,72 +1,90 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TextInput, View, Button, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, Image, ImageBackground, Pressable } from 'react-native';
 import { supabase } from './supabase';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SplashScreen } from './Screens/SplashScreen'
 import { HomeScreen } from './Screens/HomeScreen'
+import { UbicationScreen } from './Screens/UbicationScreen'
 import { DetailsScreen } from './Screens/DetailsScreen'
 import { LocalesScreen } from './Screens/LocalesScreen'
+import { AltaLocalScreen } from './Screens/AltaLocalScreen'
+import { VerInfoScreen } from "./Screens/VerInfoScreen";
+import { EventosScreen } from "./Screens/EventosScreen";
 import { PromocionesScreen } from './Screens/PromocionesScreen';
 import { VerPromocionesScreen } from './Screens/VerPromocionesScreen';
 import 'react-native-url-polyfill/auto';
-
+//import MapView, { Marker, Polyline } from 'react-native-maps';
+//import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+//import ImageBlurShadow from 'react-native-image-blur-shadow';
 
 const AuthContext = React.createContext();
+const image = { uri: "./assets/FondoDesenfocado.jpg" };
 
 function SignInScreen() {
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
   const { signIn } = React.useContext(AuthContext);
 
   return (
-    <View style = {styles.container}>
-      
-      <Image style = {styles.imagen} source={require('./assets/logo.png')} />
-      <View style = {styles.container2}>
-      <TextInput
-        style = {styles.input}
-        placeholder="Ingresa tu ubicacion"
-        value={username}
-        onChangeText={setUsername}
-        
-      />
-      <TextInput
-        style = {styles.input}
-        placeholder="Rango de cobertura"
-        value={password}
-        onChangeText={setPassword}
-        //secureTextEntry
-      />
-      <Button style = {styles.input} title="Buscar" onPress={() => signIn({ username, password })} />
+
+    <ImageBackground
+      source={require("./assets/fondoLogIn7.jpg")}
+      style={styles.container}
+    >
+      <Image style={styles.imagen} source={require("./assets/logo.png")} />
+      <View style={styles.container2}>
+        <TextInput
+          style={styles.input}
+          placeholder="Usuario"
+          value={username}
+          onChangeText={setUsername}
+          //secureTextEntry
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Contraseña"
+          value={password}
+          onChangeText={setPassword}
+          //secureTextEntry
+        />
+
+        <Pressable
+          style={styles.button}
+          onPress={() => signIn({ username, password })}
+        >
+          <Text style={styles.text}>LOG IN</Text>
+        </Pressable>
 
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 
 const Stack = createNativeStackNavigator();
 
-export default function App({navigation}) {
+export default function App({ navigation }) {
 
-    const [state, dispatch] = React.useReducer(
+  const [fontsLoaded, setFontsLoaded] = React.useState(false);
+
+  const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
-        case 'RESTORE_TOKEN':
+        case "RESTORE_TOKEN":
           return {
             ...prevState,
             userToken: action.token,
             isLoading: false,
           };
-        case 'SIGN_IN':
+        case "SIGN_IN":
           return {
             ...prevState,
             isSignout: false,
             userToken: action.token,
           };
-        case 'SIGN_OUT':
+        case "SIGN_OUT":
           return {
             ...prevState,
             isSignout: true,
@@ -97,9 +115,14 @@ export default function App({navigation}) {
 
       // This will switch to the App screen or Auth screen and this loading
       // screen will be unmounted and thrown away.
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+      dispatch({ type: "RESTORE_TOKEN", token: userToken });
     };
 
+    if (!fontsLoaded) {
+      Font.loadAsync({
+        "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
+      });
+    }
     bootstrapAsync();
   }, []);
 
@@ -111,23 +134,23 @@ export default function App({navigation}) {
         // After getting token, we need to persist the token using `SecureStore` or any other encrypted storage
         // In the example, we'll use a dummy token
 
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+        dispatch({ type: "SIGN_IN", token: "dummy-auth-token" });
       },
-      signOut: () => dispatch({ type: 'SIGN_OUT' }),
+      signOut: () => dispatch({ type: "SIGN_OUT" }),
       signUp: async (data) => {
         // In a production app, we need to send user data to server and get a token
         // We will also need to handle errors if sign up failed
         // After getting token, we need to persist the token using `SecureStore` or any other encrypted storage
         // In the example, we'll use a dummy token
 
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+        dispatch({ type: "SIGN_IN", token: "dummy-auth-token" });
       },
     }),
     []
   );
-    //const {signOut} = React.useContext(AuthContext);
-    //<Button title="Cerrar sesion" onPress={signOut}/>
-    return (
+  //const {signOut} = React.useContext(AuthContext);
+  //<Button title="Cerrar sesion" onPress={signOut}/>
+  return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
         <Stack.Navigator>
@@ -140,20 +163,26 @@ export default function App({navigation}) {
               name="SignIn"
               component={SignInScreen}
               options={{
-                title: 'Sign in',
+                title: "Sign in",
                 // When logging out, a pop animation feels intuitive
-                animationTypeForReplace: state.isSignout ? 'pop' : 'push',
+                animationTypeForReplace: state.isSignout ? "pop" : "push",
               }}
             />
-          ) : ( 
+          ) : (
             // User is signed in
-          <>
-            <Stack.Screen name="Home" component={HomeScreen} options={{title:'Inicio'}}/>
-            <Stack.Screen name="Details" component={DetailsScreen} />
-            <Stack.Screen name="Locales" component={LocalesScreen} options={{title:'Mi Local'}}/>
-            <Stack.Screen name="Promociones" component={PromocionesScreen} options={{title:'Nueva Promocion'}}/>
-            <Stack.Screen name="VerPromociones" component={VerPromocionesScreen} options={{title:'Promociones'}}/>
-          </> )}
+
+            <>
+              <Stack.Screen name="Ubication" component={UbicationScreen} options={{title:'Ubicación'}}/>
+              <Stack.Screen name="Home" component={HomeScreen} options={{title:'Inicio'}}/>
+              <Stack.Screen name="Details" component={DetailsScreen} />
+              <Stack.Screen name="VerInfo" component={VerInfoScreen} />
+              <Stack.Screen name="Locales" component={LocalesScreen} options={{title:'Mi Local'}}/>
+              <Stack.Screen name="AltaLocal" component={AltaLocalScreen} options={{title:'Alta de Local'}}/>
+              <Stack.Screen name="Eventos" component={EventosScreen} options={{ title: "Mis Eventos" }}/>
+              <Stack.Screen name="Promociones" component={PromocionesScreen} options={{title:'Nueva Promocion'}}/>
+              <Stack.Screen name="VerPromociones" component={VerPromocionesScreen} options={{title:'Promociones'}}/>
+            </>)}
+
         </Stack.Navigator>
       </NavigationContainer>
     </AuthContext.Provider>
@@ -161,26 +190,66 @@ export default function App({navigation}) {
 }
 
 const styles = StyleSheet.create({
+  test: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignContent: "space-between",
+    //backgroundColor: '#fff',
+    alignItems: "center",
+    //justifyContent: 'center',
+    //alignContent: "space-between",
   },
   container2: {
-    width: '50%',
-    height: '17%',
-    backgroundColor: '#fff',
+    width: "50%",
+    height: 132,
+    //backgroundColor: '#fff',
+    elevation: 10,
+
   },
   imagen: {
     width: 300,
     height: 300,
   },
   input: {
+    height: 39,
     marginBottom: 10,
     paddingLeft: 10,
     borderWidth: 1,
     borderRadius: 4,
+    fontSize: 16,
+    fontFamily: "Roboto-Medium",
+    //borderColor: 'white',
+  },
+  places: {
+    //flex: 0,
+    //position: "absolute",
+    width: "50%",
+    //zIndex: 1,
+    //backgroundColor: "black",
+  },
+  image: {
+    //flex: 1,
+    //justifyContent: "center"
+    alignItems: "center",
+    flexGrow: 1,
+    height: "100%",
+  },
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: "black",
+    fontFamily: "Roboto-Medium",
+  },
+  text: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: "bold",
+    letterSpacing: 0.25,
+    color: "white",
   },
 });
