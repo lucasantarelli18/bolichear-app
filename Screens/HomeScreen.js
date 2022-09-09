@@ -77,18 +77,16 @@ export function HomeScreen({ route, navigation }) {
             </View>
             <View>
 
-              <Pressable
-                style={styles.button2}
-                onPress={() =>
-                  navigation.navigate("VerInfo", {
-                    idLocal: element.id,
-                    latitud: latitud,
-                    longitud: longitud,
-                  })
-                }
-              >
-                <Text style={styles.text}>VER INFO</Text>
-              </Pressable>
+            <Pressable
+              style={styles.button2}
+              onPress={() => {
+                navigation.navigate("VerEventos", {
+                  idLocal: element.id,
+                });
+              }}
+            >
+              <Text style={styles.text}>VER EVENTOS</Text>
+            </Pressable>
               <Pressable
                 style={styles.button2}
                 onPress={() =>
