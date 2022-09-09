@@ -78,6 +78,9 @@ console.log(locales);
               <Pressable style={styles.button2} onPress={() => Alert.alert('Proximamente')}>
                 <Text style={styles.text}>VER INFO</Text>
               </Pressable>
+              <Pressable style={styles.button2} onPress={() => { navigation.navigate('Promociones',{idLocal: element.id})}}>
+                <Text style={styles.text}>VER PROMOCIONES</Text>
+              </Pressable>
 
             </View>
           </View>

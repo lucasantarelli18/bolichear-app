@@ -12,6 +12,8 @@ import { LocalesScreen } from './Screens/LocalesScreen'
 import { AltaLocalScreen } from './Screens/AltaLocalScreen'
 import { VerInfoScreen } from "./Screens/VerInfoScreen";
 import { EventosScreen } from "./Screens/EventosScreen";
+import { PromocionesScreen } from './Screens/PromocionesScreen';
+import { VerPromocionesScreen } from './Screens/VerPromocionesScreen';
 import 'react-native-url-polyfill/auto';
 //import MapView, { Marker, Polyline } from 'react-native-maps';
 //import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -177,8 +179,9 @@ export default function App({ navigation }) {
               <Stack.Screen name="Locales" component={LocalesScreen} options={{title:'Mi Local'}}/>
               <Stack.Screen name="AltaLocal" component={AltaLocalScreen} options={{title:'Alta de Local'}}/>
               <Stack.Screen name="Eventos" component={EventosScreen} options={{ title: "Mis Eventos" }}/>
+              <Stack.Screen name="Promociones" component={PromocionesScreen} options={{title:'Nueva Promocion'}}/>
+              <Stack.Screen name="VerPromociones" component={VerPromocionesScreen} options={{title:'Promociones'}}/>
             </>)}
-
 
         </Stack.Navigator>
       </NavigationContainer>

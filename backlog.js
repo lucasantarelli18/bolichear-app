@@ -84,6 +84,20 @@ export const getLocalxDomicilio = async () => {
 
 */
 
+export const getPromocionXLocal = async () => { 
+  
+    const { data, error } = await supabase.from('Promocion').select(`
+        *,
+        Local (
+          id, idDueño
+        ),
+        Foto(
+          path, idPromocion
+        )
+      `)
+      return data
+        
+}
 //Gets all
 
 /*
@@ -204,6 +218,18 @@ export const insertDomicilioSinPiso = async (calle, num, idLocalidad) => {
   ]);
 };
 
+export const insertPromocion = async (nombrePromo, descrip, fHInicio, fHFin, idLocal, idPromo) => {  
+  const { data, error } = await supabase
+  .from('Domicilio')
+  .insert([
+    { calle: calle,
+      numero: num,
+      idLocalidad: idLocalidad
+
+    },
+  ]);
+};
+
 export const insertPromocion = async (
   nombrePromo,
   descrip,
@@ -218,6 +244,7 @@ export const insertPromocion = async (
       fechaHoraInicio: fHInicio,
       fechaHoraFin: fHFin,
       idLocal: idLocal,
+      idPromocion: idPromo
     },
   ]);
 };
@@ -311,7 +338,34 @@ export const updateProvincia = async (idProv, nombreProv) => {
 
 export const updateLocalidad = async (idLoc, nombreLoc, codPostal) => {
   const { data, error } = await supabase
-    .from("Localidad")
-    .update({ nombre: nombreLoc, codigoPostal: codPostal })
-    .eq("id", idLoc);
-};
+  .from('Localidad')
+  .update({ nombre: nombreLoc,
+            codigoPostal: codPostal
+  })
+  .eq('id', idLoc)
+}
+
+export const updatePromocion = async (nombrePromo, descrip, fHInicio, fHFin, idLocal) => {  
+  const { data, error } = await supabase
+  .from('Promocion')
+  .update({ 
+    nombre: nombrePromo,
+    descripcion: descrip,
+    fechaHoraInicio: fHInicio,
+    fechaHoraFin: fHFin,
+    idLocal: idLocal
+  })
+  .eq('id', idLoc)
+}
+
+
+
+//DELETES
+
+export const deletePromocion = async (idPromo) =>{
+  const { data, error } = await supabase
+  .from('Promocion')
+  .delete()
+  .match({ id: idPromo })
+}
+

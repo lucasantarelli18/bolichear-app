@@ -76,6 +76,7 @@ export function HomeScreen({ route, navigation }) {
               <Text style={styles.info}> Asistiran 300 personas </Text>
             </View>
             <View>
+
               <Pressable
                 style={styles.button2}
                 onPress={() =>
@@ -87,6 +88,16 @@ export function HomeScreen({ route, navigation }) {
                 }
               >
                 <Text style={styles.text}>VER INFO</Text>
+              </Pressable>
+              <Pressable
+                style={styles.button2}
+                onPress={() =>
+                  navigation.navigate("VerPromociones", {
+                    idLocal: element.id,
+                  })
+                }
+              >
+                <Text style={styles.text}>VER PROMOCIONES</Text>
               </Pressable>
             </View>
           </View>
