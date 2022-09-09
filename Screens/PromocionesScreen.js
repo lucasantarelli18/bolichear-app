@@ -23,7 +23,7 @@ export function PromocionesScreen({route, navigation}) {
   const [descripcion, setDescripcion] = useState(null);
   const [fechaYHoraIncio, setFechaYHoraIncio] = useState(null);
   const [fechaYHoraFin, setFechaYHoraFin] = useState(null);
-  const { idLocal } = route.params;
+  const { idLocal, latitud, longitud } = route.params;
   //const idPromocion = uuid();
 
   const showDateTimePicker = () => {
@@ -62,7 +62,7 @@ export function PromocionesScreen({route, navigation}) {
         idLocal,
         idPromocion)
         .then((items) => {Alert.alert("Promoción creada");
-        navigation.navigate("Locales");})}>
+        navigation.navigate("Locales", {latitud: latitud, longitud:longitud});})}>
       <FormItem 
         label="Nombre"
         isRequired
@@ -121,6 +121,8 @@ const styles = StyleSheet.create({
     elevation: 3,
     backgroundColor: 'black',
     flexDirection: 'row',
+    marginBottom: 24,
+
   },
   text: {
     fontSize: 16,

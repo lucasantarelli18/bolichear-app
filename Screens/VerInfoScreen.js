@@ -83,7 +83,9 @@ export function VerInfoScreen({ route, navigation }) {
             <Pressable
               style={styles.button}
               onPress={() => {
-                Alert.alert("Proximamente");
+                navigation.navigate("VerPromociones", {
+                  idLocal: element.id,
+                })
               }}
             >
               <Text style={styles.text}>MIS PROMOCIONES</Text>
@@ -91,7 +93,8 @@ export function VerInfoScreen({ route, navigation }) {
             <Pressable
               style={styles.button}
               onPress={() => {
-                Alert.alert("Proximamente");
+                navigation.navigate('Promociones',{idLocal: element.id, latitud:latitud, longitud:longitud});
+                
               }}
             >
               <Text style={styles.text}>NUEVA PROMOCION</Text>

@@ -218,7 +218,7 @@ export const insertDomicilioSinPiso = async (calle, num, idLocalidad) => {
   ]);
 };
 
-export const insertPromocion = async (nombrePromo, descrip, fHInicio, fHFin, idLocal, idPromo) => {  
+/* export const insertPromocion = async (nombrePromo, descrip, fHInicio, fHFin, idLocal, idPromo) => {  
   const { data, error } = await supabase
   .from('Domicilio')
   .insert([
@@ -228,15 +228,9 @@ export const insertPromocion = async (nombrePromo, descrip, fHInicio, fHFin, idL
 
     },
   ]);
-};
+}; */
 
-export const insertPromocion = async (
-  nombrePromo,
-  descrip,
-  fHInicio,
-  fHFin,
-  idLocal
-) => {
+export const insertPromocion = async (nombrePromo,descrip,fHInicio,fHFin,idLocal, idPromo) => {
   const { data, error } = await supabase.from("Promocion").insert([
     {
       nombre: nombrePromo,

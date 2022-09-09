@@ -75,12 +75,12 @@ console.log(locales);
             </View>
             <View>
 
-              <Pressable style={styles.button2} onPress={() => Alert.alert('Proximamente')}>
+              <Pressable style={styles.button2} onPress={() => navigation.navigate('VerInfo',{idLocal:element.id})}>
                 <Text style={styles.text}>VER INFO</Text>
               </Pressable>
-              <Pressable style={styles.button2} onPress={() => { navigation.navigate('Promociones',{idLocal: element.id})}}>
+              {/* <Pressable style={styles.button2} onPress={() => { navigation.navigate('Promociones',{idLocal: element.id})}}>
                 <Text style={styles.text}>VER PROMOCIONES</Text>
-              </Pressable>
+              </Pressable>  */}
 
             </View>
           </View>
@@ -107,6 +107,7 @@ console.log(locales);
     ) : (
     //No tiene locales
     <>
+    <ImageBackground source={require('../assets/fondoLogIn3.jpg')} blurRadius={3} style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text style={styles.titulos}>Todavía no tenes registrado un local</Text>
       <Pressable style={styles.button} onPress={() => {
         navigation.navigate('AltaLocal', {
