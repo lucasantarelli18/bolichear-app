@@ -10,49 +10,53 @@ import { UbicationScreen } from './Screens/UbicationScreen'
 import { DetailsScreen } from './Screens/DetailsScreen'
 import { LocalesScreen } from './Screens/LocalesScreen'
 import { AltaLocalScreen } from './Screens/AltaLocalScreen'
+import { VerInfoScreen } from "./Screens/VerInfoScreen";
+import { EventosScreen } from "./Screens/EventosScreen";
+import { PromocionesScreen } from './Screens/PromocionesScreen';
+import { VerPromocionesScreen } from './Screens/VerPromocionesScreen';
+import { VerEventosScreen } from "./Screens/VerEventosScreen";
 import 'react-native-url-polyfill/auto';
 //import MapView, { Marker, Polyline } from 'react-native-maps';
 //import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 //import ImageBlurShadow from 'react-native-image-blur-shadow';
 import * as Font from 'expo-font';
 
-
-
 const AuthContext = React.createContext();
 const image = { uri: "./assets/FondoDesenfocado.jpg" };
 
-
-
-
 function SignInScreen() {
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
   const { signIn } = React.useContext(AuthContext);
 
-
   return (
 
-    <ImageBackground source={require('./assets/fondoLogIn7.jpg')} style={styles.container}>
-
-
-      <Image style={styles.imagen} source={require('./assets/logo.png')} />
+    <ImageBackground
+      source={require("./assets/fondoLogIn7.jpg")}
+      style={styles.container}
+    >
+      <Image style={styles.imagen} source={require("./assets/logo.png")} />
       <View style={styles.container2}>
         <TextInput
           style={styles.input}
           placeholder="Usuario"
           value={username}
           onChangeText={setUsername}
-        //secureTextEntry
+          //secureTextEntry
         />
         <TextInput
           style={styles.input}
           placeholder="Contraseña"
           value={password}
           onChangeText={setPassword}
-        //secureTextEntry
+          //secureTextEntry
         />
-        <Pressable style={styles.button} onPress={() => signIn({ username, password })}>
+
+        <Pressable
+          style={styles.button}
+          onPress={() => signIn({ username, password })}
+        >
           <Text style={styles.text}>LOG IN</Text>
         </Pressable>
 
@@ -70,19 +74,19 @@ export default function App({ navigation }) {
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
-        case 'RESTORE_TOKEN':
+        case "RESTORE_TOKEN":
           return {
             ...prevState,
             userToken: action.token,
             isLoading: false,
           };
-        case 'SIGN_IN':
+        case "SIGN_IN":
           return {
             ...prevState,
             isSignout: false,
             userToken: action.token,
           };
-        case 'SIGN_OUT':
+        case "SIGN_OUT":
           return {
             ...prevState,
             isSignout: true,
@@ -113,12 +117,12 @@ export default function App({ navigation }) {
 
       // This will switch to the App screen or Auth screen and this loading
       // screen will be unmounted and thrown away.
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+      dispatch({ type: "RESTORE_TOKEN", token: userToken });
     };
 
-    if (!fontsLoaded){
+    if (!fontsLoaded) {
       Font.loadAsync({
-        'Roboto-Medium': require('./assets/fonts/Roboto-Medium.ttf'),
+        "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
       });
     }
     bootstrapAsync();
@@ -132,16 +136,16 @@ export default function App({ navigation }) {
         // After getting token, we need to persist the token using `SecureStore` or any other encrypted storage
         // In the example, we'll use a dummy token
 
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+        dispatch({ type: "SIGN_IN", token: "dummy-auth-token" });
       },
-      signOut: () => dispatch({ type: 'SIGN_OUT' }),
+      signOut: () => dispatch({ type: "SIGN_OUT" }),
       signUp: async (data) => {
         // In a production app, we need to send user data to server and get a token
         // We will also need to handle errors if sign up failed
         // After getting token, we need to persist the token using `SecureStore` or any other encrypted storage
         // In the example, we'll use a dummy token
 
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+        dispatch({ type: "SIGN_IN", token: "dummy-auth-token" });
       },
     }),
     []
@@ -161,9 +165,9 @@ export default function App({ navigation }) {
               name="SignIn"
               component={SignInScreen}
               options={{
-                title: 'Sign in',
+                title: "Sign in",
                 // When logging out, a pop animation feels intuitive
-                animationTypeForReplace: state.isSignout ? 'pop' : 'push',
+                animationTypeForReplace: state.isSignout ? "pop" : "push",
               }}
             />
           ) : (
@@ -173,9 +177,15 @@ export default function App({ navigation }) {
               <Stack.Screen name="Ubication" component={UbicationScreen} options={{title:'Ubicación'}}/>
               <Stack.Screen name="Home" component={HomeScreen} options={{title:'Inicio'}}/>
               <Stack.Screen name="Details" component={DetailsScreen} />
+              <Stack.Screen name="VerInfo" component={VerInfoScreen}  options={{title:'Mi Local'}}/>
               <Stack.Screen name="Locales" component={LocalesScreen} options={{title:'Mi Local'}}/>
               <Stack.Screen name="AltaLocal" component={AltaLocalScreen} options={{title:'Alta de Local'}}/>
+              <Stack.Screen name="Eventos" component={EventosScreen} options={{ title: "Nuevo Evento" }}/>
+              <Stack.Screen name="VerEventos" component={VerEventosScreen} options={{ title: "Eventos" }}/>
+              <Stack.Screen name="Promociones" component={PromocionesScreen} options={{title:'Nueva Promocion'}}/>
+              <Stack.Screen name="VerPromociones" component={VerPromocionesScreen} options={{title:'Promociones'}}/>
             </>)}
+
         </Stack.Navigator>
       </NavigationContainer>
     </AuthContext.Provider>
@@ -189,15 +199,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     //backgroundColor: '#fff',
-    alignItems: 'center',
+    alignItems: "center",
     //justifyContent: 'center',
     //alignContent: "space-between",
   },
   container2: {
-    width: '50%',
+    width: "50%",
     height: 132,
     //backgroundColor: '#fff',
     elevation: 10,
+
   },
   imagen: {
     width: 300,
@@ -210,7 +221,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 4,
     fontSize: 16,
-    fontFamily: 'Roboto-Medium',
+    fontFamily: "Roboto-Medium",
     //borderColor: 'white',
   },
   places: {
@@ -223,25 +234,25 @@ const styles = StyleSheet.create({
   image: {
     //flex: 1,
     //justifyContent: "center"
-    alignItems: 'center',
+    alignItems: "center",
     flexGrow: 1,
-    height: '100%',
+    height: "100%",
   },
   button: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: 'black',
-    fontFamily: 'Roboto-Medium',
+    backgroundColor: "black",
+    fontFamily: "Roboto-Medium",
   },
   text: {
     fontSize: 16,
     lineHeight: 21,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     letterSpacing: 0.25,
-    color: 'white',
+    color: "white",
   },
 });

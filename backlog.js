@@ -1,9 +1,9 @@
-import * as React from 'react';
-import { Text, View, Button } from 'react-native';
-import { supabase } from './supabase';
-import 'react-native-url-polyfill/auto';
+import * as React from "react";
+import { Text, View, Button } from "react-native";
+import { supabase } from "./supabase";
+import "react-native-url-polyfill/auto";
 
-export const getLocalesXUser = async (idDueno) => {  
+export const getLocalesXUser = async (idDueno) => {
   let { data: Local, error } = await supabase
   .from('Local')
   .select(`
@@ -16,7 +16,7 @@ export const getLocalesXUser = async (idDueno) => {
   return Local
 }
 
-export const getLocalidadesXProv = async (idProv) => {  
+export const getLocalidadesXProv = async (idProv) => {
   let { data: Localidad, error } = await supabase
   .from('Localidad')
   .select('*')
@@ -33,15 +33,41 @@ export const getLocalidadXNombre = async (nombre) => {
 }
 
 //Get Filtrado
-export const getLocalxDomicilio = async () => { 
-const { data, error } = await supabase.from('Local').select(`
+export const getLocalxDomicilio = async () => {
+  const { data, error } = await supabase.from("Local").select(`
     *,
     Domicilio (
       *
     )
-  `)
-  return data
-    }
+  `);
+  return data;
+};
+
+export const getLocalxID = async (idLocal) => {
+  const { data, error } = await supabase
+    .from("Local")
+    .select(
+      `*, Domicilio (
+      *
+    )`
+    )
+    .eq("id", idLocal);
+
+  return data;
+};
+
+export const getFotoxIdLocal = async (idLocal) => {
+  const { data: Foto, error } = await supabase
+    .from("Foto")
+    .select("*")
+    .eq("idLocal", idLocal);
+  return Foto;
+};
+
+export const getEventosxIdLocal = async (idLocal) => {
+  let { data: Evento, error } = await supabase.from("Evento").select("*").eq("idLocal", idLocal,);
+  return Evento;
+};
 
 export const getUltimoDomicilio = async () => { 
 const { data, error, count } = await supabase.from('Domicilio')
@@ -63,6 +89,20 @@ export const getLocalxDomicilio = async () => {
 
 */
 
+export const getPromocionXLocal = async () => { 
+  
+    const { data, error } = await supabase.from('Promocion').select(`
+        *,
+        Local (
+          id, idDueño
+        ),
+        Foto(
+          path, idPromocion
+        )
+      `)
+      return data
+        
+}
 //Gets all
 
 /*
@@ -77,77 +117,59 @@ React.useEffect(() => {
 
 */
 
-export const getProvincias = async () => {  
-  let { data: Provincia, error } = await supabase
-  .from('Provincia')
-  .select('*')
-  return Provincia
-}
+export const getProvincias = async () => {
+  let { data: Provincia, error } = await supabase.from("Provincia").select("*");
+  return Provincia;
+};
 
-export const getLocalidades = async () => {  
-  let { data: Localidad, error } = await supabase
-  .from('Localidad')
-  .select('*')
-  return Localidad
-}
+export const getLocalidades = async () => {
+  let { data: Localidad, error } = await supabase.from("Localidad").select("*");
+  return Localidad;
+};
 
-export const getDomicilios = async () => {  
-  let { data: Domicilio, error } = await supabase
-  .from('Domicilio')
-  .select('*')
-  return Domicilio
-}
+export const getDomicilios = async () => {
+  let { data: Domicilio, error } = await supabase.from("Domicilio").select("*");
+  return Domicilio;
+};
 
+export const getPromociones = async () => {
+  let { data: Promocion, error } = await supabase.from("Promocion").select("*");
+  return Promocion;
+};
 
-export const getPromociones = async () => {  
-  let { data: Promocion, error } = await supabase
-  .from('Promocion')
-  .select('*')
-  return Promocion
-}
+export const getLocales = async () => {
+  let { data: Local, error } = await supabase.from("Local").select("*");
+  return Local;
+};
 
-export const getLocales = async () => {  
-  let { data: Local, error } = await supabase
-  .from('Local')
-  .select('*')
-  return Local
-}
-
-export const getAsistencias = async () => {  
+export const getAsistencias = async () => {
   let { data: Asistencia, error } = await supabase
-  .from('Asistencia')
-  .select('*')
-  return Asistencia
-}
+    .from("Asistencia")
+    .select("*");
+  return Asistencia;
+};
 
-export const getFotos = async () => {  
-  let { data: Foto, error } = await supabase
-  .from('Foto')
-  .select('*')
-  return Foto
-}
+export const getFotos = async () => {
+  let { data: Foto, error } = await supabase.from("Foto").select("*");
+  return Foto;
+};
 
-export const getEventos = async () => {  
-  let { data: Evento, error } = await supabase
-  .from('Evento')
-  .select('*')
-  return Evento
-}
+export const getEventos = async () => {
+  let { data: Evento, error } = await supabase.from("Evento").select("*");
+  return Evento;
+};
 
-export const getTipoEventos = async () => {  
+export const getTipoEventos = async () => {
   let { data: TipoEvento, error } = await supabase
-  .from('TipoEvento')
-  .select('*')
-  return TipoEvento
-}
+    .from("TipoEvento")
+    .select("*");
+  return TipoEvento;
+};
 
-export const getUsuarios = async () => {  
-  let { data: Usuario, error } = await supabase
-  .from('Usuario')
-  .select('*')
-  return Usuario
-}
-
+export const getUsuarios = async () => {
+  let { data: Usuario, error } = await supabase.from("Usuario").select("*");
+  return Usuario;
+};
 
 //Inserts
 
@@ -161,37 +183,33 @@ React.useEffect(() => {
 
 */
 
-export const insertProvincia = async (nombreProv) => {  
+export const insertProvincia = async (nombreProv) => {
   const { data, error } = await supabase
-  .from('Provincia')
-  .insert([
-    { nombre: nombreProv},
-  ])
-}
+    .from("Provincia")
+    .insert([{ nombre: nombreProv }]);
+};
 
-export const insertLocalidad = async (nombreLoc, codPostal, idProv) => {  
+export const insertLocalidad = async (nombreLoc, codPostal, idProv) => {
   const { data, error } = await supabase
-  .from('Localidad')
-  .insert([
-    { nombre: nombreLoc,
-      codigoPostal: codPostal,
-      idProvincia: idProv
-    },
-  ])
-}
+    .from("Localidad")
+    .insert([
+      { nombre: nombreLoc, codigoPostal: codPostal, idProvincia: idProv },
+    ]);
+};
 
 export const insertDomicilio = async (calle, num, piso, dpto, idLocalidad) => {  
   const { data, error } = await supabase
   .from('Domicilio')
   .insert([
     { calle: calle,
+
       numero: num,
       piso: piso,
       dpto: dpto,
-      idLocalidad: idLocalidad
+      idLocalidad: idLocalidad,
     },
-  ])
-}
+  ]);
+};
 
 export const insertDomicilioSinPiso = async (calle, num, idLocalidad) => {  
   const { data, error } = await supabase
@@ -200,22 +218,35 @@ export const insertDomicilioSinPiso = async (calle, num, idLocalidad) => {
     { calle: calle,
       numero: num,
       idLocalidad: idLocalidad
-    },
-  ])
-}
 
-export const insertPromocion = async (nombrePromo, descrip, fHInicio, fHFin, idLocal) => {  
+    },
+  ]);
+};
+
+/* export const insertPromocion = async (nombrePromo, descrip, fHInicio, fHFin, idLocal, idPromo) => {  
   const { data, error } = await supabase
-  .from('Promocion')
+  .from('Domicilio')
   .insert([
-    { nombre: nombrePromo,
+    { calle: calle,
+      numero: num,
+      idLocalidad: idLocalidad
+
+    },
+  ]);
+}; */
+
+export const insertPromocion = async (nombrePromo,descrip,fHInicio,fHFin,idLocal, idPromo) => {
+  const { data, error } = await supabase.from("Promocion").insert([
+    {
+      nombre: nombrePromo,
       descripcion: descrip,
       fechaHoraInicio: fHInicio,
       fechaHoraFin: fHFin,
-      idLocal: idLocal
+      idLocal: idLocal,
+      idPromocion: idPromo
     },
-  ])
-}
+  ]);
+};
 
 export const insertLocal = async (nombreLocal, lat, long, idDuen, idDomicili) => {  
   console.log(nombreLocal, lat, long, idDuen, idDomicili);
@@ -232,53 +263,50 @@ export const insertLocal = async (nombreLocal, lat, long, idDuen, idDomicili) =>
   if(error){console.log(error)}
 }
 
-export const insertAsistencia = async (fecha, idLocal, idUsuario) => {  
+export const insertAsistencia = async (fecha, idLocal, idUsuario) => {
   const { data, error } = await supabase
-  .from('Asistencia')
-  .insert([
-    { fecha: fecha,
-      idLocal: idLocal,
-      idUsuario: idUsuario
-    
-    },
-  ])
-}
+    .from("Asistencia")
+    .insert([{ fecha: fecha, idLocal: idLocal, idUsuario: idUsuario }]);
+};
 
-export const insertFoto = async (path, idLocal, idEvento, idPromo) => {  
-  const { data, error } = await supabase
-  .from('Foto')
-  .insert([
-    { path: path,
+export const insertFoto = async (path, idLocal, idEvento, idPromo) => {
+  const { data, error } = await supabase.from("Foto").insert([
+    {
+      path: path,
       idLocal: idLocal,
       idEvento: idEvento,
-      idPromocion: idPromo
+      idPromocion: idPromo,
     },
-  ])
-}
+  ]);
+};
 
-export const insertEvento = async (fecha, nombreEvento, horaInicio, horaFin, idEvento, idLocal) => {  
-  const { data, error } = await supabase
-  .from('Evento')
-  .insert([
-    { fecha: fecha,
+export const insertEvento = async (
+  nombreEvento,
+  descripcion,
+  fHoraInicio,
+  fHoraFin,
+  idTipoEvento,
+  idLocal
+) => {
+  const { data, error } = await supabase.from("Evento").insert([
+    {
       nombre: nombreEvento,
-      horaInicio: horaInicio,
-      horaFin: horaFin,
-      idEvento: idEvento,
-      idLocal: idLocal
+      descripcion: descripcion,
+      fechaHoraInicio: fHoraInicio,
+      fechaHoraFin: fHoraFin,
+      idTipoEvento: idTipoEvento,
+      idLocal: idLocal,
     },
-  ])
-}
+  ]);
+};
 
-export const insertTipoEvento = async (tipo) => {  
+export const insertTipoEvento = async (tipo) => {
   const { data, error } = await supabase
-  .from('TipoEvento')
-  .insert([
-    { tipo: tipo},
-  ])
-}
+    .from("TipoEvento")
+    .insert([{ tipo: tipo }]);
+};
 
-export const insertUsuario = async (nombreUsuario, contraseña) => {  
+export const insertUsuario = async (nombreUsuario, contraseña) => {
   const { data, error } = await supabase
   .from('Usuario')
   .insert([
@@ -287,8 +315,6 @@ export const insertUsuario = async (nombreUsuario, contraseña) => {
     },
   ])
 }
-
-
 
 //Updates
 
@@ -302,14 +328,14 @@ React.useEffect(() => {
 
 */
 
-export const updateProvincia = async (idProv, nombreProv) => {  
+export const updateProvincia = async (idProv, nombreProv) => {
   const { data, error } = await supabase
-  .from('Provincia')
-  .update({ nombre: nombreProv })
-  .eq('id', idProv)
-}
+    .from("Provincia")
+    .update({ nombre: nombreProv })
+    .eq("id", idProv);
+};
 
-export const updateLocalidad = async (idLoc, nombreLoc, codPostal) => {  
+export const updateLocalidad = async (idLoc, nombreLoc, codPostal) => {
   const { data, error } = await supabase
   .from('Localidad')
   .update({ nombre: nombreLoc,
@@ -318,6 +344,27 @@ export const updateLocalidad = async (idLoc, nombreLoc, codPostal) => {
   .eq('id', idLoc)
 }
 
+export const updatePromocion = async (nombrePromo, descrip, fHInicio, fHFin, idLocal) => {  
+  const { data, error } = await supabase
+  .from('Promocion')
+  .update({ 
+    nombre: nombrePromo,
+    descripcion: descrip,
+    fechaHoraInicio: fHInicio,
+    fechaHoraFin: fHFin,
+    idLocal: idLocal
+  })
+  .eq('id', idLoc)
+}
 
 
+
+//DELETES
+
+export const deletePromocion = async (idPromo) =>{
+  const { data, error } = await supabase
+  .from('Promocion')
+  .delete()
+  .match({ id: idPromo })
+}
 
