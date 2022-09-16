@@ -5,6 +5,7 @@ import 'react-native-url-polyfill/auto';
 //import MapView, { Marker, Polyline } from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { RealtimeClient } from '@supabase/supabase-js';
+import { Slider } from "@miblanchard/react-native-slider";
 
 export function UbicationScreen({ navigation }) {
 
@@ -27,7 +28,7 @@ export function UbicationScreen({ navigation }) {
       localidad: ubicacion.localidad,
       latitud: ubicacion.latitude,
       longitud: ubicacion.longitude,
-      rango: rango,
+      rango: rango*1000,
     })
   };
 
@@ -119,13 +120,19 @@ export function UbicationScreen({ navigation }) {
               },
             }}
           />
-          <TextInput
-            style={styles.input}
-            //placeholderTextColor= 'white'
-            placeholder="Rango de cobertura (mts)"
-            onChangeText={nuevoRango => setRango(nuevoRango)}
-            value={rango}
-          />
+
+            <Text style={{position:'absolute', right: 0, fontSize: 20, fontWeight:'bold'}}>{rango} km</Text>
+            <Slider
+              containerStyle={{width: '75%', marginVertical:10}}
+              value={rango}
+              minimumValue={0}
+              maximumValue={50}
+              minimumTrackTintColor='#641c34'
+              step={1}
+              onValueChange={value=> setRango(value)}
+              thumbStyle={styles.thumb}
+              trackStyle={styles.track}
+            />
 
           <Pressable style={styles.button} onPress={onPress}>
             <Text style={styles.text}>BUSCAR BOLICHES</Text>
@@ -181,4 +188,23 @@ const styles = StyleSheet.create({
     letterSpacing: 0.25,
     color: 'white',
   },
+  thumb: {
+    backgroundColor: '#000',
+    borderRadius: 30,
+    borderWidth: 10,
+    height: 25,
+    shadowColor: '#000',
+    shadowOffset: {
+        width: 0,
+        height: 2,
+    },
+    shadowOpacity: 0.35,
+    shadowRadius: 2,
+    width: 25,
+},
+track: {
+    backgroundColor: '#d0d0d0',
+    borderRadius: 5,
+    height: 5,
+}, 
 });
