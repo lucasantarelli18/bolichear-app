@@ -1,71 +1,100 @@
-import {Alert, StyleSheet} from 'react-native';
 import * as Backend from '../backlog';
-import { View, Text, Image, ScrollView, Dimensions } from 'react-native';
+import { View, Image, ScrollView,Pressable, StyleSheet, Alert } from 'react-native';
 import React, { useState } from "react";
-import {  Card } from 'react-native-elements';
 import Moment from 'moment';
 import 'moment/locale/es';
-
+import { Text, Card, Button, Icon } from '@rneui/themed';
+import RNRestart from 'react-native-restart';
 
 export function VerPromocionesScreen({route, navigation}) {
     
     const [promociones, setPromociones] = React.useState([]);
-    const [promocionXLocal, setPromocionXLocal] = React.useState([]);
-    const [image, setImage] = useState(null);
+    const [idPromocion, setImage] = useState(null);
     const [cant, setCant] = React.useState([]); 
-    const { idLocal } = route.params;
+    const { idLocal,latitud, longitud } = route.params;
 
-    console.log(idLocal)
+  
 
     React.useEffect(() => {
-        Backend.getPromociones()
+        Backend.getPromocionesxIdLocal(idLocal)
         .then((items) => {
-          setPromociones(items)
-          
-              promociones.map((element) =>{
-                if(element.idLocal == idLocal){
-                    if (items.length > 0) {
-                    console.log(element.idLocal, idLocal)
-                    setCant(true)
-                  } else {
-                      console.log(idLocal)
-                    setCant(false)
-                  }}
-              })
-              
-            
-          
-        }),
+          if (items.length > 0) {
+            setPromociones(items)
+            setCant(true);
+          }else{
+            setCant(false);
+          }
+          console.log(items.length)
+        }),  
+        
+         
         Backend.getFotos()
         .then((items) => {
             //console.log(items)
             setImage(items)
         })
+        
         }, [])
+
+   
+        
 
     const list = () => {
               
         return promociones.map((element) => {
+          
             if(idLocal == element.idLocal){
                 const fechaHoraInicio = Moment(element.fechaHoraInicio).format('DD/MM/YYYY [a las] HH:mm ');
                 const fechaHoraFin = Moment(element.fechaHoraFin).format('DD/MM/YYYY [a las] HH:mm ');
 
             return(
-
-                    <Card style={styles.card}>
-                    <Image
-                        source={{ uri: element.idPromocion }}
-                        style={{ width: 350, height: 200 }}
+          
+              <Card style={styles.card}>
+                
+                <Image
+                  source={{ uri: element.idPromocion }}
+                  style={{ width: 350, height: 200 }}
+                />
+                <Text style={styles.titleText}>{element.nombre}</Text>
+                <Text style={styles.descriptionText}>
+                  {element.descripcion}
+                </Text>
+                <Text>
+                  Vigente desde el {fechaHoraInicio} hasta {fechaHoraFin}
+                </Text>
+                <Button
+                  icon={
+                    <Icon
+                      name="delete"
+                      color="#ffffff"
+                      iconStyle={{ marginRight: 10 }}
                     />
-                    <Text style={styles.titleText}>{element.nombre}</Text>
-                    <Text style={styles.descriptionText}>
-                        {element.descripcion}
-                    </Text>
-                    <Text>
-                        Vigente desde el {fechaHoraInicio} 
-                        hasta {fechaHoraFin}
-                    </Text>
-                </Card>
+                  }
+                  buttonStyle={{
+                    backgroundColor: 'black',
+                    borderRadius: 0,
+                    marginRight: 10,
+                    marginBottom: 0
+                  }} 
+                  onPress={()=>Alert.alert(
+                        "Eliminar",
+                        "¿Desea eliminar la promoción?",
+                        [
+                          {
+                            text: "Cancelar",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel"
+                          },
+                          { text: "Aceptar", 
+                          onPress: () =>Backend.deletePromocion(element.id).then((items) => Alert.alert("Promoción eliminada con éxito")), }
+                        ]
+                  )}
+
+                  title='Eliminar'
+                          
+                />
+
+              </Card>
             
             );
             }
@@ -73,8 +102,12 @@ export function VerPromocionesScreen({route, navigation}) {
         });
     }
 
+    
     return (
 
+        <>
+      {cant ? (
+        //Tiene Eventos
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <ScrollView>
                 
@@ -82,7 +115,30 @@ export function VerPromocionesScreen({route, navigation}) {
               
             </ScrollView>
         </View>
-   
+      ) : (
+        //No tiene locales
+        <>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <Text style={styles.titulos}>
+            No hay promociones
+          </Text>
+          <Pressable
+              style={styles.button}
+              onPress={() => {
+                navigation.navigate("Promociones", {
+                  idLocal: idLocal,
+                  latitud: latitud,
+                  longitud: longitud,
+                });
+              }}
+            >
+              <Text style={styles.titleButton}>NUEVA PROMOCION</Text>
+            </Pressable>
+        </View>
+          
+        </>
+      )}
+    </>
     );
     };
 
@@ -91,9 +147,14 @@ export function VerPromocionesScreen({route, navigation}) {
 const styles = StyleSheet.create({
    
     titleText: {
-        fontSize: 20,
+        fontSize: 15,
+        fontWeight: "bold"
+    },
+    titleButton: {
+        fontSize: 15,
         fontWeight: "bold",
-      },
+        color: "white"
+    },
     descriptionText: {
         fontSize: 15,
         fontWeight: "bold",
@@ -110,6 +171,24 @@ const styles = StyleSheet.create({
         height: '100%',
         backgroundColor: '#fff',
         paddingVertical: 110
+      },
+ 
+      button: {
+        alignItems: "center",
+        justifyContent: "center",
+        paddingVertical: 12,
+        paddingHorizontal: 5,
+        borderRadius: 4,
+        elevation: 3,
+        backgroundColor: "black",
+        marginVertical: 20,
+        width: "50%",
+      },
+      titulos: {
+        fontSize: 19,
+        textTransform: "uppercase",
+        fontWeight: "bold",
+        fontFamily: "Roboto-Medium",
       },
 
   });
