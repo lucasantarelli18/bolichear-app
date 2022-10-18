@@ -4,12 +4,13 @@ import { StyleSheet, Text, TextInput, View, Button, Image, ImageBackground, Pres
 import { supabase } from './supabase';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { SplashScreen } from './Screens/SplashScreen'
-import { HomeScreen } from './Screens/HomeScreen'
-import { UbicationScreen } from './Screens/UbicationScreen'
-import { DetailsScreen } from './Screens/DetailsScreen'
-import { LocalesScreen } from './Screens/LocalesScreen'
-import { AltaLocalScreen } from './Screens/AltaLocalScreen'
+import { SplashScreen } from './Screens/SplashScreen';
+import { MapScreen } from './Screens/MapScreen';
+import { HomeScreen } from './Screens/HomeScreen';
+import { UbicationScreen } from './Screens/UbicationScreen';
+import { DetailsScreen } from './Screens/DetailsScreen';
+import { LocalesScreen } from './Screens/LocalesScreen';
+import { AltaLocalScreen } from './Screens/AltaLocalScreen';
 import { VerInfoScreen } from "./Screens/VerInfoScreen";
 import { EventosScreen } from "./Screens/EventosScreen";
 import { PromocionesScreen } from './Screens/PromocionesScreen';
@@ -184,6 +185,8 @@ export default function App({ navigation }) {
               <Stack.Screen name="VerEventos" component={VerEventosScreen} options={{ title: "Eventos" }}/>
               <Stack.Screen name="Promociones" component={PromocionesScreen} options={{title:'Nueva Promocion'}}/>
               <Stack.Screen name="VerPromociones" component={VerPromocionesScreen} options={{title:'Promociones'}}/>
+              <Stack.Screen name="MapScreen" component={MapScreen} options={{title:'Mapa'}}/>
+              
             </>)}
 
         </Stack.Navigator>

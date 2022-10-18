@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Text, View, Button, ScrollView, StyleSheet, Alert, ImageBackground, Pressable } from 'react-native';
 import * as Backend from '../backlog';
 import 'react-native-url-polyfill/auto';
+import TabScreen from './TabScreen';
 //import MapView, { Marker, Polyline } from 'react-native-maps';
 //import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 //import { SafeAreaInsetsContext } from 'react-native-safe-area-context';

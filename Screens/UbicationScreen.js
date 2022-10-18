@@ -12,15 +12,26 @@ export function UbicationScreen({ navigation }) {
     calle:"Sarmiento",
     numero: 420,
     localidad: "La Plata",
-    latitude: -34.934941,
-    longitude: -57.967533,
+    latitude: -34.904625,  
+    longitude: -57.925738,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421
   });
 
   const [rango, setRango] = React.useState(0);
 
-  const onPress = () => {
+  const onPressMap = () => {
+    navigation.navigate('MapScreen', {
+      calle: ubicacion.calle,
+      numero: ubicacion.numero,
+      localidad: ubicacion.localidad,
+      latitud: ubicacion.latitude,
+      longitud: ubicacion.longitude,
+      rango: rango,
+    })
+  };
+
+  const onPressList = () => {
     navigation.navigate('Home', {
       calle: ubicacion.calle,
       numero: ubicacion.numero,
@@ -41,7 +52,7 @@ export function UbicationScreen({ navigation }) {
           
 
           <GooglePlacesAutocomplete
-            placeholder='Ubicacion'
+            placeholder='UTN, FRLP'
             fetchDetails={true}
             onPress={(data, details = null) => {
               //console.log(data, details);
@@ -126,10 +137,15 @@ export function UbicationScreen({ navigation }) {
             onChangeText={nuevoRango => setRango(nuevoRango)}
             value={rango}
           />
-
-          <Pressable style={styles.button} onPress={onPress}>
-            <Text style={styles.text}>BUSCAR BOLICHES</Text>
+          <View style={styles.container3}> 
+          <Pressable style={styles.button} onPress={onPressMap}>
+            <Text style={styles.text}>MAPA</Text>
           </Pressable>
+
+          <Pressable style={styles.button} onPress={onPressList}>
+            <Text style={styles.text}>LISTA</Text>
+          </Pressable>
+          </View>
 
         </View>
       </ImageBackground>
@@ -154,6 +170,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'rgba(200, 200, 200, 0)',
   },
+  container3: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    justifyContent: 'space-between',
+    backgroundColor: 'rgba(200, 200, 200, 0)',
+  },
   input: {
     borderWidth: 2,
     height: 39,
@@ -173,6 +195,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     elevation: 3,
     backgroundColor: 'black',
+    width: '49%',
   },
   text: {
     fontSize: 16,
