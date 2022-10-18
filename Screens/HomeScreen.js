@@ -1,8 +1,11 @@
 import * as React from 'react';
-import { Text, View, Button, ScrollView, StyleSheet, Alert, ImageBackground, Pressable } from 'react-native';
+import { Text, View, Button, ScrollView, StyleSheet, Alert, ImageBackground, Pressable, Image } from 'react-native';
 import * as Backend from '../backlog';
+import { StatusBar } from 'expo-status-bar';
 import 'react-native-url-polyfill/auto';
 import TabScreen from './TabScreen';
+import { LinearGradient } from 'expo-linear-gradient';
+
 //import MapView, { Marker, Polyline } from 'react-native-maps';
 //import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 //import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
@@ -16,102 +19,90 @@ export function HomeScreen({ route, navigation }) {
   React.useEffect(() => {
     Backend.getLocalxDomicilio()
       .then((items) => {
-//        console.log(items)
+        //        console.log(items)
 
-      const arr = [];
-      for (const i in items) {
-        const latMts = parseFloat(items[i].latitud) * 111120 - latitud * 111120;
-        const lonMts =
-          parseFloat(items[i].longitud) * 111100 - longitud * 111100;
-        const val = Math.pow(latMts, 2) + Math.pow(lonMts, 2);
-        const dist = Math.sqrt(val);
-        const distkm = (dist / 1000).toFixed(2);
+        const arr = [];
+        for (const i in items) {
+          const latMts = parseFloat(items[i].latitud) * 111120 - latitud * 111120;
+          const lonMts =
+            parseFloat(items[i].longitud) * 111100 - longitud * 111100;
+          const val = Math.pow(latMts, 2) + Math.pow(lonMts, 2);
+          const dist = Math.sqrt(val);
+          const distkm = (dist / 1000).toFixed(2);
 
           if (dist < rango) {
             //console.log("dentro del rango")
-           console.log(items[i].dist = distkm)
+            console.log(items[i].dist = distkm)
             arr.push(items[i])
           } else {
             //console.log("fuera del rango")
           }
         }
+        arr.sort(function (a, b) {
+          return a.dist - b.dist
+        })
         setLocales(arr)
       })
-      Backend.getLocalidadXNombre(localidad).then((items)=>{
-        setIdLocalidad(items[0].id);
-      })
+    Backend.getLocalidadXNombre(localidad).then((items) => {
+      setIdLocalidad(items[0].id);
+    })
 
   }, [])
 
 
   const filtradoLocales = (query) => {
     const arr = [[]];
-    return query.map((i) => {});
+    return query.map((i) => { });
   };
   const list = () => {
     return locales.map((element) => {
-
-//      console.log(element)
-//      console.log(element.id)
-//        console.log(element.dist)
-
+      console.log(element.dist)
       return (
-        <ImageBackground
-          source={require("../assets/fondoBoliches3.jpg")}
-          blurRadius={3}
-          style={styles.boliches}
-        >
-          <View style={styles.boliches2}>
-            <Text style={styles.titulos} key="{element.id}">
-              {element.nombre}
-            </Text>
-            <Text style={styles.km}> {element.dist} km</Text>
-          </View>
-
-          <View style={styles.boliches3}>
-            <View>
-              <Text style={styles.info}>
-                {" "}
-                Direccion: {element.Domicilio.calle} {element.Domicilio.numero}
+        <Pressable
+          onPress={() => {
+            navigation.navigate("VerEventos", {
+              idLocal: element.id,
+            });
+          }}>
+          <ImageBackground
+            imageStyle={{ borderRadius: 15 }}
+            source={require("../assets/fondoLogIn.jpg")}
+            blurRadius={25}
+            style={styles.boliches}
+          >
+            <View style={styles.boliches2}>
+              <Text style={styles.titulos} key="{element.id}">
+                {element.nombre}
               </Text>
-              <Text style={styles.info}> Asistiran 300 personas </Text>
             </View>
-            <View>
 
-            <Pressable
-              style={styles.button2}
-              onPress={() => {
-                navigation.navigate("VerEventos", {
-                  idLocal: element.id,
-                });
-              }}
-            >
-              <Text style={styles.text}>VER EVENTOS</Text>
-            </Pressable>
-              <Pressable
-                style={styles.button2}
-                onPress={() =>
-                  navigation.navigate("VerPromociones", {
-                    idLocal: element.id,
-                  })
-                }
-              >
-                <Text style={styles.text}>VER PROMOCIONES</Text>
-              </Pressable>
+            <View style={styles.boliches3}>
+              <Text style={styles.km}>Estás a {element.dist} km</Text>
             </View>
-          </View>
-        </ImageBackground>
+
+            <View style={styles.boliches4}>
+              <View>
+                <Text style={styles.info}>
+                  {" "}
+                  Direccion: {element.Domicilio.calle} {element.Domicilio.numero}
+                </Text>
+                <Text style={styles.info}> Asistiran 300 personas </Text>
+              </View>
+            </View>
+          </ImageBackground>
+        </Pressable>
       );
     });
   };
 
   return (
-    <ImageBackground
-      source={require("../assets/fondoLogIn3.jpg")}
+    <View
       blurRadius={3}
-      style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+      style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#fff" }}
     >
-
+      <View style={styles.skewed}>
+        <Text style={styles.info}> Dirección actual: {calle} {numero} </Text>
+      </View>
       <ScrollView style={styles.container}>{list()}</ScrollView>
 
       <Pressable style={styles.button} onPress={() => {
@@ -122,25 +113,22 @@ export function HomeScreen({ route, navigation }) {
           calle: calle,
           numero: numero,
         });
-
       }}>
         <Text style={styles.text}>IR A MI LOCAL</Text>
       </Pressable>
-    </ImageBackground>
+      <StatusBar style="dark" />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    borderRadius: 1,
-    width: "100%",
+    width: "95%",
   },
   boliches: {
     flex: 0.3,
-    backgroundColor: "lightgrey",
-    marginBottom: 0.5,
-    padding: 0,
+    marginTop: 10,
     paddingRight: 12,
     paddingLeft: 12,
     fontFamily: "Roboto-Medium",
@@ -151,22 +139,37 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     fontFamily: "Roboto-Medium",
+    paddingTop: 50,
+    justifyContent: "center"
+
   },
   boliches3: {
     flex: 1.5,
     flexDirection: "row",
-    alignItems: "center",
+    position: "absolute",
+    right: 0,
     justifyContent: "space-between",
     fontFamily: "Roboto-Medium",
+    marginRight: 10,
+    marginTop: 5
+  },
+  boliches4: {
+    flex: 1.5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    fontFamily: "Roboto-Medium",
+    marginRight: 10,
+    paddingTop: 25,
+    paddingBottom: 15,
   },
   titulos: {
-    fontSize: 25,
+    fontSize: 30,
     textTransform: "uppercase",
     fontWeight: "bold",
     fontFamily: "Roboto-Medium",
   },
   km: {
-    fontSize: 15,
+    fontSize: 10,
     fontWeight: "bold",
     fontFamily: "Roboto-Medium",
   },
@@ -179,18 +182,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 12,
     paddingHorizontal: 32,
-    borderRadius: 4,
+    borderRadius: 30,
     elevation: 3,
     backgroundColor: "black",
+    marginVertical: 10
   },
   button2: {
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 10,
+    paddingVertical: 15,
     paddingHorizontal: 15,
-    borderRadius: 4,
+    borderRadius: 30,
     backgroundColor: "black",
-    marginVertical:2,
+    marginVertical: 5,
+    width: "90%"
   },
   text: {
     fontSize: 16,
@@ -199,4 +204,17 @@ const styles = StyleSheet.create({
     letterSpacing: 0.25,
     color: "white",
   },
+  container3: {
+    flex: 1,
+    alignItems: "flex-end",
+    marginVertical: 10
+  },
+  skewed: {
+    width: "99%",
+    alignItems: "center",
+    backgroundColor: "#e8ded3",
+    borderBottomEndRadius: 500,
+    borderBottomStartRadius: 500,
+
+  }
 });

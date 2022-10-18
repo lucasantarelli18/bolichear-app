@@ -5,11 +5,12 @@ import 'react-native-url-polyfill/auto';
 //import MapView, { Marker, Polyline } from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { RealtimeClient } from '@supabase/supabase-js';
+import { Slider } from "@miblanchard/react-native-slider";
 
 export function UbicationScreen({ navigation }) {
 
   const [ubicacion, setUbicacion] = React.useState({
-    calle:"Sarmiento",
+    calle: "Sarmiento",
     numero: 420,
     localidad: "La Plata",
     latitude: -34.904625,  
@@ -38,7 +39,7 @@ export function UbicationScreen({ navigation }) {
       localidad: ubicacion.localidad,
       latitud: ubicacion.latitude,
       longitud: ubicacion.longitude,
-      rango: rango,
+      rango: rango * 1000,
     })
   };
 
@@ -46,10 +47,9 @@ export function UbicationScreen({ navigation }) {
 
   return (
     //<ScrollView style={styles.scrollView} contentContainerStyle={{flexGrow: 1}}>
-      <ImageBackground source={require('../assets/fondoBoliches2.jpg')} blurRadius={3} style={styles.container}>
-        <View style={styles.container2}>
+    <ImageBackground source={require('../assets/fondoBoliches2.jpg')} blurRadius={3} style={styles.container}>
+      <View style={styles.container2}>
 
-          
 
           <GooglePlacesAutocomplete
             placeholder='UTN, FRLP'
@@ -66,8 +66,8 @@ export function UbicationScreen({ navigation }) {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421
               })
-              }else{
-               setUbicacion({
+            } else {
+              setUbicacion({
                 calle: details.address_components[1].long_name,
                 numero: details.address_components[0].long_name,
                 localidad: details.address_components[2].long_name,
@@ -75,6 +75,7 @@ export function UbicationScreen({ navigation }) {
                 longitude: details.geometry.location.lng,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421
+
               }) 
               }
               
@@ -130,13 +131,18 @@ export function UbicationScreen({ navigation }) {
               },
             }}
           />
-          <TextInput
-            style={styles.input}
-            //placeholderTextColor= 'white'
-            placeholder="Rango de cobertura (mts)"
-            onChangeText={nuevoRango => setRango(nuevoRango)}
-            value={rango}
-          />
+        <Text style={{ position: 'absolute', right: 0, fontSize: 20, fontWeight: 'bold' }}>{rango} km</Text>
+        <Slider
+          containerStyle={{ width: '75%', marginVertical: 10 }}
+          value={rango}
+          minimumValue={0}
+          maximumValue={50}
+          minimumTrackTintColor='#641c34'
+          step={1}
+          onValueChange={value => setRango(value)}
+          thumbStyle={styles.thumb}
+          trackStyle={styles.track}
+        />
           <View style={styles.container3}> 
           <Pressable style={styles.button} onPress={onPressMap}>
             <Text style={styles.text}>MAPA</Text>
@@ -147,8 +153,8 @@ export function UbicationScreen({ navigation }) {
           </Pressable>
           </View>
 
-        </View>
-      </ImageBackground>
+      </View>
+    </ImageBackground>
     //</ScrollView>
   );
 }
@@ -164,7 +170,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   container2: {
-    width: '65%',
+    width: '80%',
     flexDirection: 'column',
     backgroundColor: '#fff',
     justifyContent: 'center',
@@ -203,5 +209,24 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 0.25,
     color: 'white',
+  },
+  thumb: {
+    backgroundColor: '#000',
+    borderRadius: 30,
+    borderWidth: 10,
+    height: 25,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.35,
+    shadowRadius: 2,
+    width: 25,
+  },
+  track: {
+    backgroundColor: '#d0d0d0',
+    borderRadius: 5,
+    height: 5,
   },
 });
