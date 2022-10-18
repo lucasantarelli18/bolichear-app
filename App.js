@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TextInput, View, Button, Image, ImageBackground, Pressable } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Image, ImageBackground, Pressable } from 'react-native';
 import { supabase } from './supabase';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -15,6 +15,7 @@ import { EventosScreen } from "./Screens/EventosScreen";
 import { PromocionesScreen } from './Screens/PromocionesScreen';
 import { VerPromocionesScreen } from './Screens/VerPromocionesScreen';
 import { VerEventosScreen } from "./Screens/VerEventosScreen";
+import { LinearGradient } from 'expo-linear-gradient';
 import 'react-native-url-polyfill/auto';
 //import MapView, { Marker, Polyline } from 'react-native-maps';
 //import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -33,7 +34,7 @@ function SignInScreen() {
   return (
 
     <ImageBackground
-      source={require("./assets/fondoLogIn7.jpg")}
+      source={require("./assets/fondoLogIn.jpg")}
       style={styles.container}
     >
       <Image style={styles.imagen} source={require("./assets/logo.png")} />
@@ -43,24 +44,33 @@ function SignInScreen() {
           placeholder="Usuario"
           value={username}
           onChangeText={setUsername}
-          //secureTextEntry
+        //secureTextEntry
         />
         <TextInput
           style={styles.input}
           placeholder="Contraseña"
           value={password}
           onChangeText={setPassword}
-          //secureTextEntry
+          secureTextEntry={true}
         />
-
+        <Text style={styles.texto}>Olvidé mi contraseña</Text>
         <Pressable
-          style={styles.button}
-          onPress={() => signIn({ username, password })}
-        >
-          <Text style={styles.text}>LOG IN</Text>
+          style={styles.container3}
+          onPress={() => signIn({ username, password })}>
+          <LinearGradient
+            // Button Linear Gradient
+            colors={['#C2454A', '#A32934', '#680008']}
+            start={{ x: 1, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={styles.button}>
+            <Text style={styles.text}>INICIAR SESIÓN</Text>
+          </LinearGradient>
         </Pressable>
-
+        <Pressable>
+          <Text style={styles.texto}>CREAR CUENTA</Text>
+        </Pressable>
       </View>
+      <StatusBar style="dark" />
     </ImageBackground>
   );
 }
@@ -166,6 +176,7 @@ export default function App({ navigation }) {
               component={SignInScreen}
               options={{
                 title: "Sign in",
+                headerShown: false,
                 // When logging out, a pop animation feels intuitive
                 animationTypeForReplace: state.isSignout ? "pop" : "push",
               }}
@@ -174,16 +185,24 @@ export default function App({ navigation }) {
             // User is signed in
 
             <>
-              <Stack.Screen name="Ubication" component={UbicationScreen} options={{title:'Ubicación'}}/>
-              <Stack.Screen name="Home" component={HomeScreen} options={{title:'Inicio'}}/>
+              <Stack.Screen name="Ubication" component={UbicationScreen} options={{
+                title: 'Ubicación',
+                headerShown: false
+              }} />
+              <Stack.Screen name="Home" component={HomeScreen} options={{
+                title: 'Inicio',
+                headerTitleAlign: "center",
+                headerTitleStyle: { color: 'black' },
+                headerStyle: { backgroundColor: '#fff', justifyContent: "center", fontColor: 'white' },
+              }} />
               <Stack.Screen name="Details" component={DetailsScreen} />
-              <Stack.Screen name="VerInfo" component={VerInfoScreen}  options={{title:'Mi Local'}}/>
-              <Stack.Screen name="Locales" component={LocalesScreen} options={{title:'Mi Local'}}/>
-              <Stack.Screen name="AltaLocal" component={AltaLocalScreen} options={{title:'Alta de Local'}}/>
-              <Stack.Screen name="Eventos" component={EventosScreen} options={{ title: "Nuevo Evento" }}/>
-              <Stack.Screen name="VerEventos" component={VerEventosScreen} options={{ title: "Eventos" }}/>
-              <Stack.Screen name="Promociones" component={PromocionesScreen} options={{title:'Nueva Promocion'}}/>
-              <Stack.Screen name="VerPromociones" component={VerPromocionesScreen} options={{title:'Promociones'}}/>
+              <Stack.Screen name="VerInfo" component={VerInfoScreen} options={{ title: 'Mi Local' }} />
+              <Stack.Screen name="Locales" component={LocalesScreen} options={{ title: 'Mi Local' }} />
+              <Stack.Screen name="AltaLocal" component={AltaLocalScreen} options={{ title: 'Alta de Local' }} />
+              <Stack.Screen name="Eventos" component={EventosScreen} options={{ title: "Nuevo Evento" }} />
+              <Stack.Screen name="VerEventos" component={VerEventosScreen} options={{ title: "Eventos" }} />
+              <Stack.Screen name="Promociones" component={PromocionesScreen} options={{ title: 'Nueva Promocion' }} />
+              <Stack.Screen name="VerPromociones" component={VerPromocionesScreen} options={{ title: 'Promociones' }} />
             </>)}
 
         </Stack.Navigator>
@@ -204,32 +223,28 @@ const styles = StyleSheet.create({
     //alignContent: "space-between",
   },
   container2: {
-    width: "50%",
-    height: 132,
+    width: '100%',
     //backgroundColor: '#fff',
-    elevation: 10,
+    alignItems: "center",
+    justifyContent: "center"
 
   },
   imagen: {
+    marginTop: 80,
     width: 300,
     height: 300,
   },
   input: {
-    height: 39,
-    marginBottom: 10,
-    paddingLeft: 10,
-    borderWidth: 1,
-    borderRadius: 4,
-    fontSize: 16,
+    padding: 10,
+    width: "80%",
+    heigt: 10,
+    marginTop: 25,
+    borderRadius: 30,
+    backgroundColor: '#f1f1f1',
     fontFamily: "Roboto-Medium",
-    //borderColor: 'white',
-  },
-  places: {
-    //flex: 0,
-    //position: "absolute",
-    width: "50%",
-    //zIndex: 1,
-    //backgroundColor: "black",
+    paddingStart: 30,
+    fontSize: 16,
+    elevation: 10,
   },
   image: {
     //flex: 1,
@@ -238,21 +253,31 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     height: "100%",
   },
+  container3: {
+    flex: 1,
+    width: "100%",
+    alignItems: "center",
+    marginTop: 100,
+    marginBottom: 50
+  },
   button: {
+    width: '50%',
+    height: 50,
+    borderRadius: 30,
+    padding: 10,
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: "black",
-    fontFamily: "Roboto-Medium",
   },
   text: {
     fontSize: 16,
-    lineHeight: 21,
     fontWeight: "bold",
-    letterSpacing: 0.25,
     color: "white",
   },
+  texto: {
+    marginTop: 10,
+    fontSize: 12,
+    color: "white",
+    fontStyle: 'italic',
+    textDecorationLine: "underline"
+  }
 });
