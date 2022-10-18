@@ -143,14 +143,11 @@ export function UbicationScreen({ navigation }) {
           thumbStyle={styles.thumb}
           trackStyle={styles.track}
         />
+        <Pressable style={styles.button} onPress={onPressMap}>
+            <Text style={styles.text}>BUSCAR</Text>
+          </Pressable>
         <View style={styles.container3}>
-          <Pressable style={styles.button} onPress={onPressMap}>
-            <Text style={styles.text}>MAPA</Text>
-          </Pressable>
-
-          <Pressable style={styles.button} onPress={onPressList}>
-            <Text style={styles.text}>LISTA</Text>
-          </Pressable>
+          
         </View>
 
       </View>
@@ -201,7 +198,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     elevation: 3,
     backgroundColor: 'black',
-    width: '49%',
+    width: '100%',
   },
   text: {
     fontSize: 16,
