@@ -13,7 +13,7 @@ export function UbicationScreen({ navigation }) {
     calle: "Sarmiento",
     numero: 420,
     localidad: "La Plata",
-    latitude: -34.904625,  
+    latitude: -34.904625,
     longitude: -57.925738,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421
@@ -28,7 +28,7 @@ export function UbicationScreen({ navigation }) {
       localidad: ubicacion.localidad,
       latitud: ubicacion.latitude,
       longitud: ubicacion.longitude,
-      rango: rango,
+      rango: rango * 1000, //rango*1000 pq rango esta en km y lo pasa a mts
     })
   };
 
@@ -51,13 +51,13 @@ export function UbicationScreen({ navigation }) {
       <View style={styles.container2}>
 
 
-          <GooglePlacesAutocomplete
-            placeholder='UTN, FRLP'
-            fetchDetails={true}
-            onPress={(data, details = null) => {
-              //console.log(data, details);
-              if (details.address_components[0].long_name == "AGN"){
-                setUbicacion({
+        <GooglePlacesAutocomplete
+          placeholder='UTN, FRLP'
+          fetchDetails={true}
+          onPress={(data, details = null) => {
+            //console.log(data, details);
+            if (details.address_components[0].long_name == "AGN") {
+              setUbicacion({
                 calle: details.address_components[2].long_name,
                 numero: details.address_components[1].long_name,
                 localidad: details.address_components[3].long_name,
@@ -76,61 +76,61 @@ export function UbicationScreen({ navigation }) {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421
 
-              }) 
-              }
-              
-            }}
-            query={{
-              key: process.env.GOOGLE_MAPS_KEY,
-              language: 'es',
-              components: "country:ar",
-            }}
-            styles={{
-              container: {
-                flex: 0,
-              },
-              textInputContainer: {
-                height: 39,
-                marginBottom: 8,
-              },
-              textInput: {
-                borderWidth: 2,
-                //borderColor: "white",
-                height: 39,
-                color: '#white',
-                fontSize: 16,
-                fontFamily: 'Roboto-Medium',
-                backgroundColor: 'rgba(255, 255, 255, 0.2)',
-              },
-              poweredContainer: {
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderBottomRightRadius: 5,
-                borderBottomLeftRadius: 5,
-                borderColor: '#c8c7cc',
-                borderTopWidth: 0.5,
-                //placeholderTextColor: 'white',
-              },
-              loader: {
-                flexDirection: 'row',
-                justifyContent: 'center',
-                height: 20,
-              },
-              row: {
-                zIndex: 1,
-                backgroundColor: '#FFFFFF',
-                padding: 10,
-                height: 40,
-                flexDirection: 'row',
-              },
-              separator: {
-                position: 'absolute',
-                zIndex: 1,
-                height: 0.2,
-                backgroundColor: '#c8c7cc',
-              },
-            }}
-          />
+              })
+            }
+
+          }}
+          query={{
+            key: process.env.GOOGLE_MAPS_KEY,
+            language: 'es',
+            components: "country:ar",
+          }}
+          styles={{
+            container: {
+              flex: 0,
+            },
+            textInputContainer: {
+              height: 39,
+              marginBottom: 8,
+            },
+            textInput: {
+              borderWidth: 2,
+              //borderColor: "white",
+              height: 39,
+              color: '#white',
+              fontSize: 16,
+              fontFamily: 'Roboto-Medium',
+              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            },
+            poweredContainer: {
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderBottomRightRadius: 5,
+              borderBottomLeftRadius: 5,
+              borderColor: '#c8c7cc',
+              borderTopWidth: 0.5,
+              //placeholderTextColor: 'white',
+            },
+            loader: {
+              flexDirection: 'row',
+              justifyContent: 'center',
+              height: 20,
+            },
+            row: {
+              zIndex: 1,
+              backgroundColor: '#FFFFFF',
+              padding: 10,
+              height: 40,
+              flexDirection: 'row',
+            },
+            separator: {
+              position: 'absolute',
+              zIndex: 1,
+              height: 0.2,
+              backgroundColor: '#c8c7cc',
+            },
+          }}
+        />
         <Text style={{ position: 'absolute', right: 0, fontSize: 20, fontWeight: 'bold' }}>{rango} km</Text>
         <Slider
           containerStyle={{ width: '75%', marginVertical: 10 }}
@@ -143,7 +143,7 @@ export function UbicationScreen({ navigation }) {
           thumbStyle={styles.thumb}
           trackStyle={styles.track}
         />
-          <View style={styles.container3}> 
+        <View style={styles.container3}>
           <Pressable style={styles.button} onPress={onPressMap}>
             <Text style={styles.text}>MAPA</Text>
           </Pressable>
@@ -151,7 +151,7 @@ export function UbicationScreen({ navigation }) {
           <Pressable style={styles.button} onPress={onPressList}>
             <Text style={styles.text}>LISTA</Text>
           </Pressable>
-          </View>
+        </View>
 
       </View>
     </ImageBackground>
