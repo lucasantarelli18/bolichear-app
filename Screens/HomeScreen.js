@@ -3,7 +3,9 @@ import { Text, View, Button, ScrollView, StyleSheet, Alert, ImageBackground, Pre
 import * as Backend from '../backlog';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-url-polyfill/auto';
+import TabScreen from './TabScreen';
 import { LinearGradient } from 'expo-linear-gradient';
+
 //import MapView, { Marker, Polyline } from 'react-native-maps';
 //import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 //import { SafeAreaInsetsContext } from 'react-native-safe-area-context';

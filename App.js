@@ -4,12 +4,13 @@ import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Image, Ima
 import { supabase } from './supabase';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { SplashScreen } from './Screens/SplashScreen'
-import { HomeScreen } from './Screens/HomeScreen'
-import { UbicationScreen } from './Screens/UbicationScreen'
-import { DetailsScreen } from './Screens/DetailsScreen'
-import { LocalesScreen } from './Screens/LocalesScreen'
-import { AltaLocalScreen } from './Screens/AltaLocalScreen'
+import { SplashScreen } from './Screens/SplashScreen';
+import { MapScreen } from './Screens/MapScreen';
+import { HomeScreen } from './Screens/HomeScreen';
+import { UbicationScreen } from './Screens/UbicationScreen';
+import { DetailsScreen } from './Screens/DetailsScreen';
+import { LocalesScreen } from './Screens/LocalesScreen';
+import { AltaLocalScreen } from './Screens/AltaLocalScreen';
 import { VerInfoScreen } from "./Screens/VerInfoScreen";
 import { EventosScreen } from "./Screens/EventosScreen";
 import { PromocionesScreen } from './Screens/PromocionesScreen';
@@ -196,13 +197,14 @@ export default function App({ navigation }) {
                 headerStyle: { backgroundColor: '#fff', justifyContent: "center", fontColor: 'white' },
               }} />
               <Stack.Screen name="Details" component={DetailsScreen} />
-              <Stack.Screen name="VerInfo" component={VerInfoScreen} options={{ title: 'Mi Local' }} />
-              <Stack.Screen name="Locales" component={LocalesScreen} options={{ title: 'Mi Local' }} />
-              <Stack.Screen name="AltaLocal" component={AltaLocalScreen} options={{ title: 'Alta de Local' }} />
-              <Stack.Screen name="Eventos" component={EventosScreen} options={{ title: "Nuevo Evento" }} />
-              <Stack.Screen name="VerEventos" component={VerEventosScreen} options={{ title: "Eventos" }} />
-              <Stack.Screen name="Promociones" component={PromocionesScreen} options={{ title: 'Nueva Promocion' }} />
-              <Stack.Screen name="VerPromociones" component={VerPromocionesScreen} options={{ title: 'Promociones' }} />
+              <Stack.Screen name="VerInfo" component={VerInfoScreen}  options={{title:'Mi Local'}}/>
+              <Stack.Screen name="Locales" component={LocalesScreen} options={{title:'Mi Local'}}/>
+              <Stack.Screen name="AltaLocal" component={AltaLocalScreen} options={{title:'Alta de Local'}}/>
+              <Stack.Screen name="Eventos" component={EventosScreen} options={{ title: "Nuevo Evento" }}/>
+              <Stack.Screen name="VerEventos" component={VerEventosScreen} options={{ title: "Eventos" }}/>
+              <Stack.Screen name="Promociones" component={PromocionesScreen} options={{title:'Nueva Promocion'}}/>
+              <Stack.Screen name="VerPromociones" component={VerPromocionesScreen} options={{title:'Promociones'}}/>
+              <Stack.Screen name="MapScreen" component={MapScreen} options={{title:'Mapa'}}/>
             </>)}
 
         </Stack.Navigator>
