@@ -368,3 +368,26 @@ export const deletePromocion = async (idPromo) =>{
   .match({ id: idPromo })
 }
 
+export const deleteEventoXLocal = async (idLocal) =>{
+  const { data, error } = await supabase
+  .from('Evento')
+  .delete()
+  .match({ idLocal: idLocal })
+}
+
+export const deletePromoXLocal = async (idLocal) =>{
+  const { data, error } = await supabase
+  .from('Promocion')
+  .delete()
+  .match({ idLocal: idLocal })
+}
+
+export const deleteLocal = async (idLocal) =>{
+  deletePromoXLocal(idLocal);
+  deleteEventoXLocal(idLocal);
+  const { data, error } = await supabase
+  .from('Local')
+  .delete()
+  .match({ id: idLocal })
+}
+
