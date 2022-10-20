@@ -197,14 +197,22 @@ export default function App({ navigation }) {
                 headerStyle: { backgroundColor: '#fff', justifyContent: "center", fontColor: 'white' },
               }} />
               <Stack.Screen name="Details" component={DetailsScreen} />
-              <Stack.Screen name="VerInfo" component={VerInfoScreen}  options={{title:'Mi Local'}}/>
-              <Stack.Screen name="Locales" component={LocalesScreen} options={{title:'Mi Local'}}/>
-              <Stack.Screen name="AltaLocal" component={AltaLocalScreen} options={{title:'Alta de Local'}}/>
-              <Stack.Screen name="Eventos" component={EventosScreen} options={{ title: "Nuevo Evento" }}/>
-              <Stack.Screen name="VerEventos" component={VerEventosScreen} options={{ title: "Eventos" }}/>
-              <Stack.Screen name="Promociones" component={PromocionesScreen} options={{title:'Nueva Promocion'}}/>
-              <Stack.Screen name="VerPromociones" component={VerPromocionesScreen} options={{title:'Promociones'}}/>
-              <Stack.Screen name="MapScreen" component={MapScreen} options={{title:'Mapa'}}/>
+              <Stack.Screen name="VerInfo" component={VerInfoScreen} options={{ title: 'Mi Local' }} />
+              <Stack.Screen name="Locales" component={LocalesScreen} options={{ title: 'Mi Local' }} />
+              <Stack.Screen name="AltaLocal" component={AltaLocalScreen} options={{ title: 'Alta de Local' }} />
+              <Stack.Screen name="Eventos" component={EventosScreen} options={{ title: "Nuevo Evento" }} />
+              <Stack.Screen name="VerEventos" component={VerEventosScreen} options={{
+                title: 'Detalles', headerTitleAlign: "center",
+                headerTitleStyle: { color: 'black' },
+                headerStyle: { backgroundColor: '#fff', justifyContent: "center", fontColor: 'white' },
+              }} />
+              <Stack.Screen name="Promociones" component={PromocionesScreen} options={{ title: 'Nueva Promocion' }} />
+              <Stack.Screen name="VerPromociones" component={VerPromocionesScreen} options={{ title: 'Promociones' }} />
+              <Stack.Screen name="MapScreen" component={MapScreen} options={{
+                title: 'Mapa', headerTitleAlign: "center",
+                headerTitleStyle: { color: 'black' },
+                headerStyle: { backgroundColor: '#fff', justifyContent: "center", fontColor: 'white' },
+              }} />
             </>)}
 
         </Stack.Navigator>
