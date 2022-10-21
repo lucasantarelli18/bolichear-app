@@ -6,6 +6,8 @@ import 'react-native-url-polyfill/auto';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { RealtimeClient } from '@supabase/supabase-js';
 import { Slider } from "@miblanchard/react-native-slider";
+import { LinearGradient } from 'expo-linear-gradient';
+import { StatusBar } from 'expo-status-bar';
 
 export function UbicationScreen({ navigation }) {
 
@@ -47,10 +49,16 @@ export function UbicationScreen({ navigation }) {
 
   return (
     //<ScrollView style={styles.scrollView} contentContainerStyle={{flexGrow: 1}}>
-    <ImageBackground source={require('../assets/fondoBoliches2.jpg')} blurRadius={3} style={styles.container}>
+    <View style={styles.container}>
+
+      <View style={{ width: "60%", flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 40 }}>
+        <Text style={{ fontSize: 40, fontWeight: 'bold' }}>
+          Ingresa tu UBICACIÓN
+        </Text>
+        <Image style={{ height: 150, width: 112.5 }} source={require("../assets/logo2.png")} />
+      </View>
+
       <View style={styles.container2}>
-
-
         <GooglePlacesAutocomplete
           placeholder='UTN, FRLP'
           fetchDetails={true}
@@ -94,13 +102,15 @@ export function UbicationScreen({ navigation }) {
               marginBottom: 8,
             },
             textInput: {
-              borderWidth: 2,
-              //borderColor: "white",
-              height: 39,
-              color: '#white',
+              padding: 10,
+              width: "80%",
+              heigt: 10,
+              borderRadius: 30,
+              backgroundColor: '#f1f1f1',
+              fontFamily: "Roboto-Medium",
+              paddingStart: 30,
               fontSize: 16,
-              fontFamily: 'Roboto-Medium',
-              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              elevation: 10,
             },
             poweredContainer: {
               justifyContent: 'center',
@@ -131,27 +141,34 @@ export function UbicationScreen({ navigation }) {
             },
           }}
         />
-        <Text style={{ position: 'absolute', right: 0, fontSize: 20, fontWeight: 'bold' }}>{rango} km</Text>
-        <Slider
-          containerStyle={{ width: '75%', marginVertical: 10 }}
-          value={rango}
-          minimumValue={0}
-          maximumValue={50}
-          minimumTrackTintColor='#641c34'
-          step={1}
-          onValueChange={value => setRango(value)}
-          thumbStyle={styles.thumb}
-          trackStyle={styles.track}
-        />
-        <Pressable style={styles.button} onPress={onPressMap}>
+        <View style={{ justifyContent: 'center' }}>
+          <Text style={{ position: 'absolute', right: 0, fontSize: 20, fontWeight: 'bold' }}>{rango} km</Text>
+          <Slider
+            containerStyle={{ width: '75%', marginVertical: 10 }}
+            value={rango}
+            minimumValue={0}
+            maximumValue={50}
+            minimumTrackTintColor='#641c34'
+            step={1}
+            onValueChange={value => setRango(value)}
+            thumbStyle={styles.thumb}
+            trackStyle={styles.track}
+          /></View>
+
+        <Pressable onPress={onPressMap}>
+          <LinearGradient
+            // Button Linear Gradient
+            colors={['#C2454A', '#A32934', '#680008']}
+            start={{ x: 1, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={styles.button}>
             <Text style={styles.text}>BUSCAR</Text>
-          </Pressable>
-        <View style={styles.container3}>
-          
-        </View>
+          </LinearGradient>
+        </Pressable>
+        <StatusBar style="white" />
 
       </View>
-    </ImageBackground>
+    </View>
     //</ScrollView>
   );
 }
@@ -164,7 +181,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#eff0e2',
   },
   container2: {
     width: '80%',
@@ -195,10 +212,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 12,
     paddingHorizontal: 32,
-    borderRadius: 4,
+    borderRadius: 30,
     elevation: 3,
     backgroundColor: 'black',
-    width: '100%',
+    width: '80%',
+    marginStart: "10%",
+    marginTop: 50
   },
   text: {
     fontSize: 16,
