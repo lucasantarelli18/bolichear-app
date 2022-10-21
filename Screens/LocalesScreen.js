@@ -43,10 +43,10 @@ export function LocalesScreen({ route, navigation }) {
       } else {
         setCant(false);
       }
-      console.log(locales);
-      Backend.insertDomicilioSinPiso(calle, numero, idLocalidad).then(
-        (items) => {}
-      );
+      //console.log(locales);
+      //Backend.insertDomicilioSinPiso(calle, numero, idLocalidad).then(
+      //  (items) => {}
+      //);
 
       Backend.getUltimoDomicilio().then((items) => {
         setIdDomicilio(items[0].id);
@@ -94,17 +94,27 @@ export function LocalesScreen({ route, navigation }) {
               >
                 <Text style={styles.text}>VER INFO</Text>
               </Pressable>
+              <Pressable
+                style={styles.button2}
+                onPress={() => 
+                  Backend.deleteLocal(element.id).then((items) => {
+                    console.log("Borrando local: ", element.id);
+                    setCant(false)
+                  })
+                }
+              >
+                <Text style={styles.text}>BORRAR</Text>
+              </Pressable>
             </View>
           </View>
         </ImageBackground>
       );
     });
   };
-
+if (cant) {
   return (
+      //Tiene locales
     <>
-      {cant ? (
-        //Tiene locales
         <ImageBackground
           source={require("../assets/fondoLogIn3.jpg")}
           blurRadius={3}
@@ -112,7 +122,10 @@ export function LocalesScreen({ route, navigation }) {
         >
           <View style={styles.container}>{list()}</View>
         </ImageBackground>
-      ) : (
+    </>
+  );  
+} else {
+  return (
         //No tiene locales
         <>
           <Text style={styles.titulos}>
@@ -127,14 +140,18 @@ export function LocalesScreen({ route, navigation }) {
                 idDomicilio: idDomicilio,
                 idDueno: idDueno,
               });
+              setCant(true);
+              Backend.getLocalesXUser(idDueno).then((items) => {
+                setLocales(items);
+              });
             }}
           >
             <Text style={styles.text}>DAR DE ALTA UN LOCAL</Text>
           </Pressable>
         </>
-      )}
-    </>
-  );
+      )
+}
+
 }
 
 const styles = StyleSheet.create({
