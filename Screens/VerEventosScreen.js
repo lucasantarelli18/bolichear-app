@@ -1,10 +1,11 @@
 import { Alert, StyleSheet, Button } from 'react-native';
 import * as Backend from '../backlog';
-import { SafeAreaView, FlatList, View, Text, Image, ScrollView, Dimensions, ImageBackground } from 'react-native';
-import React, { useState } from "react";
-import { Card } from 'react-native-elements';
+import { SafeAreaView, FlatList, View, Text, Image, ScrollView, Dimensions, ImageBackground, Pressable, RefreshControl} from 'react-native';
+import React, { useState, useEffect } from "react";
 import Moment from 'moment';
 import 'moment/locale/es';
+import {Icon } from '@rneui/themed';
+
 
 export function VerEventosScreen({ route, navigation }) {
   const [eventos, setEventos] = React.useState([])
@@ -12,11 +13,12 @@ export function VerEventosScreen({ route, navigation }) {
 
   const [cantEventos, setCantEventos] = React.useState([]);
   const [cantPromos, setCantPromos] = React.useState([]);
-
   const { idLocal } = route.params;
   const { width } = Dimensions.get('window')
+  const [refreshing, setRefreshing] = React.useState(false);
 
-  React.useEffect(() => {
+  const onRefresh =  React.useEffect(() => {
+    setRefreshing(false);
     Backend.getEventosxIdLocal(idLocal)
       .then((items) => {
         setEventos(items)
@@ -39,6 +41,7 @@ export function VerEventosScreen({ route, navigation }) {
           console.log(items.length)
 
         })
+        
 
   }, [])
 
@@ -83,7 +86,6 @@ export function VerEventosScreen({ route, navigation }) {
     }
   });
 
-
   // Creo constantes para mostrar el FlatList en la pantalla
   const flatlistEventos = () => {
     return (
@@ -120,6 +122,37 @@ export function VerEventosScreen({ route, navigation }) {
                   Vigente desde el {item.fechaInicio}
                   Hasta el {item.fechaFin}
                 </Text>
+                <Pressable
+                  style={styles.button}
+                  onPress={()=>Alert.alert(
+                        "Eliminar",
+                        "¿Desea eliminar el evento?",
+                        [
+                          {
+                            text: "Cancelar",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel"
+                          },
+                          { text: "Aceptar", 
+                          onPress: () => Backend.deleteEvento(item.id).then((items) => Alert.alert("Evento eliminado con éxito"), navigation.reset({
+                          
+                            routes: [
+                              {
+                                name: 'VerEventos',
+                                params: {idLocal: idLocal}
+                              },
+                            ],
+                          }))
+                          }
+                          
+
+                        ]
+                  )}
+
+                          
+                >
+                  <Text style={styles.titleButton}>Eliminar</Text>
+                  </Pressable>
               </SafeAreaView>
             );
           }
@@ -163,6 +196,37 @@ export function VerEventosScreen({ route, navigation }) {
                   Vigente desde el {item.fechaInicio}
                   Hasta el {item.fechaFin}
                 </Text>
+                <Pressable
+                  style={styles.button}
+                  onPress={()=>Alert.alert(
+                        "Eliminar",
+                        "¿Desea eliminar el evento?",
+                        [
+                          {
+                            text: "Cancelar",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel"
+                          },
+                          { text: "Aceptar", 
+                          onPress: () => Backend.deleteEvento(item.id).then((items) => Alert.alert("Evento eliminado con éxito"), navigation.reset({
+                          
+                            routes: [
+                              {
+                                name: 'VerEventos',
+                                params: {idLocal: idLocal}
+                              },
+                            ],
+                          }))
+                          }
+                          
+
+                        ]
+                  )}
+
+                          
+                >
+                  <Text style={styles.titleButton}>Eliminar</Text>
+                  </Pressable>
               </SafeAreaView>
             );
           }
@@ -170,29 +234,11 @@ export function VerEventosScreen({ route, navigation }) {
       </View >
     )
   }
-
-  return (
-
-
-    //Tiene Eventos
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <ScrollView>
-        <View >
+  if (cantEventos || cantPromos) {
+      return(
+        <View>
+        <ScrollView>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
-            <View>
-              <Text style={{
-                width: 150, textAlign: 'center', fontWeight: "bold",
-                fontSize: 25,
-                margin: 5
-              }}>Eventos</Text>
-            </View>
-            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
-          </View>
-          {flatlistEventos()}
-        </View>
-
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
           <View>
             <Text style={{
@@ -201,25 +247,62 @@ export function VerEventosScreen({ route, navigation }) {
               margin: 5
             }}>Promociones</Text>
           </View>
+
           <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
         </View>
         <View>{flatlistPromos()}</View>
+          <View >
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+              <View>
+                <Text style={{
+                  width: 150, textAlign: 'center', fontWeight: "bold",
+                  fontSize: 25,
+                  margin: 5
+                }}>Eventos</Text>
+              </View>
+              <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+            </View>
+            {flatlistEventos()}
+          </View>
       </ScrollView>
-    </View>
+      </View>
+    );
+  
+
+  } else {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text style={styles.titulos}>
+              No hay eventos próximos
+            </Text>
+            <Pressable
+                style={styles.button}
+                onPress={() => {
+                  navigation.navigate("Eventos", {
+                    idLocal: idLocal,
+                    latitud: latitud,
+                    longitud: longitud,
+                  });
+                }}
+              >
+                <Text style={styles.titleButton}>NUEVO EVENTO</Text>
+              </Pressable>
+          </View>
+         
+    );
+  }
+    
+      
+
+  
+  
 
 
-  );
+          
 }
 
-/*  <>
-      {cantEventos ? (
-        //Tiene Eventos
-        ) : (
-        //No tiene locales
-        <>
-        </>
-      )}
-    </>*/
+
 
 const styles = StyleSheet.create({
 
@@ -253,5 +336,27 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 25,
     margin: 5
-  }
+  },
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 5,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: "black",
+    marginVertical: 20,
+ 
+  },
+  titulos: {
+    fontSize: 19,
+    textTransform: "uppercase",
+    fontWeight: "bold",
+    fontFamily: "Roboto-Medium",
+  },
+  titleButton: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "white"
+},
 });
