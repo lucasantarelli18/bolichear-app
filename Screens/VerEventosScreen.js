@@ -200,6 +200,33 @@ const sinEventos = () => {
        
   );
 }
+
+const sinPromos = () => {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={styles.titulos}>
+            No hay promociones
+          </Text>
+          { cant  ?
+          <Pressable
+              style={styles.button}
+              onPress={() => {
+                navigation.navigate("Promociones", {
+                  idLocal: idLocal,
+                  latitud: latitud,
+                  longitud: longitud,
+                });
+              }}
+            >
+              <Text style={styles.titleButton}>NUEVA PROMOCION</Text>
+            </Pressable>
+            :
+            console.log('bien')
+            }
+        </View>
+       
+  );
+}
   const flatlistPromos = () => {
     return (
       <View>
@@ -278,39 +305,54 @@ const sinEventos = () => {
   }
 
   if (cantPromos || cantEventos) {
-
       return(
         <View>
-        <ScrollView>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
-          <View>
-            <Text style={{
-              width: 200, textAlign: 'center', fontWeight: "bold",
-              fontSize: 25,
-              margin: 5
-            }}>Promociones</Text>
-          </View>
-
-          <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
-        </View>
-        <View>{flatlistPromos()}</View>
-
-            <View >
+          <ScrollView>
+            {cantPromos ? 
+            <View>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
-                <View>
+              <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+              <View>
                   <Text style={{
-                    width: 150, textAlign: 'center', fontWeight: "bold",
-                    fontSize: 25,
-                    margin: 5
-                  }}>Eventos</Text>
-                </View>
-                <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+                  width: 200, textAlign: 'center', fontWeight: "bold",
+                  fontSize: 25,
+                  margin: 5
+                  }}>Promociones</Text>
               </View>
-              {flatlistEventos()}
+              <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+              </View>
+              <View>{flatlistPromos()}</View>
+            </View> :
+            <View>
+              <ScrollView>
+                <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+                <View>{sinPromos()}</View>
+              </ScrollView>
             </View>
-        </ScrollView>
+            }
+            {cantEventos ?
+              <View>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+                    <View>
+                    <Text style={{
+                        width: 150, textAlign: 'center', fontWeight: "bold",
+                        fontSize: 25,
+                        margin: 5
+                    }}>Eventos</Text>
+                    </View>
+                    <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+                </View>
+                {flatlistEventos()}
+              </View> :
+              <View>
+              <ScrollView>
+                <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+                <View>{sinEventos()}</View>
+              </ScrollView>
+            </View>
+            }
+          </ScrollView>
         </View>
       );
     }
@@ -321,6 +363,7 @@ const sinEventos = () => {
             <ScrollView>
               <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
               <View>{sinEventos()}</View>
+              <View>{sinPromos()}</View>
             </ScrollView>
           </View>
 
