@@ -10,15 +10,16 @@ import {Icon } from '@rneui/themed';
 export function VerEventosScreen({ route, navigation }) {
   const [eventos, setEventos] = React.useState([])
   const [promociones, setPromociones] = React.useState([]);
-
+  const [locales, setLocales] = React.useState([]);
   const [cantEventos, setCantEventos] = React.useState([]);
   const [cantPromos, setCantPromos] = React.useState([]);
+  const [cant, setCant] = React.useState([]);
   const { idLocal } = route.params;
   const { width } = Dimensions.get('window')
-  const [refreshing, setRefreshing] = React.useState(false);
+  const idDueno = 5;
 
-  const onRefresh =  React.useEffect(() => {
-    setRefreshing(false);
+   React.useEffect(() => {
+
     Backend.getEventosxIdLocal(idLocal)
       .then((items) => {
         setEventos(items)
@@ -26,6 +27,7 @@ export function VerEventosScreen({ route, navigation }) {
           setCantEventos(true);
         } else {
           setCantEventos(false);
+          sinEventos();
         }
         console.log(items.length)
 
@@ -37,11 +39,20 @@ export function VerEventosScreen({ route, navigation }) {
             setCantPromos(true);
           } else {
             setCantPromos(false);
+            
           }
           console.log(items.length)
 
+        }),
+
+        Backend.getLocalesXUser(idDueno).then((items) => {
+          setLocales(items);
+          if (items.length > 0) {
+            setCant(true);
+          } else {
+            setCant(false);
+          }
         })
-        
 
   }, [])
 
@@ -122,6 +133,7 @@ export function VerEventosScreen({ route, navigation }) {
                   Vigente desde el {item.fechaInicio}
                   Hasta el {item.fechaFin}
                 </Text>
+                { cant  ?
                 <Pressable
                   style={styles.button}
                   onPress={()=>Alert.alert(
@@ -147,12 +159,13 @@ export function VerEventosScreen({ route, navigation }) {
                           
 
                         ]
-                  )}
-
-                          
+                  )}         
                 >
                   <Text style={styles.titleButton}>Eliminar</Text>
-                  </Pressable>
+                </Pressable>
+                :
+                console.log('bien')
+                }
               </SafeAreaView>
             );
           }
@@ -161,6 +174,32 @@ export function VerEventosScreen({ route, navigation }) {
     )
   }
 
+const sinEventos = () => {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={styles.titulos}>
+            No hay eventos próximos
+          </Text>
+          { cant  ?
+          <Pressable
+              style={styles.button}
+              onPress={() => {
+                navigation.navigate("Eventos", {
+                  idLocal: idLocal,
+                  latitud: latitud,
+                  longitud: longitud,
+                });
+              }}
+            >
+              <Text style={styles.titleButton}>NUEVO EVENTO</Text>
+            </Pressable>
+            :
+            console.log('bien')
+            }
+        </View>
+       
+  );
+}
   const flatlistPromos = () => {
     return (
       <View>
@@ -196,11 +235,13 @@ export function VerEventosScreen({ route, navigation }) {
                   Vigente desde el {item.fechaInicio}
                   Hasta el {item.fechaFin}
                 </Text>
-                <Pressable
+
+                { cant  ? 
+                  <Pressable
                   style={styles.button}
                   onPress={()=>Alert.alert(
                         "Eliminar",
-                        "¿Desea eliminar el evento?",
+                        "¿Desea eliminar la promoción?",
                         [
                           {
                             text: "Cancelar",
@@ -208,7 +249,7 @@ export function VerEventosScreen({ route, navigation }) {
                             style: "cancel"
                           },
                           { text: "Aceptar", 
-                          onPress: () => Backend.deleteEvento(item.id).then((items) => Alert.alert("Evento eliminado con éxito"), navigation.reset({
+                          onPress: () => Backend.deleteEvento(item.id).then((items) => Alert.alert("Promoción eliminada con éxito"), navigation.reset({
                           
                             routes: [
                               {
@@ -218,15 +259,16 @@ export function VerEventosScreen({ route, navigation }) {
                             ],
                           }))
                           }
-                          
-
                         ]
-                  )}
-
-                          
+                  )}      
                 >
                   <Text style={styles.titleButton}>Eliminar</Text>
-                  </Pressable>
+                </Pressable>
+                :
+                console.log('bien')
+          }
+               
+                
               </SafeAreaView>
             );
           }
@@ -234,7 +276,9 @@ export function VerEventosScreen({ route, navigation }) {
       </View >
     )
   }
-  if (cantEventos || cantPromos) {
+
+  if (cantPromos || cantEventos) {
+
       return(
         <View>
         <ScrollView>
@@ -251,57 +295,40 @@ export function VerEventosScreen({ route, navigation }) {
           <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
         </View>
         <View>{flatlistPromos()}</View>
-          <View >
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
-              <View>
-                <Text style={{
-                  width: 150, textAlign: 'center', fontWeight: "bold",
-                  fontSize: 25,
-                  margin: 5
-                }}>Eventos</Text>
+
+            <View >
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+                <View>
+                  <Text style={{
+                    width: 150, textAlign: 'center', fontWeight: "bold",
+                    fontSize: 25,
+                    margin: 5
+                  }}>Eventos</Text>
+                </View>
+                <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
               </View>
-              <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+              {flatlistEventos()}
             </View>
-            {flatlistEventos()}
+        </ScrollView>
+        </View>
+      );
+    }
+    else{
+
+        return (
+          <View>
+            <ScrollView>
+              <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+              <View>{sinEventos()}</View>
+            </ScrollView>
           </View>
-      </ScrollView>
-      </View>
-    );
-  
 
-  } else {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={styles.titulos}>
-              No hay eventos próximos
-            </Text>
-            <Pressable
-                style={styles.button}
-                onPress={() => {
-                  navigation.navigate("Eventos", {
-                    idLocal: idLocal,
-                    latitud: latitud,
-                    longitud: longitud,
-                  });
-                }}
-              >
-                <Text style={styles.titleButton}>NUEVO EVENTO</Text>
-              </Pressable>
-          </View>
-         
-    );
-  }
-    
-      
+        );
+        
+      }
 
-  
-  
-
-
-          
 }
-
 
 
 const styles = StyleSheet.create({
