@@ -14,7 +14,7 @@ export function VerEventosScreen({ route, navigation }) {
   const [cantEventos, setCantEventos] = React.useState([]);
   const [cantPromos, setCantPromos] = React.useState([]);
   const [cant, setCant] = React.useState([]);
-  const { idLocal } = route.params;
+  const { idLocal, latitud, longitud } = route.params;
   const { width } = Dimensions.get('window')
   const idDueno = 5;
 
@@ -151,7 +151,9 @@ export function VerEventosScreen({ route, navigation }) {
                             routes: [
                               {
                                 name: 'VerEventos',
-                                params: {idLocal: idLocal}
+                                params: {idLocal: idLocal,
+                                        latitud :latitud, 
+                                        longitud: longitud }
                               },
                             ],
                           }))
@@ -201,32 +203,7 @@ const sinEventos = () => {
   );
 }
 
-const sinPromos = () => {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Text style={styles.titulos}>
-            No hay promociones
-          </Text>
-          { cant  ?
-          <Pressable
-              style={styles.button}
-              onPress={() => {
-                navigation.navigate("Promociones", {
-                  idLocal: idLocal,
-                  latitud: latitud,
-                  longitud: longitud,
-                });
-              }}
-            >
-              <Text style={styles.titleButton}>NUEVA PROMOCION</Text>
-            </Pressable>
-            :
-            console.log('bien')
-            }
-        </View>
-       
-  );
-}
+
   const flatlistPromos = () => {
     return (
       <View>
@@ -262,9 +239,8 @@ const sinPromos = () => {
                   Vigente desde el {item.fechaInicio}
                   Hasta el {item.fechaFin}
                 </Text>
-
-                { cant  ? 
-                  <Pressable
+                { cant  ?
+                <Pressable
                   style={styles.button}
                   onPress={()=>Alert.alert(
                         "Eliminar",
@@ -276,26 +252,28 @@ const sinPromos = () => {
                             style: "cancel"
                           },
                           { text: "Aceptar", 
-                          onPress: () => Backend.deleteEvento(item.id).then((items) => Alert.alert("Promoción eliminada con éxito"), navigation.reset({
+                          onPress: () => Backend.deletePromocion(item.id).then((items) => Alert.alert("Promoción eliminada con éxito"), navigation.reset({
                           
                             routes: [
                               {
                                 name: 'VerEventos',
-                                params: {idLocal: idLocal}
+                                params: {idLocal: idLocal,
+                                        latitud :latitud, 
+                                        longitud: longitud }
                               },
                             ],
                           }))
                           }
+                          
+
                         ]
-                  )}      
+                  )}         
                 >
                   <Text style={styles.titleButton}>Eliminar</Text>
                 </Pressable>
                 :
                 console.log('bien')
-          }
-               
-                
+                }
               </SafeAreaView>
             );
           }
@@ -304,6 +282,32 @@ const sinPromos = () => {
     )
   }
 
+  const sinPromos = () => {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text style={styles.titulos}>
+              No hay promociones
+            </Text>
+            { cant  ?
+            <Pressable
+                style={styles.button}
+                onPress={() => {
+                  navigation.navigate("Promociones", {
+                    idLocal: idLocal,
+                    latitud: latitud,
+                    longitud: longitud,
+                  });
+                }}
+              >
+                <Text style={styles.titleButton}>NUEVA PROMOCION</Text>
+              </Pressable>
+              :
+              console.log('bien')
+              }
+          </View>
+         
+    );
+  }
   if (cantPromos || cantEventos) {
       return(
         <View>

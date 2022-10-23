@@ -127,11 +127,14 @@ export function EventosScreen({ route, navigation }) {
               value,
               idLocal
             ).then((items) => {
-              Alert.alert("Evento creado");
-              navigation.navigate("Locales", {
-                latitud: latitud,
-                longitud: longitud,
-              });
+              Alert.alert("Evento creado"),
+              navigation.reset({
+                routes: [
+                  {
+                    name: 'VerEventos',
+                    params: {idLocal: idLocal,
+                              latitud :latitud, 
+                              longitud: longitud }}]});
             })
           }
         >

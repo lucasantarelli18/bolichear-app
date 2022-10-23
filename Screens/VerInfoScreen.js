@@ -61,7 +61,6 @@ export function VerInfoScreen({ route, navigation }) {
             </View>
           </View>
           <View style={styles.detalles}>
-            <Text style={styles.title}> EVENTOS </Text>
             <Pressable
               style={styles.button}
               onPress={() => {
@@ -70,43 +69,7 @@ export function VerInfoScreen({ route, navigation }) {
                 });
               }}
             >
-              <Text style={styles.text}>MIS EVENTOS</Text>
-            </Pressable>
-            <Pressable
-              style={styles.button}
-              onPress={() => {
-                navigation.navigate("Eventos", {
-                  idLocal: element.id,
-                  latitud: latitud,
-                  longitud: longitud,
-                });
-              }}
-            >
-              <Text style={styles.text}>NUEVO EVENTO</Text>
-            </Pressable>
-
-            <Text style={styles.title}> PROMOCIONES </Text>
-            <Pressable
-              style={styles.button}
-              onPress={() => {
-                navigation.navigate("VerPromociones", {
-                  idLocal: element.id,
-                });
-              }}
-            >
-              <Text style={styles.text}>MIS PROMOCIONES</Text>
-            </Pressable>
-            <Pressable
-              style={styles.button}
-              onPress={() => {
-                navigation.navigate("Promociones", {
-                  idLocal: element.id,
-                  latitud: latitud,
-                  longitud: longitud,
-                });
-              }}
-            >
-              <Text style={styles.text}>NUEVA PROMOCION</Text>
+              <Text style={styles.text}>MIS EVENTOS Y PROMOCION</Text>
             </Pressable>
           </View>
         </ImageBackground>
