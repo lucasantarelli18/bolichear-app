@@ -24,7 +24,7 @@ export function MapScreen({ route, navigation }) {
     longitude: -57.967533,
   });
 
-  const [cambio, setCambio] = React.useState(true);
+  const [cambio, setCambio] = React.useState(false);
 
   const [idLocalidad, setIdLocalidad] = React.useState([]);
 
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
   },
   viewCien: {
     flex: 1,
-    
+
   },
   cal: {
     //backgroundColor: '#111',
