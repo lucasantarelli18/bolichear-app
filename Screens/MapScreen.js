@@ -24,7 +24,7 @@ export function MapScreen({ route, navigation }) {
     longitude: -57.967533,
   });
 
-  const [cambio, setCambio] = React.useState(false);
+  const [cambio, setCambio] = React.useState(true);
 
   const [idLocalidad, setIdLocalidad] = React.useState([]);
 
@@ -79,11 +79,11 @@ export function MapScreen({ route, navigation }) {
             coordinate={{ latitude: element.latitud, longitude: element.longitud, }}>
 
 
-            <Callout style={styles.cal} onPress={() =>
-              navigation.navigate("VerPromociones", {
+            <Callout style={styles.cal} onPress={() => {
+              navigation.navigate("VerEventos", {
                 idLocal: element.id,
-              })
-            }>
+              });
+            }}>
               <View style={styles.bubble}>
                 <Text style={styles.name}>{element.nombre}</Text>
               </View>
