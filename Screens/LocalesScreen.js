@@ -16,11 +16,11 @@ import * as Backend from "../backlog";
 //import Constants from 'expo-constants';
 
 export function LocalesScreen({ route, navigation }) {
-  const { latitud, longitud, idLocalidad, calle, numero } = route.params;
+  const { latitud, longitud, localidad, idLocalidad, calle, numero } = route.params;
 
   //traer del login
   const idDueno = 5;
-  console.log("Buenas, esta es la calle y el numero", calle, numero, idLocalidad)
+  console.log("Buenas, esta es la calle y el numero", calle, numero, idLocalidad, localidad)
   //traer del home
   //  const lat = -34.921296;
   //  const long = -57.954208;
@@ -143,7 +143,8 @@ export function LocalesScreen({ route, navigation }) {
               navigation.navigate("AltaLocal", {
                 latitud: latitud,
                 longitud: longitud,
-                idDomicilio: idDomicilio,
+                localidad: localidad,
+                idLocalidad: idLocalidad,
                 idDueno: idDueno,
                 calle: calle,
                 numero: numero

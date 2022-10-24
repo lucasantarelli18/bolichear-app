@@ -14,6 +14,8 @@ export function MapScreen({ route, navigation }) {
 
   const { calle, numero, localidad, latitud, longitud, rango } = route.params;
 
+  console.log("Buenas, esta es la calle y el numero", calle, numero, localidad)
+
   const [origin, setOrigin] = React.useState({
     latitude: route.params.latitud,
     longitude: route.params.longitud,
@@ -182,6 +184,7 @@ export function MapScreen({ route, navigation }) {
           navigation.navigate('Locales', {
             latitud: latitud,
             longitud: longitud,
+            localidad: localidad,
             idLocalidad: idLocalidad,
             calle: calle,
             numero: numero,

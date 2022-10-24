@@ -12,9 +12,9 @@ import { StatusBar } from 'expo-status-bar';
 export function UbicationScreen({ navigation }) {
 
   const [ubicacion, setUbicacion] = React.useState({
-    calle: "Sarmiento",
-    numero: 420,
-    localidad: "Quilmes",
+    calle: "Av. del Petroleo Argentino",
+    numero: 417,
+    localidad: "Berisso",
     latitude: -34.904625,
     longitude: -57.925738,
     latitudeDelta: 0.0922,
