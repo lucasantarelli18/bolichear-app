@@ -1,5 +1,6 @@
 import * as React from "react";
 import {
+  Image,
   Text,
   View,
   Button,
@@ -9,6 +10,7 @@ import {
   ImageBackground,
   Pressable,
 } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient';
 import * as Backend from "../backlog";
 //import DropDownPicker from 'react-native-dropdown-picker';
 //import Constants from 'expo-constants';
@@ -18,7 +20,7 @@ export function LocalesScreen({ route, navigation }) {
 
   //traer del login
   const idDueno = 5;
-
+  console.log("Buenas, esta es la calle y el numero", calle, numero, idLocalidad)
   //traer del home
   //  const lat = -34.921296;
   //  const long = -57.954208;
@@ -96,7 +98,7 @@ export function LocalesScreen({ route, navigation }) {
               </Pressable>
               <Pressable
                 style={styles.button2}
-                onPress={() => 
+                onPress={() =>
                   Backend.deleteLocal(element.id).then((items) => {
                     console.log("Borrando local: ", element.id);
                     setCant(false)
@@ -111,10 +113,10 @@ export function LocalesScreen({ route, navigation }) {
       );
     });
   };
-if (cant) {
-  return (
+  if (cant) {
+    return (
       //Tiene locales
-    <>
+      <>
         <ImageBackground
           source={require("../assets/fondoLogIn3.jpg")}
           blurRadius={3}
@@ -122,23 +124,29 @@ if (cant) {
         >
           <View style={styles.container}>{list()}</View>
         </ImageBackground>
-    </>
-  );  
-} else {
-  return (
-        //No tiene locales
-        <>
-          <Text style={styles.titulos}>
-            Todavía no tenes registrado un local
-          </Text>
+      </>
+    );
+  } else {
+    return (
+      //No tiene locales
+      <>
+        <View style={styles.container}>
+          <View style={{ width: "90%", justifyContent: 'center', alignItems: 'center', marginBottom: 40, marginTop: "30%" }}>
+            <Image style={{ height: 250, width: 300, marginBottom: 15 }} source={require("../assets/logo3.png")} />
+            <Text style={{ fontFamily: 'sans-serif', fontStyle: 'italic', fontSize: 25, fontWeight: 'bold', textAlign: 'center' }}>
+              Todavía no tenés registrado un local
+            </Text>
+          </View>
+
           <Pressable
-            style={styles.button}
             onPress={() => {
               navigation.navigate("AltaLocal", {
                 latitud: latitud,
                 longitud: longitud,
                 idDomicilio: idDomicilio,
                 idDueno: idDueno,
+                calle: calle,
+                numero: numero
               });
               setCant(true);
               Backend.getLocalesXUser(idDueno).then((items) => {
@@ -146,11 +154,19 @@ if (cant) {
               });
             }}
           >
-            <Text style={styles.text}>DAR DE ALTA UN LOCAL</Text>
-          </Pressable>
-        </>
-      )
-}
+            <LinearGradient
+              // Button Linear Gradient
+              colors={['#C2454A', '#A32934', '#680008']}
+              start={{ x: 1, y: 0 }}
+              end={{ x: 0, y: 1 }}
+              style={styles.button}>
+              <Text style={styles.text}>DAR DE ALTA UN LOCAL</Text>
+            </LinearGradient>
+          </Pressable></View>
+
+      </>
+    )
+  }
 
 }
 
@@ -159,6 +175,8 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 1,
     width: "100%",
+    backgroundColor: "#ebe6d9",
+    alignItems: "center",
   },
   boliches: {
     flex: 0.2,
@@ -199,13 +217,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   button: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: 12,
     paddingHorizontal: 32,
-    borderRadius: 4,
+    borderRadius: 30,
     elevation: 3,
-    backgroundColor: "black",
+    backgroundColor: 'black',
+    width: '80%',
+    marginTop: 50,
   },
   button2: {
     alignItems: "center",
@@ -216,10 +236,12 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
   },
   text: {
-    fontSize: 16,
+    fontSize: 20,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,
     color: "white",
+    textAlign: "center",
+    lineHeight: 30,
   },
 });

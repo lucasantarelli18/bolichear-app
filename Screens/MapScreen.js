@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     //borderColor: '#ccc',
     //borderWidth: 0.5,
     //padding: 10,
-    width: 100,
+    width: 200,
   },
   image: {
     width: 120,

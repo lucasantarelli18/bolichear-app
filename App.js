@@ -198,8 +198,16 @@ export default function App({ navigation }) {
               }} />
               <Stack.Screen name="Details" component={DetailsScreen} />
               <Stack.Screen name="VerInfo" component={VerInfoScreen} options={{ title: 'Mi Local' }} />
-              <Stack.Screen name="Locales" component={LocalesScreen} options={{ title: 'Mi Local' }} />
-              <Stack.Screen name="AltaLocal" component={AltaLocalScreen} options={{ title: 'Alta de Local' }} />
+              <Stack.Screen name="Locales" component={LocalesScreen} options={{
+                title: 'Mi Local', headerTitleAlign: "center",
+                headerTitleStyle: { color: 'black' },
+                headerStyle: { backgroundColor: '#ebe6d9', justifyContent: "center", fontColor: 'white' }
+              }} />
+              <Stack.Screen name="AltaLocal" component={AltaLocalScreen} options={{
+                title: 'Carga tu Local', headerTitleAlign: "center",
+                headerTitleStyle: { color: 'black' },
+                headerStyle: { backgroundColor: '#ebe6d9', justifyContent: "center", fontColor: 'white' }
+              }} />
               <Stack.Screen name="Eventos" component={EventosScreen} options={{ title: "Nuevo Evento" }} />
               <Stack.Screen name="VerEventos" component={VerEventosScreen} options={{
                 title: 'Detalles', headerTitleAlign: "center",
@@ -242,7 +250,7 @@ const styles = StyleSheet.create({
   imagen: {
     marginTop: 80,
     width: 300,
-    height: 300,
+    height: 250,
   },
   input: {
     padding: 10,
