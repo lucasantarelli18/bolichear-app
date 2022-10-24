@@ -103,6 +103,8 @@ export function VerInfoScreen({ route, navigation }) {
               onPress={() => {
                 navigation.navigate("VerEventos", {
                   idLocal: element.id,
+                  longitud: element.longitud,
+                  latitud:element.latitud
                 });
               }}
             >

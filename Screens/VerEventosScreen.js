@@ -5,6 +5,9 @@ import React, { useState, useEffect } from "react";
 import Moment from 'moment';
 import 'moment/locale/es';
 import {Icon } from '@rneui/themed';
+import { useNavigation, CommonActions, StackActions } from '@react-navigation/native';
+
+
 
 
 export function VerEventosScreen({ route, navigation }) {
@@ -14,7 +17,7 @@ export function VerEventosScreen({ route, navigation }) {
   const [cantEventos, setCantEventos] = React.useState([]);
   const [cantPromos, setCantPromos] = React.useState([]);
   const [cant, setCant] = React.useState([]);
-  const { idLocal, latitud, longitud } = route.params;
+  const { idLocal, latitud, longitud} = route.params;
   const { width } = Dimensions.get('window')
   const idDueno = 5;
 
@@ -53,7 +56,7 @@ export function VerEventosScreen({ route, navigation }) {
             setCant(false);
           }
         })
-
+    
   }, [])
 
   // inicializo los vectores de data 
@@ -65,7 +68,7 @@ export function VerEventosScreen({ route, navigation }) {
     if (idLocal == element.idLocal) {
       const fechaHoraInicio = Moment(element.fechaHoraInicio).format('DD/MM/YYYY [a las] HH:mm ');
       const fechaHoraFin = Moment(element.fechaHoraFin).format('DD/MM/YYYY [a las] HH:mm ');
-      console.log(element)
+      //console.log(element)
       dataEventos.push(
         {
           id: element.id,
@@ -83,7 +86,7 @@ export function VerEventosScreen({ route, navigation }) {
     if (idLocal == element.idLocal) {
       const fechaHoraInicio = Moment(element.fechaHoraInicio).format('DD/MM/YYYY [a las] HH:mm ');
       const fechaHoraFin = Moment(element.fechaHoraFin).format('DD/MM/YYYY [a las] HH:mm ');
-      console.log(element)
+      //console.log(element)
       dataPromos.push(
         {
           id: element.id,
@@ -96,6 +99,8 @@ export function VerEventosScreen({ route, navigation }) {
       )
     }
   });
+
+
 
   // Creo constantes para mostrar el FlatList en la pantalla
   const flatlistEventos = () => {
@@ -146,17 +151,16 @@ export function VerEventosScreen({ route, navigation }) {
                             style: "cancel"
                           },
                           { text: "Aceptar", 
-                          onPress: () => Backend.deleteEvento(item.id).then((items) => Alert.alert("Evento eliminado con éxito"), navigation.reset({
-                          
-                            routes: [
-                              {
-                                name: 'VerEventos',
-                                params: {idLocal: idLocal,
-                                        latitud :latitud, 
-                                        longitud: longitud }
-                              },
-                            ],
-                          }))
+                          onPress: () => Backend.deleteEvento(item.id).then((items) => Alert.alert("Evento eliminado con éxito"),navigation.dispatch({
+                            ...StackActions.replace('VerEventos', {
+                              idLocal:idLocal, latitud:latitud, longitud:longitud
+                            }),
+                            source: route.key,
+                            target: navigation.getState().key,
+              
+                          })
+                        
+                          )
                           }
                           
 
@@ -165,9 +169,10 @@ export function VerEventosScreen({ route, navigation }) {
                 >
                   <Text style={styles.titleButton}>Eliminar</Text>
                 </Pressable>
+                
                 :
                 console.log('bien')
-                }
+                } 
               </SafeAreaView>
             );
           }
@@ -187,9 +192,7 @@ const sinEventos = () => {
               style={styles.button}
               onPress={() => {
                 navigation.navigate("Eventos", {
-                  idLocal: idLocal,
-                  latitud: latitud,
-                  longitud: longitud,
+                  idLocal: idLocal
                 });
               }}
             >
@@ -239,7 +242,7 @@ const sinEventos = () => {
                   Vigente desde el {item.fechaInicio}
                   Hasta el {item.fechaFin}
                 </Text>
-                { cant  ?
+              { cant  ?
                 <Pressable
                   style={styles.button}
                   onPress={()=>Alert.alert(
@@ -252,16 +255,13 @@ const sinEventos = () => {
                             style: "cancel"
                           },
                           { text: "Aceptar", 
-                          onPress: () => Backend.deletePromocion(item.id).then((items) => Alert.alert("Promoción eliminada con éxito"), navigation.reset({
-                          
-                            routes: [
-                              {
-                                name: 'VerEventos',
-                                params: {idLocal: idLocal,
-                                        latitud :latitud, 
-                                        longitud: longitud }
-                              },
-                            ],
+                          onPress: () => Backend.deletePromocion(item.id).then((items) => Alert.alert("Promoción eliminada con éxito"),navigation.dispatch({
+                            ...StackActions.replace('VerEventos', {
+                              idLocal:idLocal, latitud:latitud, longitud:longitud
+                            }),
+                            source: route.key,
+                            target: navigation.getState().key,
+              
                           }))
                           }
                           
@@ -273,7 +273,7 @@ const sinEventos = () => {
                 </Pressable>
                 :
                 console.log('bien')
-                }
+                }  
               </SafeAreaView>
             );
           }
@@ -293,9 +293,7 @@ const sinEventos = () => {
                 style={styles.button}
                 onPress={() => {
                   navigation.navigate("Promociones", {
-                    idLocal: idLocal,
-                    latitud: latitud,
-                    longitud: longitud,
+                    idLocal: idLocal
                   });
                 }}
               >
