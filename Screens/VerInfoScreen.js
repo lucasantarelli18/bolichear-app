@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from 'react';
 import {
   Text,
   View,
@@ -10,12 +11,34 @@ import {
   Pressable,
   Image,
 } from "react-native";
+import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import * as Backend from "../backlog";
 
 export function VerInfoScreen({ route, navigation }) {
   const [local, setLocal] = React.useState([]);
   const [image, setImage] = React.useState([]);
   const { idLocal, latitud, longitud } = route.params;
+  const [visible, setVisible] = useState(false);
+
+  const hideMenu = () => setVisible(false);
+
+  const showMenu = () => setVisible(true);
+  const evento = () => {
+                navigation.navigate("Eventos", {
+                  idLocal: idLocal,
+                  latitud: latitud,
+                  longitud: longitud,
+                });
+              
+  }
+
+  const promo = () =>{
+    navigation.navigate("Promociones", {
+      idLocal: idLocal,
+      latitud: latitud,
+      longitud: longitud,
+    });
+  }
 
   React.useEffect(() => {
     Backend.getLocalxID(idLocal).then((items) => {
@@ -47,6 +70,20 @@ export function VerInfoScreen({ route, navigation }) {
           blurRadius={3}
           style={{ flex: 1 }}
         >
+        <Menu
+          visible={visible}
+          anchor={ <Pressable
+                    style={styles.button}
+                    onPress={showMenu}>
+                    <Text style={styles.titleButton}>AGREGAR</Text>
+                    </Pressable>
+                  }
+          onRequestClose={hideMenu}
+        >
+        <MenuItem onPress={hideMenu, evento}>Nuevo Evento</MenuItem>
+        <MenuDivider />
+        <MenuItem onPress={hideMenu, promo}>Nueva Promocion</MenuItem>
+        </Menu>
           <View>
             <Text style={styles.titulos}key="{element.id}">{element.nombre}</Text>
             <Text style={styles.km}> {distkm} km</Text>
@@ -61,52 +98,17 @@ export function VerInfoScreen({ route, navigation }) {
             </View>
           </View>
           <View style={styles.detalles}>
-            <Text style={styles.title}> EVENTOS </Text>
             <Pressable
               style={styles.button}
               onPress={() => {
                 navigation.navigate("VerEventos", {
                   idLocal: element.id,
+                  longitud: element.longitud,
+                  latitud:element.latitud
                 });
               }}
             >
-              <Text style={styles.text}>MIS EVENTOS</Text>
-            </Pressable>
-            <Pressable
-              style={styles.button}
-              onPress={() => {
-                navigation.navigate("Eventos", {
-                  idLocal: element.id,
-                  latitud: latitud,
-                  longitud: longitud,
-                });
-              }}
-            >
-              <Text style={styles.text}>NUEVO EVENTO</Text>
-            </Pressable>
-
-            <Text style={styles.title}> PROMOCIONES </Text>
-            <Pressable
-              style={styles.button}
-              onPress={() => {
-                navigation.navigate("VerPromociones", {
-                  idLocal: element.id,
-                });
-              }}
-            >
-              <Text style={styles.text}>MIS PROMOCIONES</Text>
-            </Pressable>
-            <Pressable
-              style={styles.button}
-              onPress={() => {
-                navigation.navigate("Promociones", {
-                  idLocal: element.id,
-                  latitud: latitud,
-                  longitud: longitud,
-                });
-              }}
-            >
-              <Text style={styles.text}>NUEVA PROMOCION</Text>
+              <Text style={styles.text}>MIS EVENTOS Y PROMOCION</Text>
             </Pressable>
           </View>
         </ImageBackground>
@@ -193,4 +195,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: "100%",
   },
+  titleButton: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "white"
+},
 });

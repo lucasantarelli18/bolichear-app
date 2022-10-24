@@ -401,3 +401,9 @@ export const deleteLocal = async (idLocal) =>{
   .match({ id: idLocal })
 }
 
+export const deleteEvento = async (idEvento) =>{
+  const { data, error } = await supabase
+  .from('Evento')
+  .delete()
+  .match({ id: idEvento })
+}

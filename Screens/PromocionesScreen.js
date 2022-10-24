@@ -70,7 +70,7 @@ export function PromocionesScreen({ route, navigation }) {
           idPromocion)
           .then((items) => {
             Alert.alert("Promoción creada");
-            navigation.navigate("Locales", { latitud: latitud, longitud: longitud });
+            navigation.navigate('VerInfo', { idLocal: idLocal, latitud: latitud, longitud: longitud })
           })}>
           <FormItem
             label="Nombre"

@@ -1,22 +1,30 @@
 import { Alert, StyleSheet, Button } from 'react-native';
 import * as Backend from '../backlog';
-import { SafeAreaView, FlatList, View, Text, Image, ScrollView, Dimensions, ImageBackground } from 'react-native';
-import React, { useState } from "react";
-import { Card } from 'react-native-elements';
+import { SafeAreaView, FlatList, View, Text, Image, ScrollView, Dimensions, ImageBackground, Pressable, RefreshControl } from 'react-native';
+import React, { useState, useEffect } from "react";
 import Moment from 'moment';
 import 'moment/locale/es';
+import { Icon } from '@rneui/themed';
+import { useNavigation, CommonActions, StackActions } from '@react-navigation/native';
+
+
+
 
 export function VerEventosScreen({ route, navigation }) {
   const [eventos, setEventos] = React.useState([])
   const [promociones, setPromociones] = React.useState([]);
-
+  const [locales, setLocales] = React.useState([]);
   const [cantEventos, setCantEventos] = React.useState([]);
   const [cantPromos, setCantPromos] = React.useState([]);
-
-  const { idLocal } = route.params;
+  const [cant, setCant] = React.useState([]);
+  const { idLocal, latitud, longitud } = route.params;
   const { width } = Dimensions.get('window')
+  const idDueno = 5;
+
+
 
   React.useEffect(() => {
+
     Backend.getEventosxIdLocal(idLocal)
       .then((items) => {
         setEventos(items)
@@ -24,6 +32,7 @@ export function VerEventosScreen({ route, navigation }) {
           setCantEventos(true);
         } else {
           setCantEventos(false);
+          sinEventos();
         }
         console.log(items.length)
 
@@ -35,12 +44,25 @@ export function VerEventosScreen({ route, navigation }) {
             setCantPromos(true);
           } else {
             setCantPromos(false);
+
           }
           console.log(items.length)
 
-        })
+        }),
+
+      Backend.getLocalesXUser(idDueno).then((items) => {
+        setLocales(items);
+        console.log("EL LOCAL QUE ESTAS BUSCANDO ES ESTE: ", items)
+        if (items.length > 0) {
+
+          setCant(true);
+        } else {
+          setCant(false);
+        }
+      })
 
   }, [])
+
 
   // inicializo los vectores de data 
   const dataEventos = [];
@@ -51,10 +73,11 @@ export function VerEventosScreen({ route, navigation }) {
     if (idLocal == element.idLocal) {
       const fechaHoraInicio = Moment(element.fechaHoraInicio).format('DD/MM/YYYY [a las] HH:mm ');
       const fechaHoraFin = Moment(element.fechaHoraFin).format('DD/MM/YYYY [a las] HH:mm ');
-      console.log(element)
+      //console.log(element)
       dataEventos.push(
         {
           id: element.id,
+          idLocal: element.idLocal,
           title: element.nombre,
           description: element.descripcion,
           image: { uri: element.path },
@@ -65,14 +88,16 @@ export function VerEventosScreen({ route, navigation }) {
     }
   });
 
+
   promociones.map((element) => {
     if (idLocal == element.idLocal) {
       const fechaHoraInicio = Moment(element.fechaHoraInicio).format('DD/MM/YYYY [a las] HH:mm ');
       const fechaHoraFin = Moment(element.fechaHoraFin).format('DD/MM/YYYY [a las] HH:mm ');
-      console.log(element)
+      //console.log(element)
       dataPromos.push(
         {
           id: element.id,
+          idLocal: element.idLocal,
           title: element.nombre,
           description: element.descripcion,
           image: { uri: element.idPromocion },
@@ -83,7 +108,19 @@ export function VerEventosScreen({ route, navigation }) {
     }
   });
 
+  const localDueño = [];
 
+  if (cant) {
+    locales.map((element) => {
+      console.log("id local del dueño 5", element.id)
+      localDueño.push(element.id)
+    })
+  } else {
+    localDueño.push(0)
+  }
+
+
+  console.log("DUEÑOOOOOO", localDueño[0])
   // Creo constantes para mostrar el FlatList en la pantalla
   const flatlistEventos = () => {
     return (
@@ -120,6 +157,42 @@ export function VerEventosScreen({ route, navigation }) {
                   Vigente desde el {item.fechaInicio}
                   Hasta el {item.fechaFin}
                 </Text>
+                {item.idLocal == localDueño[0] ?
+                  <Pressable
+                    style={styles.button}
+                    onPress={() => Alert.alert(
+                      "Eliminar",
+                      "¿Desea eliminar el evento?",
+                      [
+                        {
+                          text: "Cancelar",
+                          onPress: () => console.log("Cancel Pressed"),
+                          style: "cancel"
+                        },
+                        {
+                          text: "Aceptar",
+                          onPress: () => Backend.deleteEvento(item.id).then((items) => Alert.alert("Evento eliminado con éxito"), navigation.dispatch({
+                            ...StackActions.replace('VerEventos', {
+                              idLocal: idLocal, latitud: latitud, longitud: longitud
+                            }),
+                            source: route.key,
+                            target: navigation.getState().key,
+
+                          })
+
+                          )
+                        }
+
+
+                      ]
+                    )}
+                  >
+                    <Text style={styles.titleButton}>Eliminar</Text>
+                  </Pressable>
+
+                  :
+                  console.log('bien')
+                }
               </SafeAreaView>
             );
           }
@@ -127,6 +200,32 @@ export function VerEventosScreen({ route, navigation }) {
       </View >
     )
   }
+
+  const sinEventos = () => {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text style={styles.titulos}>
+          No hay eventos próximos
+        </Text>
+        {idLocal == localDueño[0] ?
+          <Pressable
+            style={styles.button}
+            onPress={() => {
+              navigation.navigate("Eventos", {
+                idLocal: idLocal
+              });
+            }}
+          >
+            <Text style={styles.titleButton}>NUEVO EVENTO</Text>
+          </Pressable>
+          :
+          console.log('bien')
+        }
+      </View>
+
+    );
+  }
+
 
   const flatlistPromos = () => {
     return (
@@ -163,6 +262,39 @@ export function VerEventosScreen({ route, navigation }) {
                   Vigente desde el {item.fechaInicio}
                   Hasta el {item.fechaFin}
                 </Text>
+                {item.idLocal == localDueño[0] ?
+                  <Pressable
+                    style={styles.button}
+                    onPress={() => Alert.alert(
+                      "Eliminar",
+                      "¿Desea eliminar la promoción?",
+                      [
+                        {
+                          text: "Cancelar",
+                          onPress: () => console.log("Cancel Pressed"),
+                          style: "cancel"
+                        },
+                        {
+                          text: "Aceptar",
+                          onPress: () => Backend.deletePromocion(item.id).then((items) => Alert.alert("Promoción eliminada con éxito"), navigation.dispatch({
+                            ...StackActions.replace('VerEventos', {
+                              idLocal: idLocal, latitud: latitud, longitud: longitud
+                            }),
+                            source: route.key,
+                            target: navigation.getState().key,
+
+                          }))
+                        }
+
+
+                      ]
+                    )}
+                  >
+                    <Text style={styles.titleButton}>Eliminar</Text>
+                  </Pressable>
+                  :
+                  console.log('bien')
+                }
               </SafeAreaView>
             );
           }
@@ -171,55 +303,99 @@ export function VerEventosScreen({ route, navigation }) {
     )
   }
 
-  return (
+  const sinPromos = () => {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text style={styles.titulos}>
+          No hay promociones
+        </Text>
+        {idLocal == localDueño[0] ?
+          <Pressable
+            style={styles.button}
+            onPress={() => {
+              navigation.navigate("Promociones", {
+                idLocal: idLocal
+              });
+            }}
+          >
+            <Text style={styles.titleButton}>NUEVA PROMOCION</Text>
+          </Pressable>
+          :
+          console.log('bien')
+        }
+      </View>
 
-
-    //Tiene Eventos
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <ScrollView>
-        <View >
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+    );
+  }
+  if (cantPromos || cantEventos) {
+    return (
+      <View>
+        <ScrollView>
+          {cantPromos ?
             <View>
-              <Text style={{
-                width: 150, textAlign: 'center', fontWeight: "bold",
-                fontSize: 25,
-                margin: 5
-              }}>Eventos</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+                <View>
+                  <Text style={{
+                    width: 200, textAlign: 'center', fontWeight: "bold",
+                    fontSize: 25,
+                    margin: 5
+                  }}>Promociones</Text>
+                </View>
+                <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+              </View>
+              <View>{flatlistPromos()}</View>
+            </View> :
+            <View>
+              <ScrollView>
+                <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+                <View>{sinPromos()}</View>
+              </ScrollView>
             </View>
-            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
-          </View>
-          {flatlistEventos()}
-        </View>
+          }
+          {cantEventos ?
+            <View>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+                <View>
+                  <Text style={{
+                    width: 150, textAlign: 'center', fontWeight: "bold",
+                    fontSize: 25,
+                    margin: 5
+                  }}>Eventos</Text>
+                </View>
+                <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+              </View>
+              {flatlistEventos()}
+            </View> :
+            <View>
+              <ScrollView>
+                <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+                <View>{sinEventos()}</View>
+              </ScrollView>
+            </View>
+          }
+        </ScrollView>
+      </View>
+    );
+  }
+  else {
 
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    return (
+      <View>
+        <ScrollView>
           <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
-          <View>
-            <Text style={{
-              width: 200, textAlign: 'center', fontWeight: "bold",
-              fontSize: 25,
-              margin: 5
-            }}>Promociones</Text>
-          </View>
-          <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
-        </View>
-        <View>{flatlistPromos()}</View>
-      </ScrollView>
-    </View>
+          <View>{sinEventos()}</View>
+          <View>{sinPromos()}</View>
+        </ScrollView>
+      </View>
 
+    );
 
-  );
+  }
+
 }
 
-/*  <>
-      {cantEventos ? (
-        //Tiene Eventos
-        ) : (
-        //No tiene locales
-        <>
-        </>
-      )}
-    </>*/
 
 const styles = StyleSheet.create({
 
@@ -253,5 +429,27 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 25,
     margin: 5
-  }
+  },
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 5,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: "black",
+    marginVertical: 20,
+
+  },
+  titulos: {
+    fontSize: 19,
+    textTransform: "uppercase",
+    fontWeight: "bold",
+    fontFamily: "Roboto-Medium",
+  },
+  titleButton: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "white"
+  },
 });
