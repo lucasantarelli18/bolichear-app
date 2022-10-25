@@ -65,11 +65,40 @@ export function VerInfoScreen({ route, navigation }) {
       const distkm = (dist / 1000).toFixed(2);
 
       return (
-        <ImageBackground
-          source={require("../assets/fondoBoliches3.jpg")}
-          blurRadius={3}
-          style={{ flex: 1 }}
+        <ScrollView style={styles.container}
         >
+
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+            <View>
+              <Text style={{
+                width: 200, textAlign: 'center', fontWeight: "bold",
+                fontSize: 25,
+                margin: 20
+              }}>{element.nombre.toUpperCase()}</Text>
+            </View>
+            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+          </View>
+
+          <View>
+            <Text style={styles.info}>
+              {" "}
+              Direccion: {element.Domicilio.calle} {element.Domicilio.numero}
+            </Text>
+          </View>
+
+          <View style={{ alignItems: 'center' }}>
+            {element.image == null ?
+              <Image
+                source={require("../assets/camara.jpg")}
+                style={{ margin: 15, width: "90%", height: 250, borderRadius: 12, }}
+              /> :
+              <Image
+                source={{ uri: element.image }}
+                style={{ margin: 15, width: "90%", height: 250, borderRadius: 12, }} />
+            }
+          </View>
+
           <Menu
             visible={visible}
             anchor={<Pressable
@@ -84,19 +113,7 @@ export function VerInfoScreen({ route, navigation }) {
             <MenuDivider />
             <MenuItem onPress={hideMenu, promo}>Nueva Promocion</MenuItem>
           </Menu>
-          <View>
-            <Text style={styles.titulos} key="{element.id}">{element.nombre}</Text>
-            <Text style={styles.km}> {distkm} km</Text>
-          </View>
-          <View >
-            <View>
-              <Text style={styles.info}>
-                {" "}
-                Dirección: {element.Domicilio.calle} {element.Domicilio.numero}
-              </Text>
-              <Text style={styles.info}> Asistiran 300 personas </Text>
-            </View>
-          </View>
+
           <View style={styles.detalles}>
             <Pressable
               style={styles.button}
@@ -111,12 +128,12 @@ export function VerInfoScreen({ route, navigation }) {
               <Text style={styles.text}>MIS EVENTOS Y PROMOCION</Text>
             </Pressable>
           </View>
-        </ImageBackground>
+        </ScrollView>
       );
     });
   };
 
-  return <View style={styles.container}>{list()}</View>;
+  return <View>{list()}</View>;
 }
 
 const styles = StyleSheet.create({
@@ -191,8 +208,6 @@ const styles = StyleSheet.create({
   detalles: {
     alignItems: "center",
     justifyContent: "center",
-    position: "absolute",
-    bottom: 0,
     width: "100%",
   },
   titleButton: {
