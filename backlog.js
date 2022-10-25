@@ -254,7 +254,7 @@ export const insertPromocion = async (nombrePromo, descrip, fHInicio, fHFin, idL
   ]);
 };
 
-export const insertLocal = async (nombreLocal, lat, long, idDuen, idDomicili) => {
+export const insertLocal = async (nombreLocal, lat, long, idDuen, idDomicili, image) => {
   console.log(nombreLocal, lat, long, idDuen, idDomicili);
   const { data, error } = await supabase
     .from('Local')
@@ -265,6 +265,7 @@ export const insertLocal = async (nombreLocal, lat, long, idDuen, idDomicili) =>
         longitud: long,
         idDueño: parseInt(idDuen),
         idDomicilio: parseInt(idDomicili),
+        image: image
       },
     ])
   if (error) { console.log(error) }
