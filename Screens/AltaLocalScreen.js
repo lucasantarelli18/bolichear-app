@@ -43,8 +43,7 @@ export function AltaLocalScreen({ route, navigation: { goBack } }) {
 
   return (
     <>
-    <ScrollView>
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <Text style={styles.titulos}>Nombre del Local</Text>
         <View style={styles.container2}>
           <TextInput
@@ -114,8 +113,8 @@ export function AltaLocalScreen({ route, navigation: { goBack } }) {
           </LinearGradient>
 
         </Pressable>
-      </View>
       </ScrollView>
+
     </>
   );
 }
