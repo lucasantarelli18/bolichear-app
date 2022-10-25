@@ -24,15 +24,15 @@ export function VerInfoScreen({ route, navigation }) {
 
   const showMenu = () => setVisible(true);
   const evento = () => {
-                navigation.navigate("Eventos", {
-                  idLocal: idLocal,
-                  latitud: latitud,
-                  longitud: longitud,
-                });
-              
+    navigation.navigate("Eventos", {
+      idLocal: idLocal,
+      latitud: latitud,
+      longitud: longitud,
+    });
+
   }
 
-  const promo = () =>{
+  const promo = () => {
     navigation.navigate("Promociones", {
       idLocal: idLocal,
       latitud: latitud,
@@ -70,22 +70,22 @@ export function VerInfoScreen({ route, navigation }) {
           blurRadius={3}
           style={{ flex: 1 }}
         >
-        <Menu
-          visible={visible}
-          anchor={ <Pressable
-                    style={styles.button}
-                    onPress={showMenu}>
-                    <Text style={styles.titleButton}>AGREGAR</Text>
-                    </Pressable>
-                  }
-          onRequestClose={hideMenu}
-        >
-        <MenuItem onPress={hideMenu, evento}>Nuevo Evento</MenuItem>
-        <MenuDivider />
-        <MenuItem onPress={hideMenu, promo}>Nueva Promocion</MenuItem>
-        </Menu>
+          <Menu
+            visible={visible}
+            anchor={<Pressable
+              style={styles.button}
+              onPress={showMenu}>
+              <Text style={styles.titleButton}>AGREGAR</Text>
+            </Pressable>
+            }
+            onRequestClose={hideMenu}
+          >
+            <MenuItem onPress={hideMenu, evento}>Nuevo Evento</MenuItem>
+            <MenuDivider />
+            <MenuItem onPress={hideMenu, promo}>Nueva Promocion</MenuItem>
+          </Menu>
           <View>
-            <Text style={styles.titulos}key="{element.id}">{element.nombre}</Text>
+            <Text style={styles.titulos} key="{element.id}">{element.nombre}</Text>
             <Text style={styles.km}> {distkm} km</Text>
           </View>
           <View >
@@ -104,7 +104,7 @@ export function VerInfoScreen({ route, navigation }) {
                 navigation.navigate("VerEventos", {
                   idLocal: element.id,
                   longitud: element.longitud,
-                  latitud:element.latitud
+                  latitud: element.latitud
                 });
               }}
             >
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     fontWeight: "bold",
     fontFamily: "Roboto-Medium",
- 
+
   },
   km: {
     fontSize: 15,
@@ -199,5 +199,5 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "bold",
     color: "white"
-},
+  },
 });

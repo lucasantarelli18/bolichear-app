@@ -208,7 +208,6 @@ export const insertDomicilio = async (calle, num, piso, dpto, idLocalidad) => {
     .insert([
       {
         calle: calle,
-
         numero: num,
         piso: piso,
         dpto: dpto,
@@ -255,7 +254,7 @@ export const insertPromocion = async (nombrePromo, descrip, fHInicio, fHFin, idL
   ]);
 };
 
-export const insertLocal = async (nombreLocal, lat, long, idDuen, idDomicili) => {
+export const insertLocal = async (nombreLocal, lat, long, idDuen, idDomicili, image) => {
   console.log(nombreLocal, lat, long, idDuen, idDomicili);
   const { data, error } = await supabase
     .from('Local')
@@ -266,6 +265,7 @@ export const insertLocal = async (nombreLocal, lat, long, idDuen, idDomicili) =>
         longitud: long,
         idDueño: parseInt(idDuen),
         idDomicilio: parseInt(idDomicili),
+        image: image
       },
     ])
   if (error) { console.log(error) }
@@ -378,32 +378,32 @@ export const deletePromocion = async (idPromo) => {
     .match({ id: idPromo })
 }
 
-export const deleteEventoXLocal = async (idLocal) =>{
+export const deleteEventoXLocal = async (idLocal) => {
   const { data, error } = await supabase
-  .from('Evento')
-  .delete()
-  .match({ idLocal: idLocal })
+    .from('Evento')
+    .delete()
+    .match({ idLocal: idLocal })
 }
 
-export const deletePromoXLocal = async (idLocal) =>{
+export const deletePromoXLocal = async (idLocal) => {
   const { data, error } = await supabase
-  .from('Promocion')
-  .delete()
-  .match({ idLocal: idLocal })
+    .from('Promocion')
+    .delete()
+    .match({ idLocal: idLocal })
 }
 
-export const deleteLocal = async (idLocal) =>{
+export const deleteLocal = async (idLocal) => {
   deletePromoXLocal(idLocal);
   deleteEventoXLocal(idLocal);
   const { data, error } = await supabase
-  .from('Local')
-  .delete()
-  .match({ id: idLocal })
+    .from('Local')
+    .delete()
+    .match({ id: idLocal })
 }
 
-export const deleteEvento = async (idEvento) =>{
+export const deleteEvento = async (idEvento) => {
   const { data, error } = await supabase
-  .from('Evento')
-  .delete()
-  .match({ id: idEvento })
+    .from('Evento')
+    .delete()
+    .match({ id: idEvento })
 }
