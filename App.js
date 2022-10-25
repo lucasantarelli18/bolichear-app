@@ -197,7 +197,11 @@ export default function App({ navigation }) {
                 headerStyle: { backgroundColor: '#fff', justifyContent: "center", fontColor: 'white' },
               }} />
               <Stack.Screen name="Details" component={DetailsScreen} />
-              <Stack.Screen name="VerInfo" component={VerInfoScreen} options={{ title: 'Mi Local' }} />
+              <Stack.Screen name="VerInfo" component={VerInfoScreen} options={{
+                title: 'Detalles de mi Local', headerTitleAlign: "center",
+                headerTitleStyle: { color: 'black' },
+                headerStyle: { backgroundColor: '#fff', justifyContent: "center", fontColor: 'white' }
+              }} />
               <Stack.Screen name="Locales" component={LocalesScreen} options={{
                 title: 'Mi Local', headerTitleAlign: "center",
                 headerTitleStyle: { color: 'black' },

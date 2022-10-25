@@ -128,7 +128,7 @@ export function EventosScreen({ route, navigation }) {
               idLocal
             ).then((items) => {
               Alert.alert("Evento creado"),
-              navigation.navigate('VerInfo', {idLocal:idLocal, latitud:latitud, longitud:longitud})
+                navigation.navigate('Locales', { idLocal: idLocal, latitud: latitud, longitud: longitud })
             })
           }
         >

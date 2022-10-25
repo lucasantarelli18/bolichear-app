@@ -11,6 +11,7 @@ import {
   Pressable,
 } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
+import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import * as Backend from "../backlog";
 //import DropDownPicker from 'react-native-dropdown-picker';
 //import Constants from 'expo-constants';
@@ -35,12 +36,15 @@ export function LocalesScreen({ route, navigation }) {
   const [idDomicilio, setIdDomicilio] = React.useState([]);
   const [nombreLocal, setNombreLocal] = React.useState([]);
   const [cant, setCant] = React.useState([]);
+  const [visible, setVisible] = React.useState(false);
+  const [idLocal, setIdLocal] = React.useState([]);
   const [image, setImage] = React.useState(null);
 
   React.useEffect(() => {
     //Tomo los locales del user
     Backend.getLocalesXUser(idDueno).then((items) => {
       setLocales(items);
+      setIdLocal(items[0].id);
       if (items.length > 0) {
         setCant(true);
       } else {
@@ -62,6 +66,26 @@ export function LocalesScreen({ route, navigation }) {
   //  {label:"Quilmes", value:2},
   //  {label:"Bernal", value:3}
   //  ]
+  const hideMenu = () => setVisible(false);
+
+  const showMenu = () => setVisible(true);
+  const evento = () => {
+    navigation.navigate("Eventos", {
+      idLocal: idLocal,
+      latitud: latitud,
+      longitud: longitud,
+    });
+
+  }
+
+  const promo = () => {
+    navigation.navigate("Promociones", {
+      idLocal: idLocal,
+      latitud: latitud,
+      longitud: longitud,
+    });
+  }
+
 
   const list = () => {
     return locales.map((element) => {
@@ -99,8 +123,10 @@ export function LocalesScreen({ route, navigation }) {
             }
           </View>
 
+
+
           <View style={{ flex: 1, justifyContent: "space-between", alignItems: 'center', flexDirection: 'row' }}>
-            <Pressable
+            {/*<Pressable
               style={styles.button2}
               onPress={() =>
                 navigation.navigate("VerInfo", {
@@ -111,7 +137,36 @@ export function LocalesScreen({ route, navigation }) {
               }
             >
               <Text style={styles.text}>VER INFO</Text>
+            </Pressable>*/}
+            <Menu
+              visible={visible}
+              anchor={<Pressable
+                style={styles.button2}
+                onPress={showMenu}>
+                <Text style={styles.text}>AGREGAR</Text>
+              </Pressable>
+              }
+              onRequestClose={hideMenu}
+            >
+              <MenuItem onPress={hideMenu, evento}>Nuevo Evento</MenuItem>
+              <MenuDivider />
+              <MenuItem onPress={hideMenu, promo}>Nueva Promocion</MenuItem>
+            </Menu>
+
+            <Pressable
+              style={styles.button4}
+              onPress={() => {
+                navigation.navigate("VerEventos", {
+                  idLocal: element.id,
+                  longitud: element.longitud,
+                  latitud: element.latitud
+                });
+              }}
+            >
+              <Text style={styles.text}>VER INFO</Text>
             </Pressable>
+          </View>
+          <View style={{ marginTop: "35%", width: "100%", alignItems: 'center' }}>
             <Pressable
               style={styles.button3}
               onPress={() =>
@@ -122,8 +177,9 @@ export function LocalesScreen({ route, navigation }) {
               }
             >
               <Text style={styles.text}>BORRAR</Text>
-            </Pressable>
-          </View>
+            </Pressable></View>
+
+
         </ScrollView>
       );
     });
@@ -212,7 +268,7 @@ const styles = StyleSheet.create({
     flex: 1.4,
     width: "90%",
     alignItems: "center",
-    flexDirection: "row",
+
     justifyContent: "space-between",
     fontFamily: "Roboto-Medium",
   },
@@ -248,7 +304,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     elevation: 3,
     backgroundColor: 'black',
-    width: '40%',
+    width: '95%',
     marginHorizontal: "5%",
     marginTop: 10
   },
@@ -262,13 +318,29 @@ const styles = StyleSheet.create({
     marginHorizontal: "5%",
     marginTop: 10
   },
+  button4: {
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 30,
+    elevation: 3,
+    backgroundColor: 'black',
+    width: '40%',
+    marginHorizontal: "5%",
+    marginTop: 10
+  },
   text: {
-    fontSize: 20,
+    fontSize: 15,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,
     color: "white",
     textAlign: "center",
     lineHeight: 30,
+  },
+  titleButton: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "white",
+    textAlign: "center",
   },
 });
