@@ -35,6 +35,7 @@ export function LocalesScreen({ route, navigation }) {
   const [idDomicilio, setIdDomicilio] = React.useState([]);
   const [nombreLocal, setNombreLocal] = React.useState([]);
   const [cant, setCant] = React.useState([]);
+  const [image, setImage] = React.useState(null);
 
   React.useEffect(() => {
     //Tomo los locales del user
@@ -64,52 +65,66 @@ export function LocalesScreen({ route, navigation }) {
 
   const list = () => {
     return locales.map((element) => {
+      console.log("LISTAAAAAAAAA LOCAL", element);
       return (
-        <ImageBackground
-          source={require("../assets/fondoBoliches3.jpg")}
-          blurRadius={3}
-          style={styles.boliches}
-        >
-          <View style={styles.boliches2}>
-            <Text style={styles.titulos} key="{element.id}">
-              {element.nombre}
+        <ScrollView style={styles.container2}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+            <View>
+              <Text style={{
+                width: 200, textAlign: 'center', fontWeight: "bold",
+                fontSize: 25,
+                margin: 20
+              }}>{element.nombre.toUpperCase()}</Text>
+            </View>
+            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+          </View>
+
+          <View>
+            <Text style={styles.info}>
+              {" "}
+              Direccion: {element.Domicilio.calle} {element.Domicilio.numero}
             </Text>
           </View>
 
-          <View style={styles.boliches3}>
-            <View>
-              <Text style={styles.info}>
-                {" "}
-                Direccion: {element.Domicilio.calle} {element.Domicilio.numero}
-              </Text>
-            </View>
-            <View>
-              <Pressable
-                style={styles.button2}
-                onPress={() =>
-                  navigation.navigate("VerInfo", {
-                    idLocal: element.id,
-                    latitud: latitud,
-                    longitud: longitud,
-                  })
-                }
-              >
-                <Text style={styles.text}>VER INFO</Text>
-              </Pressable>
-              <Pressable
-                style={styles.button2}
-                onPress={() =>
-                  Backend.deleteLocal(element.id).then((items) => {
-                    console.log("Borrando local: ", element.id);
-                    setCant(false)
-                  })
-                }
-              >
-                <Text style={styles.text}>BORRAR</Text>
-              </Pressable>
-            </View>
+          <View style={{ alignItems: 'center' }}>
+            {element.image == null ?
+              <Image
+                source={require("../assets/camara.jpg")}
+                style={{ margin: 15, width: "90%", height: 250, borderRadius: 12, }}
+              /> :
+              <Image
+                source={{ uri: element.image }}
+                style={{ margin: 15, width: "90%", height: 250, borderRadius: 12, }} />
+            }
           </View>
-        </ImageBackground>
+
+          <View style={{ flex: 1, justifyContent: "space-between", alignItems: 'center', flexDirection: 'row' }}>
+            <Pressable
+              style={styles.button2}
+              onPress={() =>
+                navigation.navigate("VerInfo", {
+                  idLocal: element.id,
+                  latitud: latitud,
+                  longitud: longitud,
+                })
+              }
+            >
+              <Text style={styles.text}>VER INFO</Text>
+            </Pressable>
+            <Pressable
+              style={styles.button3}
+              onPress={() =>
+                Backend.deleteLocal(element.id).then((items) => {
+                  console.log("Borrando local: ", element.id);
+                  setCant(false)
+                })
+              }
+            >
+              <Text style={styles.text}>BORRAR</Text>
+            </Pressable>
+          </View>
+        </ScrollView>
       );
     });
   };
@@ -117,13 +132,7 @@ export function LocalesScreen({ route, navigation }) {
     return (
       //Tiene locales
       <>
-        <ImageBackground
-          source={require("../assets/fondoLogIn3.jpg")}
-          blurRadius={3}
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-        >
-          <View style={styles.container}>{list()}</View>
-        </ImageBackground>
+        <View>{list()}</View>
       </>
     );
   } else {
@@ -173,11 +182,15 @@ export function LocalesScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    borderRadius: 1,
     width: "100%",
     backgroundColor: "#ebe6d9",
+    height: "100%",
     alignItems: "center",
+  },
+  container2: {
+    width: "100%",
+    backgroundColor: "#ebe6d9",
+    height: "100%",
   },
   boliches: {
     flex: 0.2,
@@ -197,8 +210,9 @@ const styles = StyleSheet.create({
   },
   boliches3: {
     flex: 1.4,
-    flexDirection: "row",
+    width: "90%",
     alignItems: "center",
+    flexDirection: "row",
     justifyContent: "space-between",
     fontFamily: "Roboto-Medium",
   },
@@ -229,12 +243,24 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   button2: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 4,
-    backgroundColor: "black",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 30,
+    elevation: 3,
+    backgroundColor: 'black',
+    width: '40%',
+    marginHorizontal: "5%",
+    marginTop: 10
+  },
+  button3: {
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 30,
+    elevation: 3,
+    backgroundColor: 'red',
+    width: '40%',
+    marginHorizontal: "5%",
+    marginTop: 10
   },
   text: {
     fontSize: 20,
