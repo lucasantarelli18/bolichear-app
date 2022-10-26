@@ -44,8 +44,8 @@ export function LocalesScreen({ route, navigation }) {
     //Tomo los locales del user
     Backend.getLocalesXUser(idDueno).then((items) => {
       setLocales(items);
-      setIdLocal(items[0].id);
       if (items.length > 0) {
+        setIdLocal(items[0].id);
         setCant(true);
       } else {
         setCant(false);
