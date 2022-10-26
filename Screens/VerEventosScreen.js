@@ -385,8 +385,8 @@ export function VerEventosScreen({ route, navigation }) {
       <View>
         <ScrollView>
           <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
-          <View>{sinEventos()}</View>
           <View>{sinPromos()}</View>
+          <View>{sinEventos()}</View>
         </ScrollView>
       </View>
 

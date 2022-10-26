@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, View, Text, StyleSheet, Pressable, Image, Alert, ScrollView } from "react-native";
+import { Button, View, Text, StyleSheet, Pressable, Image, Alert, ScrollView, Input, TextInput, } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as Backend from '../backlog';
 import 'moment-timezone';
@@ -17,6 +17,7 @@ import 'moment/locale/es';
 export function PromocionesScreen({ route, navigation }) {
 
   const [fechaYHoraIncioMuestra, setFechaYHoraIncioMuestra] = useState(false);
+  const [faltaIngresoNombre, setFaltaIngresoNombre] = React.useState(true);
   const [fechaYHoraFinMuestra, setfechaYHoraFinMuestra] = useState(false);
   const [idPromocion, setImage] = useState(null);
   const [nombre, setNombre] = useState(null);
@@ -24,6 +25,7 @@ export function PromocionesScreen({ route, navigation }) {
   const [fechaYHoraIncio, setFechaYHoraIncio] = useState(null);
   const [fechaYHoraFin, setFechaYHoraFin] = useState(null);
   const { idLocal, latitud, longitud } = route.params;
+  const [isImage, setIsImage] = React.useState(false);
   //const idPromocion = uuid();
 
   const showDateTimePicker = () => {
@@ -53,43 +55,61 @@ export function PromocionesScreen({ route, navigation }) {
     console.log(result);
     if (!result.cancelled) {
       setImage(result.uri);
+      setIsImage(true);
       Backend.insertFoto(result.uri)
         .then((items) => { items })
     }
   };
 
   return (
-    <ScrollView>
-      <Card>
-        <Form onButtonPress={() => Backend.insertPromocion(
-          nombre,
-          descripcion,
-          fechaYHoraIncio,
-          fechaYHoraFin,
-          idLocal,
-          idPromocion)
-          .then((items) => {
-            Alert.alert("Promoción creada");
-            navigation.navigate('Locales', { idLocal: idLocal, latitud: latitud, longitud: longitud })
-          })}>
-          <FormItem
-            label="Nombre"
+    <ScrollView style={styles.container}>
+
+      <Form
+        onButtonPress={() => {
+          if (faltaIngresoNombre/*||faltaIngresoLoc*/) {
+            Alert.alert('Complete los datos')
+          } else {
+            Backend.insertPromocion(
+              nombre,
+              descripcion,
+              fechaYHoraIncio,
+              fechaYHoraFin,
+              idLocal,
+              idPromocion)
+            .then((items) => {
+              Alert.alert("Promoción creada");
+              navigation.navigate('Locales', { idLocal: idLocal, latitud: latitud, longitud: longitud })
+            })
+          }
+        }}>
+
+        <Text style={styles.titulos}>Nombre de la Promoción</Text>
+        <View style={styles.container2}>
+          <TextInput
+            style={styles.input}
             isRequired
-            value={nombre}
-            onChangeText={(nombre) => setNombre(nombre)}
-            asterik
+            onChangeText={(nombre) => { setNombre(nombre), setFaltaIngresoNombre(false) }}
+            placeholder="Ingrese un nombre"
           />
-          <FormItem
-            label="Descripcion"
-            value={descripcion}
+        </View>
+
+        <Text style={styles.titulos}>Descripción de la Promoción</Text>
+        <View style={styles.container2}>
+          <TextInput
+            style={styles.input}
+            placeholder=" Descripción"
             onChangeText={(descripcion) => setDescripcion(descripcion)}
           />
+        </View>
 
-          <Button style={styles.button} title="Inicio" onPress={showDateTimePicker} />
+        <Text style={styles.titulos}>Vigencia</Text>
+        <View style={styles.container2}>
+          <Pressable style={styles.buttonF} title="Inicio" onPress={showDateTimePicker}>
+            <Text style={styles.text}>INICIO</Text>
+          </Pressable>
           <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical: 10 }}>
             {fechaYHoraIncio ? fechaYHoraIncio : "No selecciono la fecha inicio"}
           </Text>
-
           <DateTimePickerModal
             isVisible={fechaYHoraIncioMuestra}
             mode="datetime"
@@ -97,7 +117,10 @@ export function PromocionesScreen({ route, navigation }) {
             onCancel={hideDateTimePicker}
 
           />
-          <Button style={styles.button} title="Fin" onPress={showDateTimePicker2} />
+
+          <Pressable style={styles.buttonF} title="Fin" onPress={showDateTimePicker2}>
+            <Text style={styles.text}>FIN</Text>
+          </Pressable>
           <Text style={{ fontSize: 16, fontWeight: "bold", marginVertical: 10 }}>
             {fechaYHoraFin ? fechaYHoraFin : "No selecciono la fecha fin"}
           </Text>
@@ -108,14 +131,29 @@ export function PromocionesScreen({ route, navigation }) {
             onCancel={hideDateTimePicker2}
           />
 
+        </View>
+
+        <Text style={styles.titulos}>Foto del Local</Text>
+        <View style={styles.container2}>
+          {!isImage ?
+            <Image
+              source={require("../assets/camara.jpg")}
+              style={{ margin: 15, width: 350, height: 200, borderRadius: 12, }}
+            /> :
+            <Image
+              source={{ uri: idPromocion }}
+              style={{ margin: 15, width: 350, height: 200, borderRadius: 12 }} />}
+
+          <Pressable style={styles.botonImage} title="Cargar imagen" onPress={pickImage}>
+            <Text style={styles.text}>Cargar Imagen</Text>
+          </Pressable>
+
+        </View>
 
 
-          <Button title="Cargar imagen" onPress={pickImage} />
-          {idPromocion && <Image source={{ uri: idPromocion }} style={{ width: 350, height: 200 }} />}
 
+      </Form>
 
-        </Form>
-      </Card>
     </ScrollView>
 
 
@@ -135,12 +173,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 12,
     paddingHorizontal: 32,
-    borderRadius: 4,
+    borderRadius: 30,
     elevation: 3,
     backgroundColor: 'black',
-    flexDirection: 'row',
-    marginBottom: 24,
-
+    width: '80%',
+    marginStart: "10%",
+    marginTop: 50
+  },
+  buttonF: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 30,
+    elevation: 3,
+    backgroundColor: 'black',
+    width: '50%',
+    marginTop: 10
   },
   text: {
     fontSize: 16,
@@ -151,16 +200,15 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#A1A1A1',
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignContent: "space-between",
+    borderRadius: 1,
+    width: "100%",
+    backgroundColor: "#ebe6d9",
   },
   container2: {
-    width: '90%',
-    height: '100%',
-    backgroundColor: '#fff',
-    paddingVertical: 110
+    width: '100%',
+    //backgroundColor: '#fff',
+    alignItems: "center",
+    justifyContent: "center",
   },
   fixToText: {
     flex: 1,
@@ -168,5 +216,32 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 10,
 
+  },
+  input: {
+    padding: 7,
+    width: "80%",
+    marginTop: 10,
+    alignItems: "center",
+    borderRadius: 30,
+    backgroundColor: '#f1f1f1',
+    fontFamily: "Roboto-Medium",
+    paddingStart: 30,
+    fontSize: 16,
+    elevation: 10,
+  },
+  titulos: {
+    //width: 500,
+    fontSize: 25,
+    fontWeight: "bold",
+    marginLeft: 25,
+    marginTop: 20
+  },
+  botonImage: {
+    backgroundColor: 'black',
+    padding: 10,
+    borderRadius: 30,
+    elevation: 3,
+    width: '40%',
+    alignItems: 'center',
   }
 });
