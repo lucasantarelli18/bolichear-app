@@ -212,13 +212,21 @@ export default function App({ navigation }) {
                 headerTitleStyle: { color: 'black' },
                 headerStyle: { backgroundColor: '#ebe6d9', justifyContent: "center", fontColor: 'white' }
               }} />
-              <Stack.Screen name="Eventos" component={EventosScreen} options={{ title: "Nuevo Evento" }} />
+              <Stack.Screen name="Eventos" component={EventosScreen} options={{
+                title: "Nuevo Evento", headerTitleAlign: "center",
+                headerTitleStyle: { color: 'black' },
+                headerStyle: { backgroundColor: '#ebe6d9', justifyContent: "center", fontColor: 'white' }
+              }} />
               <Stack.Screen name="VerEventos" component={VerEventosScreen} options={{
                 title: 'Detalles', headerTitleAlign: "center",
                 headerTitleStyle: { color: 'black' },
                 headerStyle: { backgroundColor: '#fff', justifyContent: "center", fontColor: 'white' },
               }} />
-              <Stack.Screen name="Promociones" component={PromocionesScreen} options={{ title: 'Nueva Promocion' }} />
+              <Stack.Screen name="Promociones" component={PromocionesScreen} options={{
+                title: 'Nueva Promocion', headerTitleAlign: "center",
+                headerTitleStyle: { color: 'black' },
+                headerStyle: { backgroundColor: '#ebe6d9', justifyContent: "center", fontColor: 'white' }
+              }} />
               <Stack.Screen name="VerPromociones" component={VerPromocionesScreen} options={{ title: 'Promociones' }} />
               <Stack.Screen name="MapScreen" component={MapScreen} options={{
                 title: 'Mapa', headerTitleAlign: "center",

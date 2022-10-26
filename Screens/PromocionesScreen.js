@@ -65,6 +65,8 @@ export function PromocionesScreen({ route, navigation }) {
     <ScrollView style={styles.container}>
 
       <Form
+        buttonStyle={styles.button}
+        buttonText="Crear Promoción"
         onButtonPress={() => {
           if (faltaIngresoNombre/*||faltaIngresoLoc*/) {
             Alert.alert('Complete los datos')
@@ -76,10 +78,10 @@ export function PromocionesScreen({ route, navigation }) {
               fechaYHoraFin,
               idLocal,
               idPromocion)
-            .then((items) => {
-              Alert.alert("Promoción creada");
-              navigation.navigate('Locales', { idLocal: idLocal, latitud: latitud, longitud: longitud })
-            })
+              .then((items) => {
+                Alert.alert("Promoción creada");
+                navigation.navigate('Locales', { idLocal: idLocal, latitud: latitud, longitud: longitud })
+              })
           }
         }}>
 
@@ -133,7 +135,7 @@ export function PromocionesScreen({ route, navigation }) {
 
         </View>
 
-        <Text style={styles.titulos}>Foto del Local</Text>
+        <Text style={styles.titulos}>Foto de la Promoción</Text>
         <View style={styles.container2}>
           {!isImage ?
             <Image
@@ -175,7 +177,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 30,
     elevation: 3,
-    backgroundColor: 'black',
+    backgroundColor: '#a73d4c',
     width: '80%',
     marginStart: "10%",
     marginTop: 50
