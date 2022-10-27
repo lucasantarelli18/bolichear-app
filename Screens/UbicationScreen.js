@@ -12,9 +12,9 @@ import { StatusBar } from 'expo-status-bar';
 export function UbicationScreen({ navigation }) {
 
   const [ubicacion, setUbicacion] = React.useState({
-    calle: "Sarmiento",
-    numero: 420,
-    localidad: "La Plata",
+    calle: "Av. del Petroleo Argentino",
+    numero: 417,
+    localidad: "Berisso",
     latitude: -34.904625,
     longitude: -57.925738,
     latitudeDelta: 0.0922,
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#eff0e2',
+    backgroundColor: '#ebe6d9',
   },
   container2: {
     width: '80%',

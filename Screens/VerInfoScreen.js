@@ -24,15 +24,15 @@ export function VerInfoScreen({ route, navigation }) {
 
   const showMenu = () => setVisible(true);
   const evento = () => {
-                navigation.navigate("Eventos", {
-                  idLocal: idLocal,
-                  latitud: latitud,
-                  longitud: longitud,
-                });
-              
+    navigation.navigate("Eventos", {
+      idLocal: idLocal,
+      latitud: latitud,
+      longitud: longitud,
+    });
+
   }
 
-  const promo = () =>{
+  const promo = () => {
     navigation.navigate("Promociones", {
       idLocal: idLocal,
       latitud: latitud,
@@ -65,38 +65,55 @@ export function VerInfoScreen({ route, navigation }) {
       const distkm = (dist / 1000).toFixed(2);
 
       return (
-        <ImageBackground
-          source={require("../assets/fondoBoliches3.jpg")}
-          blurRadius={3}
-          style={{ flex: 1 }}
+        <ScrollView style={styles.container}
         >
-        <Menu
-          visible={visible}
-          anchor={ <Pressable
-                    style={styles.button}
-                    onPress={showMenu}>
-                    <Text style={styles.titleButton}>AGREGAR</Text>
-                    </Pressable>
-                  }
-          onRequestClose={hideMenu}
-        >
-        <MenuItem onPress={hideMenu, evento}>Nuevo Evento</MenuItem>
-        <MenuDivider />
-        <MenuItem onPress={hideMenu, promo}>Nueva Promocion</MenuItem>
-        </Menu>
-          <View>
-            <Text style={styles.titulos}key="{element.id}">{element.nombre}</Text>
-            <Text style={styles.km}> {distkm} km</Text>
-          </View>
-          <View >
+
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
             <View>
-              <Text style={styles.info}>
-                {" "}
-                Dirección: {element.Domicilio.calle} {element.Domicilio.numero}
-              </Text>
-              <Text style={styles.info}> Asistiran 300 personas </Text>
+              <Text style={{
+                width: 200, textAlign: 'center', fontWeight: "bold",
+                fontSize: 25,
+                margin: 20
+              }}>{element.nombre.toUpperCase()}</Text>
             </View>
+            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
           </View>
+
+          <View>
+            <Text style={styles.info}>
+              {" "}
+              Direccion: {element.Domicilio.calle} {element.Domicilio.numero}
+            </Text>
+          </View>
+
+          <View style={{ alignItems: 'center' }}>
+            {element.image == null ?
+              <Image
+                source={require("../assets/camara.jpg")}
+                style={{ margin: 15, width: "90%", height: 250, borderRadius: 12, }}
+              /> :
+              <Image
+                source={{ uri: element.image }}
+                style={{ margin: 15, width: "90%", height: 250, borderRadius: 12, }} />
+            }
+          </View>
+
+          <Menu
+            visible={visible}
+            anchor={<Pressable
+              style={styles.button}
+              onPress={showMenu}>
+              <Text style={styles.titleButton}>AGREGAR</Text>
+            </Pressable>
+            }
+            onRequestClose={hideMenu}
+          >
+            <MenuItem onPress={hideMenu, evento}>Nuevo Evento</MenuItem>
+            <MenuDivider />
+            <MenuItem onPress={hideMenu, promo}>Nueva Promocion</MenuItem>
+          </Menu>
+
           <View style={styles.detalles}>
             <Pressable
               style={styles.button}
@@ -104,19 +121,19 @@ export function VerInfoScreen({ route, navigation }) {
                 navigation.navigate("VerEventos", {
                   idLocal: element.id,
                   longitud: element.longitud,
-                  latitud:element.latitud
+                  latitud: element.latitud
                 });
               }}
             >
               <Text style={styles.text}>MIS EVENTOS Y PROMOCION</Text>
             </Pressable>
           </View>
-        </ImageBackground>
+        </ScrollView>
       );
     });
   };
 
-  return <View style={styles.container}>{list()}</View>;
+  return <View>{list()}</View>;
 }
 
 const styles = StyleSheet.create({
@@ -151,7 +168,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     fontWeight: "bold",
     fontFamily: "Roboto-Medium",
- 
+
   },
   km: {
     fontSize: 15,
@@ -191,13 +208,11 @@ const styles = StyleSheet.create({
   detalles: {
     alignItems: "center",
     justifyContent: "center",
-    position: "absolute",
-    bottom: 0,
     width: "100%",
   },
   titleButton: {
     fontSize: 15,
     fontWeight: "bold",
     color: "white"
-},
+  },
 });
