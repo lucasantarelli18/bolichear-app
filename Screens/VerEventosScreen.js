@@ -158,38 +158,39 @@ export function VerEventosScreen({ route, navigation }) {
                   Hasta el {item.fechaFin}
                 </Text>
                 {item.idLocal == localDueño[0] ?
-                  <Pressable
-                    style={styles.button}
-                    onPress={() => Alert.alert(
-                      "Eliminar",
-                      "¿Desea eliminar el evento?",
-                      [
-                        {
-                          text: "Cancelar",
-                          onPress: () => console.log("Cancel Pressed"),
-                          style: "cancel"
-                        },
-                        {
-                          text: "Aceptar",
-                          onPress: () => Backend.deleteEvento(item.id).then((items) => Alert.alert("Evento eliminado con éxito"), navigation.dispatch({
-                            ...StackActions.replace('VerEventos', {
-                              idLocal: idLocal, latitud: latitud, longitud: longitud
-                            }),
-                            source: route.key,
-                            target: navigation.getState().key,
+                  <View style={{ alignItems: 'center' }}>
+                    <Pressable
+                      style={styles.button2}
+                      onPress={() => Alert.alert(
+                        "Eliminar",
+                        "¿Desea eliminar el evento?",
+                        [
+                          {
+                            text: "Cancelar",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel"
+                          },
+                          {
+                            text: "Aceptar",
+                            onPress: () => Backend.deleteEvento(item.id).then((items) => Alert.alert("Evento eliminado con éxito"), navigation.dispatch({
+                              ...StackActions.replace('VerEventos', {
+                                idLocal: idLocal, latitud: latitud, longitud: longitud
+                              }),
+                              source: route.key,
+                              target: navigation.getState().key,
 
-                          })
+                            })
 
-                          )
-                        }
+                            )
+                          }
 
 
-                      ]
-                    )}
-                  >
-                    <Text style={styles.titleButton}>Eliminar</Text>
-                  </Pressable>
-
+                        ]
+                      )}
+                    >
+                      <Text style={styles.titleButton}>Eliminar</Text>
+                    </Pressable>
+                  </View>
                   :
                   console.log('bien')
                 }
@@ -204,9 +205,23 @@ export function VerEventosScreen({ route, navigation }) {
   const sinEventos = () => {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={styles.titulos}>
-          No hay eventos próximos
-        </Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+          <View>
+            <Text style={{
+              width: 200, textAlign: 'center', fontWeight: "bold",
+              fontSize: 25,
+              margin: 5
+            }}>Eventos</Text>
+          </View>
+          <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+        </View>
+        <View style={{ width: "100%", justifyContent: 'center', alignItems: 'center', marginBottom: 15, marginTop: 15 }}>
+          <Image style={{ height: 150, width: 110, marginBottom: 15 }} source={require("../assets/logo2.png")} />
+          <Text style={{ fontFamily: 'sans-serif', fontStyle: 'italic', fontSize: 25, fontWeight: 'bold', textAlign: 'center' }}>
+            No hay eventos próximos
+          </Text>
+        </View>
         {idLocal == localDueño[0] ?
           <Pressable
             style={styles.button}
@@ -216,7 +231,7 @@ export function VerEventosScreen({ route, navigation }) {
               });
             }}
           >
-            <Text style={styles.titleButton}>NUEVO EVENTO</Text>
+            <Text style={styles.text}>NUEVO EVENTO</Text>
           </Pressable>
           :
           console.log('bien')
@@ -263,35 +278,37 @@ export function VerEventosScreen({ route, navigation }) {
                   Hasta el {item.fechaFin}
                 </Text>
                 {item.idLocal == localDueño[0] ?
-                  <Pressable
-                    style={styles.button}
-                    onPress={() => Alert.alert(
-                      "Eliminar",
-                      "¿Desea eliminar la promoción?",
-                      [
-                        {
-                          text: "Cancelar",
-                          onPress: () => console.log("Cancel Pressed"),
-                          style: "cancel"
-                        },
-                        {
-                          text: "Aceptar",
-                          onPress: () => Backend.deletePromocion(item.id).then((items) => Alert.alert("Promoción eliminada con éxito"), navigation.dispatch({
-                            ...StackActions.replace('VerEventos', {
-                              idLocal: idLocal, latitud: latitud, longitud: longitud
-                            }),
-                            source: route.key,
-                            target: navigation.getState().key,
+                  <View style={{ alignItems: 'center' }}>
+                    <Pressable
+                      style={styles.button2}
+                      onPress={() => Alert.alert(
+                        "Eliminar",
+                        "¿Desea eliminar la promoción?",
+                        [
+                          {
+                            text: "Cancelar",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel"
+                          },
+                          {
+                            text: "Aceptar",
+                            onPress: () => Backend.deletePromocion(item.id).then((items) => Alert.alert("Promoción eliminada con éxito"), navigation.dispatch({
+                              ...StackActions.replace('VerEventos', {
+                                idLocal: idLocal, latitud: latitud, longitud: longitud
+                              }),
+                              source: route.key,
+                              target: navigation.getState().key,
 
-                          }))
-                        }
+                            }))
+                          }
 
 
-                      ]
-                    )}
-                  >
-                    <Text style={styles.titleButton}>Eliminar</Text>
-                  </Pressable>
+                        ]
+                      )}
+                    >
+                      <Text style={styles.titleButton}>Eliminar</Text>
+                    </Pressable>
+                  </View>
                   :
                   console.log('bien')
                 }
@@ -306,9 +323,25 @@ export function VerEventosScreen({ route, navigation }) {
   const sinPromos = () => {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={styles.titulos}>
-          No hay promociones
-        </Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+          <View>
+            <Text style={{
+              width: 200, textAlign: 'center', fontWeight: "bold",
+              fontSize: 25,
+              margin: 5
+            }}>Promociones</Text>
+          </View>
+          <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+        </View>
+
+        <View style={{ width: "100%", justifyContent: 'center', alignItems: 'center', marginBottom: 15, marginTop: 15 }}>
+          <Image style={{ height: 150, width: 110, marginBottom: 15 }} source={require("../assets/logo2.png")} />
+          <Text style={{ fontFamily: 'sans-serif', fontStyle: 'italic', fontSize: 25, fontWeight: 'bold', textAlign: 'center' }}>
+            No hay promociones vigentes
+          </Text>
+        </View>
+
         {idLocal == localDueño[0] ?
           <Pressable
             style={styles.button}
@@ -318,7 +351,7 @@ export function VerEventosScreen({ route, navigation }) {
               });
             }}
           >
-            <Text style={styles.titleButton}>NUEVA PROMOCION</Text>
+            <Text style={styles.text}>NUEVA PROMOCION</Text>
           </Pressable>
           :
           console.log('bien')
@@ -348,7 +381,6 @@ export function VerEventosScreen({ route, navigation }) {
             </View> :
             <View>
               <ScrollView>
-                <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
                 <View>{sinPromos()}</View>
               </ScrollView>
             </View>
@@ -434,12 +466,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 12,
-    paddingHorizontal: 5,
-    borderRadius: 4,
+    paddingHorizontal: 32,
+    borderRadius: 30,
     elevation: 3,
-    backgroundColor: "black",
-    marginVertical: 20,
-
+    backgroundColor: "#ebe6d9",
+    marginVertical: 10,
+  },
+  button2: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 30,
+    elevation: 3,
+    backgroundColor: "#a73d4c",
+    marginVertical: 10,
+    width: "50%"
   },
   titulos: {
     fontSize: 19,
@@ -451,5 +493,13 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "bold",
     color: "white"
+  },
+  text: {
+    fontSize: 15,
+    lineHeight: 21,
+    fontWeight: "bold",
+    letterSpacing: 0.25,
+    color: "black",
+    textAlign: "center",
   },
 });
