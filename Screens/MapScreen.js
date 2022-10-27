@@ -8,6 +8,8 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-url-polyfill/auto';
 import TabScreen from './TabScreen';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Checkbox } from 'react-native-paper';
+import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 
 export function MapScreen({ route, navigation }) {
   const [locales, setLocales] = React.useState([]);
@@ -18,16 +20,25 @@ export function MapScreen({ route, navigation }) {
     latitude: route.params.latitud,
     longitude: route.params.longitud,
   });
-
+  const [visible, setVisible] = React.useState(false);
   const [destination, setdestination] = React.useState({
     latitude: -34.924941,
     longitude: -57.967533,
   });
 
   const [cambio, setCambio] = React.useState(true);
-
+  const [evento, setEvento] = React.useState([]);
+  const [tipoEvento, setTipoEvento] = React.useState([]);
   const [idLocalidad, setIdLocalidad] = React.useState([]);
+  const [checked1, setChecked1] = React.useState(false);
+  const [checked2, setChecked2] = React.useState(false);
+  const [checked3, setChecked3] = React.useState(false);
+  const [checked4, setChecked4] = React.useState(false);
+  const [checked5, setChecked5] = React.useState(false);
 
+  const hideMenu = () => setVisible(false);
+
+  const showMenu = () => setVisible(true);
   React.useEffect(() => {
     Backend.getLocalxDomicilio()
       .then((items) => {
@@ -56,8 +67,11 @@ export function MapScreen({ route, navigation }) {
       setIdLocalidad(items[0].id);
     })
 
+    Backend.getEventos().then((items)=>{
+      setEvento(items)
+    })
+    
   }, [])
-
 
   const filtradoLocales = (query) => {
     const arr = [[]];
@@ -68,7 +82,49 @@ export function MapScreen({ route, navigation }) {
     setCambio(elem);
   };
 
-
+  const filtroTipoEvento = () =>{
+    return (
+      <View>
+         <Menu
+          visible={visible}
+          anchor={ <Pressable
+                    style={styles.button}
+                    onPress={showMenu}>
+                    <Text style={styles.titleButton}>Filtrp</Text>
+                    </Pressable>
+                  }
+          onRequestClose={hideMenu}
+        >
+        <MenuItem onPress={hideMenu}><Checkbox.Item label={tipoEvento ? 'Fiesta' : 'nada'} status={checked1 ? 'checked' : 'unchecked'}
+      onPress={() => {
+        setChecked1(!checked1);
+      }}/></MenuItem>
+        
+        <MenuItem onPress={hideMenu}><Checkbox.Item label={tipoEvento ? 'Show en vivo' : 'nada'} status={checked2 ? 'checked' : 'unchecked'}
+      onPress={() => {
+        setChecked2(!checked2);
+      }}/></MenuItem>
+      
+      <MenuItem onPress={hideMenu}><Checkbox.Item label={tipoEvento ? 'Tematica' : 'nada'} status={checked3 ? 'checked' : 'unchecked'}
+      onPress={() => {
+        setChecked3(!checked3);
+      }}/></MenuItem>
+      
+      <MenuItem onPress={hideMenu}><Checkbox.Item label={tipoEvento ? 'Noche cachengue' : 'nada'} status={checked4 ? 'checked' : 'unchecked'}
+      onPress={() => {
+        setChecked4(!checked4);
+      }}/></MenuItem>
+      
+      <MenuItem onPress={hideMenu}><Checkbox.Item label={tipoEvento ? 'Noche electronica' : 'nada'} status={checked5 ? 'checked' : 'unchecked'}
+      onPress={() => {
+        setChecked5(!checked5);
+      }}/></MenuItem>
+      </Menu>
+      </View>
+      
+    );
+    
+  }
 
   const list = () => {
     if (cambio) {
@@ -175,6 +231,7 @@ export function MapScreen({ route, navigation }) {
       >
         <View style={styles.skewed}>
           <Text style={styles.info}> Dirección actual: {calle} {numero} </Text>
+          <Text>{filtroTipoEvento()}</Text>
         </View>
         <ScrollView style={styles.container}>{list()}</ScrollView>
 

@@ -69,6 +69,11 @@ export const getEventosxIdLocal = async (idLocal) => {
   return Evento;
 };
 
+export const getEventosxTipo = async (idTipoEvento) => {
+  let { data: Evento, error } = await supabase.from("Evento").select("*").eq("idTipoEvento", idTipoEvento,);
+  return Evento;
+};
+
 export const getPromosxIdLocal = async (idLocal) => {
   let { data: Promo, error } = await supabase.from("Promocion").select("*").eq("idLocal", idLocal,);
   return Promo;
