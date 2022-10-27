@@ -22,6 +22,9 @@ import 'react-native-url-polyfill/auto';
 //import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 //import ImageBlurShadow from 'react-native-image-blur-shadow';
 import * as Font from 'expo-font';
+import { LogBox } from "react-native";
+ 
+LogBox.ignoreAllLogs();
 
 const AuthContext = React.createContext();
 const image = { uri: "./assets/FondoDesenfocado.jpg" };
