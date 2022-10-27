@@ -65,7 +65,7 @@ export const getFotoxIdLocal = async (idLocal) => {
 };
 
 export const getEventosxIdLocal = async (idLocal) => {
-  let { data: Evento, error } = await supabase.from("Evento").select("*").eq("idLocal", idLocal,);
+  let { data: Evento, error } = await supabase.from("Evento").select("*").eq("idLocal", idLocal,).order('fechaHoraInicio', { ascending: true });
   return Evento;
 };
 
@@ -75,7 +75,7 @@ export const getEventosxTipo = async (idTipoEvento) => {
 };
 
 export const getPromosxIdLocal = async (idLocal) => {
-  let { data: Promo, error } = await supabase.from("Promocion").select("*").eq("idLocal", idLocal,);
+  let { data: Promo, error } = await supabase.from("Promocion").select("*").eq("idLocal", idLocal,).order('fechaHoraInicio', { ascending: true });
   return Promo;
 };
 
