@@ -69,10 +69,10 @@ export function MapScreen({ route, navigation }) {
       setIdLocalidad(items[0].id);
     })
 
-    Backend.getEventos().then((items)=>{
+    Backend.getEventos().then((items) => {
       setEvento(items)
     })
-    
+
   }, [])
 
   const filtradoLocales = (query) => {
@@ -84,7 +84,7 @@ export function MapScreen({ route, navigation }) {
     setCambio(elem);
   };
 
-  const filtroTipoEvento = () =>{
+  /*const filtroTipoEvento = () =>{
     return (
       <View>
          <Menu
@@ -126,7 +126,7 @@ export function MapScreen({ route, navigation }) {
       
     );
     
-  }
+  }*/
 
   const list = () => {
     if (cambio) {
@@ -233,7 +233,7 @@ export function MapScreen({ route, navigation }) {
       >
         <View style={styles.skewed}>
           <Text style={styles.info}> Dirección actual: {calle} {numero} </Text>
-          <Text>{filtroTipoEvento()}</Text>
+          {/*<Text>{filtroTipoEvento()}</Text>*/}
         </View>
         <ScrollView style={styles.container}>{list()}</ScrollView>
 
