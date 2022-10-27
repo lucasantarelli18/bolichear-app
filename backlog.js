@@ -294,7 +294,8 @@ export const insertEvento = async (
   fHoraInicio,
   fHoraFin,
   idTipoEvento,
-  idLocal
+  idLocal,
+  path
 ) => {
   const { data, error } = await supabase.from("Evento").insert([
     {
@@ -304,6 +305,7 @@ export const insertEvento = async (
       fechaHoraFin: fHoraFin,
       idTipoEvento: idTipoEvento,
       idLocal: idLocal,
+      path: path
     },
   ]);
 };
