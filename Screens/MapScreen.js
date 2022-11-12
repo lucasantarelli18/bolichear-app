@@ -15,6 +15,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 
 export function MapScreen({ route, navigation }) {
   const [locales, setLocales] = React.useState([]);
+  const [localesFiltrados, setLocalesFiltrados] = React.useState([]);
 
   const { calle, numero, localidad, latitud, longitud, rango } = route.params;
 
@@ -31,7 +32,7 @@ export function MapScreen({ route, navigation }) {
   });
 
   const [cambio, setCambio] = React.useState(true);
-  const [filtrar, setFiltrar] = React.useState(false);
+  const [filtrar, setFiltrar] = React.useState(0);
   const [evento, setEvento] = React.useState([]);
   const [tipoEvento, setTipoEvento] = React.useState([]);
   const [idLocalidad, setIdLocalidad] = React.useState([]);
@@ -185,7 +186,7 @@ export function MapScreen({ route, navigation }) {
         );
       });
 
-    } else if (filtrar) {
+    } else if (filtrar == 0) {
       return locales.map((element) => {
         //console.log(element.dist)
         return (
@@ -225,7 +226,7 @@ export function MapScreen({ route, navigation }) {
         );
       });
     } else {
-      return locales.map((element) => {
+      return localesFiltrados.map((element) => {
         //console.log(element.dist)
         return (
           <Pressable
@@ -308,18 +309,7 @@ export function MapScreen({ route, navigation }) {
           {/*<Text>{filtroTipoEvento()}</Text>*/}
         </View>
 
-      <View style={styles.container2}>
-        <DropDownPicker
-          style={styles.input2}
-          open={openTE}
-          value={valueTE}
-          items={itemsTE}
-          setOpen={setOpenTE}
-          setValue={setValueTE}
-          setItems={setItemsTE}
-          placeholder="Tipo de evento"
-        />
-      </View>
+
 {/*
       <View style={styles.container2}>
         <DropDownPicker
@@ -376,13 +366,26 @@ export function MapScreen({ route, navigation }) {
             }
             }
           
+          setLocalesFiltrados(arrayFiltrado)
 
-
-          setLocales(arrayFiltrado)
-          changeFiltrar(!filtrar)
+          changeFiltrar(filtrar+1)
         } } >
             <Text style={styles.text}>FILTRAR FIESTAS</Text>
         </Pressable>
+
+
+      <View style={styles.container2}>
+        <DropDownPicker
+          style={styles.input2}
+          open={openTE}
+          value={valueTE}
+          items={itemsTE}
+          setOpen={setOpenTE}
+          setValue={setValueTE}
+          setItems={setItemsTE}
+          placeholder="Tipo de evento"
+        />
+      </View>
 
 
         <ScrollView style={styles.container}>{list()}</ScrollView>
