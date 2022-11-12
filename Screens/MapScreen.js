@@ -86,7 +86,7 @@ export function MapScreen({ route, navigation }) {
 
           if (dist < rango) {
             //console.log("dentro del rango")
-            console.log(items[i].dist = distkm)
+            //console.log(items[i].dist = distkm)
             //console.log(items[i])
             arr.push(items[i])
           } else {
@@ -163,8 +163,31 @@ export function MapScreen({ route, navigation }) {
   }*/
 
   const list = () => {
-    if (cambio) {
+    if (cambio && filtrar == 0) {
       return locales.map((element) => {
+        return (
+          <Marker tappable tooltip
+            pinColor='gold'
+            coordinate={{ latitude: element.latitud, longitude: element.longitud, }}>
+
+
+            <Callout style={styles.cal} onPress={() => {
+              navigation.navigate("VerEventos", {
+                idLocal: element.id,
+              });
+            }}>
+              <View style={styles.bubble}>
+                <Text style={styles.name}>{element.nombre}</Text>
+              </View>
+            </Callout>
+
+
+          </Marker>
+        );
+      });
+
+    } else if (cambio) {
+      return localesFiltrados.map((element) => {
         return (
           <Marker tappable tooltip
             pinColor='gold'
@@ -358,7 +381,7 @@ export function MapScreen({ route, navigation }) {
                 for (const j in array[i].Evento){
                   tiposDeEvento.push(array[i].Evento[j].idTipoEvento)
                 }
-                console.log(tiposDeEvento)
+                //console.log(tiposDeEvento)
                 if (tiposDeEvento.includes(valueTE)) {
                   arrayFiltrado.push(array[i])
                 } 
