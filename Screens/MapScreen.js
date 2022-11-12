@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from "react";
 import * as Backend from '../backlog';
 import { Text, View, Button, ScrollView, StyleSheet, Alert, Image, TextInput, Pressable, ImageBackground } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -10,6 +11,7 @@ import TabScreen from './TabScreen';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Checkbox } from 'react-native-paper';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
+import DropDownPicker from "react-native-dropdown-picker";
 
 export function MapScreen({ route, navigation }) {
   const [locales, setLocales] = React.useState([]);
@@ -38,7 +40,32 @@ export function MapScreen({ route, navigation }) {
 //  const [checked3, setChecked3] = React.useState(false);
 //  const [checked4, setChecked4] = React.useState(false);
 //  const [checked5, setChecked5] = React.useState(false);
-
+  const [openTE, setOpenTE] = useState(false);
+  const [valueTE, setValueTE] = useState(null);
+  const [itemsTE, setItemsTE] = useState([
+    {label: "Todos", value: 0},
+    {label: "Fiesta", value: 1},
+    {label: "Show en vivo", value: 2},
+    {label: "Tematica", value: 3},
+    {label: "Noche cachengue", value: 4},
+    {label: "Noche electronica", value: 5}    
+    ]);
+/*
+  const [openTL, setOpenTL] = useState(false);
+  const [valueTL, setValueTL] = useState(null);
+  const [itemsTL, setItemsTL] = useState([
+    {label: "Todos", value: 0},
+    {label: "Boliche", value: 1},
+    {label: "Bar", value: 2}
+    ]);
+  const [openPR, setOpenPR] = useState(false);
+  const [valuePR, setValuePR] = useState(null);
+  const [itemsPR, setItemsPR] = useState([
+    {label: "Todos", value: 0},
+    {label: "Ascendente", value: 1},
+    {label: "Descendente", value: 2}
+    ]);
+*/
   const hideMenu = () => setVisible(false);
 
   const showMenu = () => setVisible(true);
@@ -280,21 +307,84 @@ export function MapScreen({ route, navigation }) {
           <Text style={styles.info}> Dirección actual: {calle} {numero} </Text>
           {/*<Text>{filtroTipoEvento()}</Text>*/}
         </View>
+
+      <View style={styles.container2}>
+        <DropDownPicker
+          style={styles.input2}
+          open={openTE}
+          value={valueTE}
+          items={itemsTE}
+          setOpen={setOpenTE}
+          setValue={setValueTE}
+          setItems={setItemsTE}
+          placeholder="Tipo de evento"
+        />
+      </View>
+{/*
+      <View style={styles.container2}>
+        <DropDownPicker
+          style={styles.input2}
+          open={openTL}
+          value={valueTL}
+          items={itemsTL}
+          setOpen={setOpenTL}
+          setValue={setValueTL}
+          setItems={setItemsTL}
+          placeholder="Tipo de local"
+        />
+      </View>
+      <View style={styles.container2}>
+        <DropDownPicker
+          style={styles.input2}
+          open={openPR}
+          value={valuePR}
+          items={itemsPR}
+          setOpen={setOpenPR}
+          setValue={setValuePR}
+          setItems={setItemsPR}
+          placeholder="Precio de entradas"
+        />
+      </View>
+*/}
+
         <Pressable style={styles.button} onPress={() => {
           const array = locales
           const arrayFiltrado = []
-          for (const i in array){
-            console.log(array[i].Evento.length);
-            if (array[i].Evento.length > 0) {
-              console.log(array[i].nombre)
+
+          if (valueTE == null) {
+            for (const i in array){
               arrayFiltrado.push(array[i])
             }
-          }
+          } else if (valueTE == 0) {
+            for (const i in array){
+            //console.log(array[i]);
+            if (array[i].Evento.length > 0) {
+              arrayFiltrado.push(array[i])
+            }}
+          } else {
+            
+              for (const i in array){
+                const tiposDeEvento = []    
+                for (const j in array[i].Evento){
+                  tiposDeEvento.push(array[i].Evento[j].idTipoEvento)
+                }
+                console.log(tiposDeEvento)
+                if (tiposDeEvento.includes(valueTE)) {
+                  arrayFiltrado.push(array[i])
+                } 
+
+            }
+            }
+          
+
+
           setLocales(arrayFiltrado)
           changeFiltrar(!filtrar)
         } } >
             <Text style={styles.text}>FILTRAR FIESTAS</Text>
         </Pressable>
+
+
         <ScrollView style={styles.container}>{list()}</ScrollView>
 
         <Pressable style={styles.button} onPress={() => {
@@ -492,5 +582,20 @@ const styles = StyleSheet.create({
     borderBottomEndRadius: 500,
     borderBottomStartRadius: 500,
 
+  },
+    input2: {
+    padding: 7,
+    width: "80%",
+    marginTop: 10,
+    marginHorizontal: "10%",
+    alignItems: "center",
+    borderRadius: 30,
+    backgroundColor: '#f1f1f1',
+    fontFamily: "Roboto-Medium",
+    paddingStart: 30,
+
+    fontSize: 16,
+    elevation: 10,
   }
+
 });
