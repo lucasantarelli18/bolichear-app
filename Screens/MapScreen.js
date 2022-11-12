@@ -59,7 +59,7 @@ export function MapScreen({ route, navigation }) {
           if (dist < rango) {
             //console.log("dentro del rango")
             console.log(items[i].dist = distkm)
-            console.log(items[i])
+            //console.log(items[i])
             arr.push(items[i])
           } else {
             //console.log("fuera del rango")
@@ -282,10 +282,15 @@ export function MapScreen({ route, navigation }) {
         </View>
         <Pressable style={styles.button} onPress={() => {
           const array = locales
-          console.log("length:" + array.length)
-          array.pop()
-          setLocales(array)
-          console.log("length:" + array.length)
+          const arrayFiltrado = []
+          for (const i in array){
+            console.log(array[i].Evento.length);
+            if (array[i].Evento.length > 0) {
+              console.log(array[i].nombre)
+              arrayFiltrado.push(array[i])
+            }
+          }
+          setLocales(arrayFiltrado)
           changeFiltrar(!filtrar)
         } } >
             <Text style={styles.text}>FILTRAR FIESTAS</Text>
