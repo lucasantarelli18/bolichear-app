@@ -16,7 +16,7 @@ export function MapScreen({ route, navigation }) {
 
   const { calle, numero, localidad, latitud, longitud, rango } = route.params;
 
-  console.log("Buenas, esta es la calle y el numero", calle, numero, localidad)
+  //console.log("Buenas, esta es la calle y el numero", calle, numero, localidad)
 
   const [origin, setOrigin] = React.useState({
     latitude: route.params.latitud,
@@ -29,14 +29,15 @@ export function MapScreen({ route, navigation }) {
   });
 
   const [cambio, setCambio] = React.useState(true);
+  const [filtrar, setFiltrar] = React.useState(false);
   const [evento, setEvento] = React.useState([]);
   const [tipoEvento, setTipoEvento] = React.useState([]);
   const [idLocalidad, setIdLocalidad] = React.useState([]);
-  const [checked1, setChecked1] = React.useState(false);
-  const [checked2, setChecked2] = React.useState(false);
-  const [checked3, setChecked3] = React.useState(false);
-  const [checked4, setChecked4] = React.useState(false);
-  const [checked5, setChecked5] = React.useState(false);
+//  const [checked1, setChecked1] = React.useState(false);
+//  const [checked2, setChecked2] = React.useState(false);
+//  const [checked3, setChecked3] = React.useState(false);
+//  const [checked4, setChecked4] = React.useState(false);
+//  const [checked5, setChecked5] = React.useState(false);
 
   const hideMenu = () => setVisible(false);
 
@@ -58,6 +59,7 @@ export function MapScreen({ route, navigation }) {
           if (dist < rango) {
             //console.log("dentro del rango")
             console.log(items[i].dist = distkm)
+            console.log(items[i])
             arr.push(items[i])
           } else {
             //console.log("fuera del rango")
@@ -82,6 +84,10 @@ export function MapScreen({ route, navigation }) {
 
   const changeCambio = (elem) => {
     setCambio(elem);
+  };
+
+  const changeFiltrar = (elem) => {
+    setFiltrar(elem);
   };
 
   /*const filtroTipoEvento = () =>{
@@ -152,9 +158,48 @@ export function MapScreen({ route, navigation }) {
         );
       });
 
+    } else if (filtrar) {
+      return locales.map((element) => {
+        //console.log(element.dist)
+        return (
+          <Pressable
+            onPress={() => {
+              navigation.navigate("VerEventos", {
+                idLocal: element.id,
+              });
+            }}>
+            <ImageBackground
+              imageStyle={{ borderRadius: 15 }}
+              source={require("../assets/fondoLogIn.jpg")}
+              blurRadius={25}
+              style={styles.boliches}
+            >
+              <View style={styles.boliches2}>
+                <Text style={styles.titulos} key="{element.id}">
+                  {element.nombre}
+                </Text>
+              </View>
+
+              <View style={styles.boliches3}>
+                <Text style={styles.km}>Estás a {element.dist} km</Text>
+              </View>
+
+              <View style={styles.boliches4}>
+                <View>
+                  <Text style={styles.info}>
+                    {" "}
+                    Direccion: {element.Domicilio.calle} {element.Domicilio.numero}
+                  </Text>
+                  <Text style={styles.info}> Asistiran 300 personas </Text>
+                </View>
+              </View>
+            </ImageBackground>
+          </Pressable>
+        );
+      });
     } else {
       return locales.map((element) => {
-        console.log(element.dist)
+        //console.log(element.dist)
         return (
           <Pressable
             onPress={() => {
@@ -235,6 +280,16 @@ export function MapScreen({ route, navigation }) {
           <Text style={styles.info}> Dirección actual: {calle} {numero} </Text>
           {/*<Text>{filtroTipoEvento()}</Text>*/}
         </View>
+        <Pressable style={styles.button} onPress={() => {
+          const array = locales
+          console.log("length:" + array.length)
+          array.pop()
+          setLocales(array)
+          console.log("length:" + array.length)
+          changeFiltrar(!filtrar)
+        } } >
+            <Text style={styles.text}>FILTRAR FIESTAS</Text>
+        </Pressable>
         <ScrollView style={styles.container}>{list()}</ScrollView>
 
         <Pressable style={styles.button} onPress={() => {

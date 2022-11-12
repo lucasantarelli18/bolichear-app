@@ -38,6 +38,12 @@ export const getLocalxDomicilio = async () => {
     *,
     Domicilio (
       *
+    ), 
+    Evento (
+      id,
+      fechaHoraInicio,
+      fechaHoraFin,
+      idTipoEvento
     )
   `);
   return data;
