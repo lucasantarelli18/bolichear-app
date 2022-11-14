@@ -15,11 +15,13 @@ export function VerEventosScreen({ route, navigation }) {
   const [promociones, setPromociones] = React.useState([]);
   const [locales, setLocales] = React.useState([]);
   const [cantEventos, setCantEventos] = React.useState([]);
+  const [cantEventosActuales, setCantEventosActuales] = React.useState([]);
   const [cantPromos, setCantPromos] = React.useState([]);
   const [cant, setCant] = React.useState([]);
   const { idLocal, latitud, longitud } = route.params;
   const { width } = Dimensions.get('window')
   const idDueno = 5;
+  const fecha=new Date();
 
 
 
@@ -119,89 +121,73 @@ export function VerEventosScreen({ route, navigation }) {
     localDueño.push(0)
   }
 
-
-  console.log("DUEÑOOOOOO", localDueño[0])
-  // Creo constantes para mostrar el FlatList en la pantalla
-  const flatlistEventos = () => {
-    return (
-      <View>
-        <FlatList
-          data={dataEventos}
-          keyExtractor={(item) => String(item)}
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled
-          horizontal
-          snapToAlignment={'start'}
-          scrollEventThrottle={16}
-          decelerationRate='fast'
-          style={{ marginBottom: 20 }}
-          renderItem={({ item }) => {
-            return (
-              console.log(item),
-              <SafeAreaView style={{
-                backgroundColor: "#e8ded3",
-                width: width * 0.8 - 20,
-                marginHorizontal: 10,
-                paddingBottom: 20,
-                borderRadius: 12,
-              }}>
-                <Image
-                  source={item.image}
-                  style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
-                />
-                <Text style={styles.titleText}>{item.title}</Text>
-                <Text style={styles.descriptionText}>
-                  {item.description}
-                </Text>
-                <Text style={styles.fechaText}>
-                  Vigente desde el {item.fechaInicio}
-                  Hasta el {item.fechaFin}
-                </Text>
-                {item.idLocal == localDueño[0] ?
-                  <View style={{ alignItems: 'center' }}>
-                    <Pressable
-                      style={styles.button2}
-                      onPress={() => Alert.alert(
-                        "Eliminar",
-                        "¿Desea eliminar el evento?",
-                        [
-                          {
-                            text: "Cancelar",
-                            onPress: () => console.log("Cancel Pressed"),
-                            style: "cancel"
-                          },
-                          {
-                            text: "Aceptar",
-                            onPress: () => Backend.deleteEvento(item.id).then((items) => Alert.alert("Evento eliminado con éxito"), navigation.dispatch({
-                              ...StackActions.replace('VerEventos', {
-                                idLocal: idLocal, latitud: latitud, longitud: longitud
-                              }),
-                              source: route.key,
-                              target: navigation.getState().key,
-
-                            })
-
-                            )
-                          }
-
-
-                        ]
-                      )}
-                    >
-                      <Text style={styles.titleButton}>Eliminar</Text>
-                    </Pressable>
-                  </View>
-                  :
-                  console.log('bien')
-                }
-              </SafeAreaView>
-            );
+  const evento = () =>{
+    eventos.map((item) =>{
+      return (
+        <SafeAreaView style={{
+          backgroundColor: "#e8ded3",
+          width: width * 0.8 - 20,
+          marginHorizontal: 10,
+          paddingBottom: 20,
+          borderRadius: 12,
+        }}>
+                         
+          <Image
+            source={item.image}
+            style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
+          />
+          <Text style={styles.titleText}>{item.title}</Text>
+          <Text style={styles.descriptionText}>
+            {item.description}
+          </Text>
+          <Text style={styles.fechaText}>
+            Vigente desde el {item.fechaInicio}
+            Hasta el {item.fechaFin}
+          </Text>
+          {item.idLocal == localDueño[0] ?
+            <View style={{ alignItems: 'center' }}>
+              <Pressable
+                style={styles.button2}
+                onPress={() => Alert.alert(
+                  "Eliminar",
+                  "¿Desea eliminar el evento?",
+                  [
+                    {
+                      text: "Cancelar",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel"
+                    },
+                    {
+                      text: "Aceptar",
+                      onPress: () => Backend.deleteEvento(item.id).then((items) => Alert.alert("Evento eliminado con éxito"), navigation.dispatch({
+                        ...StackActions.replace('VerEventos', {
+                          idLocal: idLocal, latitud: latitud, longitud: longitud
+                        }),
+                        source: route.key,
+                        target: navigation.getState().key,
+  
+                      })
+  
+                      )
+                    }
+  
+  
+                  ]
+                )}
+              >
+                <Text style={styles.titleButton}>Eliminar</Text>
+              </Pressable>
+            </View>
+            :
+            console.log(fecha)
           }
-          } />
-      </View >
-    )
+  
+        </SafeAreaView>
+     
+      );
+    })
+    
   }
-
   const sinEventos = () => {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -241,6 +227,169 @@ export function VerEventosScreen({ route, navigation }) {
     );
   }
 
+  //console.log("DUEÑOOOOOO", localDueño[0])
+  // Creo constantes para mostrar el FlatList en la pantalla
+  const flatlistEventos = () => {  
+    return (
+      <View>
+        <FlatList
+          data={dataEventos}
+          keyExtractor={(item) => String(item)}
+          showsHorizontalScrollIndicator={false}
+          pagingEnabled
+          horizontal
+          snapToAlignment={'start'}
+          scrollEventThrottle={16}
+          decelerationRate='fast'
+          style={{ marginBottom: 20 }}
+          renderItem={({ item }) => {
+            const dia = item.fechaFin.substring(0,2)
+            const mes = item.fechaFin.substring(3,5)
+            const anio = item.fechaFin.substring(6,10)
+            const FechaFin = anio + '-'+ mes +'-'+dia
+            if((new Date(FechaFin)) >= fecha){
+              return (
+                <SafeAreaView style={{
+                  backgroundColor: "#e8ded3",
+                  width: width * 0.8 - 20,
+                  marginHorizontal: 10,
+                  paddingBottom: 20,
+                  borderRadius: 12,
+                }}>
+                                 
+                  <Image
+                    source={item.image}
+                    style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
+                  />
+                  <Text style={styles.titleText}>{item.title}</Text>
+                  <Text style={styles.descriptionText}>
+                    {item.description}
+                  </Text>
+                  <Text style={styles.fechaText}>
+                    Vigente desde el {item.fechaInicio}
+                    Hasta el {item.fechaFin}
+                  </Text>
+                  {item.idLocal == localDueño[0] ?
+                    <View style={{ alignItems: 'center' }}>
+                      <Pressable
+                        style={styles.button2}
+                        onPress={() => Alert.alert(
+                          "Eliminar",
+                          "¿Desea eliminar el evento?",
+                          [
+                            {
+                              text: "Cancelar",
+                              onPress: () => console.log("Cancel Pressed"),
+                              style: "cancel"
+                            },
+                            {
+                              text: "Aceptar",
+                              onPress: () => Backend.deleteEvento(item.id).then((items) => Alert.alert("Evento eliminado con éxito"), navigation.dispatch({
+                                ...StackActions.replace('VerEventos', {
+                                  idLocal: idLocal, latitud: latitud, longitud: longitud
+                                }),
+                                source: route.key,
+                                target: navigation.getState().key,
+          
+                              })
+          
+                              )
+                            }
+          
+          
+                          ]
+                        )}
+                      >
+                        <Text style={styles.titleButton}>Eliminar</Text>
+                      </Pressable>
+                    </View>
+                    :
+                    console.log(fecha)
+                  }
+          
+                </SafeAreaView>
+             
+              );
+            }else{
+              //console.log(eventos.length)
+              if((new Date(FechaFin)) < fecha){
+                return (
+                  <SafeAreaView style={{
+                    backgroundColor: "#e8ded3",
+                    width: width * 0.8 - 20,
+                    marginHorizontal: 10,
+                    paddingBottom: 20,
+                    borderRadius: 12,
+                    opacity: 0.35,
+                  }}>
+                                   
+                    <Image
+                      source={item.image}
+                      style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
+                    />
+                    <Text style={styles.titleText}>{item.title}</Text>
+                    <Text style={styles.descriptionText}>
+                      {item.description}
+                    </Text>
+                    <Text style={styles.fechaText}>
+                      Vigente desde el {item.fechaInicio}
+                      Hasta el {item.fechaFin}
+                    </Text>
+                    {item.idLocal == localDueño[0] ?
+                      <View style={{ alignItems: 'center' }}>
+                        <Pressable
+                          style={styles.button2}
+                          onPress={() => Alert.alert(
+                            "Eliminar",
+                            "¿Desea eliminar el evento?",
+                            [
+                              {
+                                text: "Cancelar",
+                                onPress: () => console.log("Cancel Pressed"),
+                                style: "cancel"
+                              },
+                              {
+                                text: "Aceptar",
+                                onPress: () => Backend.deleteEvento(item.id).then((items) => Alert.alert("Evento eliminado con éxito"), navigation.dispatch({
+                                  ...StackActions.replace('VerEventos', {
+                                    idLocal: idLocal, latitud: latitud, longitud: longitud
+                                  }),
+                                  source: route.key,
+                                  target: navigation.getState().key,
+            
+                                })
+            
+                                )
+                              }
+            
+            
+                            ]
+                          )}
+                        >
+                          <Text style={styles.titleButton}>Eliminar</Text>
+                        </Pressable>
+                      </View>
+                      :
+                      console.log(fecha)
+                    }
+            
+                  </SafeAreaView>
+               
+                );
+              }
+              
+            }
+            
+         
+          }
+  
+        }/>
+      </View >
+    )
+  }
+
+ 
+
 
   const flatlistPromos = () => {
     return (
@@ -256,6 +405,12 @@ export function VerEventosScreen({ route, navigation }) {
           decelerationRate='fast'
           style={{ marginBottom: 20 }}
           renderItem={({ item }) => {
+            const dia = item.fechaFin.substring(0,2)
+            const mes = item.fechaFin.substring(3,5)
+            const anio = item.fechaFin.substring(6,10)
+            const FechaFin = anio + '-'+ mes +'-'+dia
+            //console.log(new Date(FechaFin), fecha)
+            if((new Date(FechaFin)) >= fecha){
             return (
               console.log(item),
               <SafeAreaView style={{
@@ -313,7 +468,70 @@ export function VerEventosScreen({ route, navigation }) {
                   console.log('bien')
                 }
               </SafeAreaView>
-            );
+            );}else{
+              console.log(new Date(FechaFin), fecha)
+              if((new Date(FechaFin)) < fecha){
+              return (
+                console.log(item),
+                <SafeAreaView style={{
+                  backgroundColor: "#e8ded3",
+                  width: width * 0.8 - 20,
+                  marginHorizontal: 10,
+                  paddingBottom: 20,
+                  borderRadius: 12,
+                  opacity:0.35,
+                }}>
+                  <Image
+                    source={item.image}
+                    style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
+                  />
+                  <Text style={styles.titleText}>{item.title}</Text>
+                  <Text style={styles.descriptionText}>
+                    {item.description}
+                  </Text>
+                  <Text style={styles.fechaText}>
+                    Vigente desde el {item.fechaInicio}
+                    Hasta el {item.fechaFin}
+                  </Text>
+                  {item.idLocal == localDueño[0] ?
+                    <View style={{ alignItems: 'center' }}>
+                      <Pressable
+                        style={styles.button2}
+                        onPress={() => Alert.alert(
+                          "Eliminar",
+                          "¿Desea eliminar la promoción?",
+                          [
+                            {
+                              text: "Cancelar",
+                              onPress: () => console.log("Cancel Pressed"),
+                              style: "cancel"
+                            },
+                            {
+                              text: "Aceptar",
+                              onPress: () => Backend.deletePromocion(item.id).then((items) => Alert.alert("Promoción eliminada con éxito"), navigation.dispatch({
+                                ...StackActions.replace('VerEventos', {
+                                  idLocal: idLocal, latitud: latitud, longitud: longitud
+                                }),
+                                source: route.key,
+                                target: navigation.getState().key,
+  
+                              }))
+                            }
+  
+  
+                          ]
+                        )}
+                      >
+                        <Text style={styles.titleButton}>Eliminar</Text>
+                      </Pressable>
+                    </View>
+                    :
+                    console.log('bien')
+                  }
+                </SafeAreaView>
+              );}
+              
+            }
           }
           } />
       </View >
@@ -502,4 +720,8 @@ const styles = StyleSheet.create({
     color: "black",
     textAlign: "center",
   },
+  deshabilitar:{
+      opacity: 0.5,
+    
+  }
 });
