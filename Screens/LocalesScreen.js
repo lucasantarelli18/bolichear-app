@@ -169,12 +169,26 @@ export function LocalesScreen({ route, navigation }) {
           <View style={{ marginTop: "35%", width: "100%", alignItems: 'center' }}>
             <Pressable
               style={styles.button3}
-              onPress={() =>
-                Backend.deleteLocal(element.id).then((items) => {
-                  console.log("Borrando local: ", element.id);
-                  setCant(false)
-                })
-              }
+
+              onPress={() => Alert.alert(
+                        "Eliminar",
+                        "¿Desea eliminar el local?",
+                        [
+                          {
+                            text: "Cancelar",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel"
+                          },
+                          {
+                            text: "Aceptar",
+                            onPress: () => Backend.deleteLocal(element.id).then((items) => Alert.alert("Local eliminado con éxito"), setCant(false)
+
+                            )
+                          }
+
+
+                        ]
+                      )}
             >
               <Text style={styles.text}>BORRAR</Text>
             </Pressable></View>
