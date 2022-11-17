@@ -17,6 +17,7 @@ import { PromocionesScreen } from './Screens/PromocionesScreen';
 import { VerPromocionesScreen } from './Screens/VerPromocionesScreen';
 import { VerEventosScreen } from "./Screens/VerEventosScreen";
 import { SignInScreen } from "./Screens/SignInScreen";
+import { PreloginScreen } from "./Screens/PreloginScreen";
 import { LinearGradient } from 'expo-linear-gradient';
 import 'react-native-url-polyfill/auto';
 //import MapView, { Marker, Polyline } from 'react-native-maps';
@@ -127,6 +128,17 @@ export default function App({ navigation }) {
             <Stack.Screen name="Splash" component={SplashScreen} />
           ) : state.userToken == null ? (
             // No token found, user isn't signed in
+          <>
+            <Stack.Screen
+              name="Prelogin"
+              component={PreloginScreen}
+              options={{
+                title: "Bienvenido!",
+                headerShown: false,
+                // When logging out, a pop animation feels intuitive
+                animationTypeForReplace: state.isSignout ? "pop" : "push",
+              }}
+            />
             <Stack.Screen
               name="SignIn"
               component={SignInScreen}
@@ -137,6 +149,7 @@ export default function App({ navigation }) {
                 animationTypeForReplace: state.isSignout ? "pop" : "push",
               }}
             />
+          </>
           ) : (
             // User is signed in
 
