@@ -16,6 +16,7 @@ import { EventosScreen } from "./Screens/EventosScreen";
 import { PromocionesScreen } from './Screens/PromocionesScreen';
 import { VerPromocionesScreen } from './Screens/VerPromocionesScreen';
 import { VerEventosScreen } from "./Screens/VerEventosScreen";
+import { SignInScreen } from "./Screens/SignInScreen";
 import { LinearGradient } from 'expo-linear-gradient';
 import 'react-native-url-polyfill/auto';
 //import MapView, { Marker, Polyline } from 'react-native-maps';
@@ -23,61 +24,12 @@ import 'react-native-url-polyfill/auto';
 //import ImageBlurShadow from 'react-native-image-blur-shadow';
 import * as Font from 'expo-font';
 import { LogBox } from "react-native";
+import AuthContext from "./AuthContext"
  
 LogBox.ignoreAllLogs();
 
-const AuthContext = React.createContext();
+//const AuthContext = React.createContext();
 const image = { uri: "./assets/FondoDesenfocado.jpg" };
-
-function SignInScreen() {
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
-
-  const { signIn } = React.useContext(AuthContext);
-
-  return (
-
-    <ImageBackground
-      source={require("./assets/fondoLogIn.jpg")}
-      style={styles.container}
-    >
-      <Image style={styles.imagen} source={require("./assets/logo.png")} />
-      <View style={styles.container2}>
-        <TextInput
-          style={styles.input}
-          placeholder="Usuario"
-          value={username}
-          onChangeText={setUsername}
-        //secureTextEntry
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Contraseña"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={true}
-        />
-        <Text style={styles.texto}>Olvidé mi contraseña</Text>
-        <Pressable
-          style={styles.container3}
-          onPress={() => signIn({ username, password })}>
-          <LinearGradient
-            // Button Linear Gradient
-            colors={['#C2454A', '#A32934', '#680008']}
-            start={{ x: 1, y: 0 }}
-            end={{ x: 0, y: 1 }}
-            style={styles.button}>
-            <Text style={styles.text}>INICIAR SESIÓN</Text>
-          </LinearGradient>
-        </Pressable>
-        <Pressable>
-          <Text style={styles.texto}>CREAR CUENTA</Text>
-        </Pressable>
-      </View>
-      <StatusBar style="dark" />
-    </ImageBackground>
-  );
-}
 
 const Stack = createNativeStackNavigator();
 
