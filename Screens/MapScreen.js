@@ -278,8 +278,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: "center",
     justifyContent: "center",
-    borderColor: 'gray',
-    borderTopWidth: 1,
+    //borderColor: 'gray',
+    //borderTopWidth: 1,
   },
   tabPress: {
     //flex: 1,
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: 'white',
-    borderColor: 'gray',
+    borderColor: 'lightgray',
     borderLeftWidth: 1,
   },
   viewCien: {

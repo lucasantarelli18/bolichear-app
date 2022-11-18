@@ -17,6 +17,8 @@ import { PromocionesScreen } from './Screens/PromocionesScreen';
 import { VerPromocionesScreen } from './Screens/VerPromocionesScreen';
 import { VerEventosScreen } from "./Screens/VerEventosScreen";
 import { LinearGradient } from 'expo-linear-gradient';
+import { RandomDrinkScreen } from "./Screens/RandomDrinkScreen";
+import { NumSymScreen } from "./Screens/NumSymScreen";
 import 'react-native-url-polyfill/auto';
 //import MapView, { Marker, Polyline } from 'react-native-maps';
 //import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -233,6 +235,16 @@ export default function App({ navigation }) {
               <Stack.Screen name="VerPromociones" component={VerPromocionesScreen} options={{ title: 'Promociones' }} />
               <Stack.Screen name="MapScreen" component={MapScreen} options={{
                 title: 'Mapa', headerTitleAlign: "center",
+                headerTitleStyle: { color: 'black' },
+                headerStyle: { backgroundColor: '#fff', justifyContent: "center", fontColor: 'white' },
+              }} />
+              <Stack.Screen name="RandomDrink" component={RandomDrinkScreen} options={{
+                title: 'RandomDrink', headerTitleAlign: "center",
+                headerTitleStyle: { color: 'black' },
+                headerStyle: { backgroundColor: '#fff', justifyContent: "center", fontColor: 'white' },
+              }} />
+              <Stack.Screen name="NumSym" component={NumSymScreen} options={{
+                title: 'Number&Symbol', headerTitleAlign: "center",
                 headerTitleStyle: { color: 'black' },
                 headerStyle: { backgroundColor: '#fff', justifyContent: "center", fontColor: 'white' },
               }} />

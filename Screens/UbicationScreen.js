@@ -34,6 +34,14 @@ export function UbicationScreen({ navigation }) {
     })
   };
 
+  const onPressRandomDrink = () => {
+    navigation.navigate('RandomDrink')
+  };
+
+  const onPressNumSym = () => {
+    navigation.navigate('NumSym')
+  };
+
   const onPressList = () => {
     navigation.navigate('Home', {
       calle: ubicacion.calle,
@@ -45,136 +53,205 @@ export function UbicationScreen({ navigation }) {
     })
   };
 
+  const [cambio, setCambio] = React.useState(true);
+  const changeCambio = (elem) => {
+    setCambio(elem);
+  };
 
 
-  return (
-    //<ScrollView style={styles.scrollView} contentContainerStyle={{flexGrow: 1}}>
-    <View style={styles.container}>
+  if (cambio) {
 
-      <View style={{ width: "60%", flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 40 }}>
-        <Text style={{ fontSize: 40, fontWeight: 'bold' }}>
-          Ingresa tu UBICACIÓN
-        </Text>
-        <Image style={{ height: 150, width: 112.5 }} source={require("../assets/logo2.png")} />
+    return (
+      //<ScrollView style={styles.scrollView} contentContainerStyle={{flexGrow: 1}}>
+      <View style={styles.container}>
+
+        <View style={{ width: "60%", flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 40 }}>
+          <Text style={{ fontSize: 40, fontWeight: 'bold' }}>
+            Ingresa tu UBICACIÓN
+          </Text>
+          <Image style={{ height: 150, width: 112.5 }} source={require("../assets/logo2.png")} />
+        </View>
+
+
+        <View style={styles.container2}>
+
+          <GooglePlacesAutocomplete
+            placeholder='UTN, FRLP'
+            fetchDetails={true}
+            onPress={(data, details = null) => {
+              //console.log(data, details);
+              if (details.address_components[0].long_name == "AGN") {
+                setUbicacion({
+                  calle: details.address_components[2].long_name,
+                  numero: details.address_components[1].long_name,
+                  localidad: details.address_components[3].long_name,
+                  latitude: details.geometry.location.lat,
+                  longitude: details.geometry.location.lng,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421
+                })
+              } else {
+                setUbicacion({
+                  calle: details.address_components[1].long_name,
+                  numero: details.address_components[0].long_name,
+                  localidad: details.address_components[2].long_name,
+                  latitude: details.geometry.location.lat,
+                  longitude: details.geometry.location.lng,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421
+
+                })
+              }
+
+            }}
+            query={{
+              key: process.env.GOOGLE_MAPS_KEY,
+              language: 'es',
+              components: "country:ar",
+            }}
+            styles={{
+              container: {
+                flex: 0,
+              },
+              textInputContainer: {
+                height: 39,
+                marginBottom: 8,
+              },
+              poweredContainer: {
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderBottomRightRadius: 5,
+                borderBottomLeftRadius: 5,
+                borderColor: '#c8c7cc',
+                borderTopWidth: 0.5,
+                //placeholderTextColor: 'white',
+              },
+              loader: {
+                flexDirection: 'row',
+                justifyContent: 'center',
+                height: 20,
+              },
+              row: {
+                zIndex: 1,
+                backgroundColor: '#FFFFFF',
+                padding: 10,
+                height: 40,
+                flexDirection: 'row',
+              },
+              separator: {
+                position: 'absolute',
+                zIndex: 1,
+                height: 0.2,
+                backgroundColor: '#c8c7cc',
+              },
+            }}
+          />
+          <View style={{ justifyContent: 'center' }}>
+            <Text style={{ position: 'absolute', right: 0, fontSize: 20, fontWeight: 'bold' }}>{rango} km</Text>
+            <Slider
+              containerStyle={{ width: '75%', marginVertical: 10 }}
+              value={rango}
+              minimumValue={0}
+              maximumValue={50}
+              minimumTrackTintColor='#641c34'
+              step={1}
+              onValueChange={value => setRango(value)}
+              thumbStyle={styles.thumb}
+              trackStyle={styles.track}
+            /></View>
+
+          <Pressable onPress={onPressMap}>
+            <LinearGradient
+              // Button Linear Gradient
+              colors={['#C2454A', '#A32934', '#680008']}
+              start={{ x: 1, y: 0 }}
+              end={{ x: 0, y: 1 }}
+              style={styles.button}>
+              <Text style={styles.text}>BUSCAR</Text>
+            </LinearGradient>
+          </Pressable>
+          <StatusBar style="white" />
+
+        </View>
+
+        <View style={styles.tabCambio}>
+          <Pressable style={styles.tabPress} onPress={() => changeCambio(true)}>
+            <Text>Boliches</Text>
+          </Pressable>
+          <Pressable style={styles.tabPress2} onPress={() => changeCambio(false)}>
+            <Text>Juegos</Text>
+          </Pressable>
+        </View>
+
       </View>
 
-      <View style={styles.container2}>
-        <GooglePlacesAutocomplete
-          placeholder='UTN, FRLP'
-          fetchDetails={true}
-          onPress={(data, details = null) => {
-            //console.log(data, details);
-            if (details.address_components[0].long_name == "AGN") {
-              setUbicacion({
-                calle: details.address_components[2].long_name,
-                numero: details.address_components[1].long_name,
-                localidad: details.address_components[3].long_name,
-                latitude: details.geometry.location.lat,
-                longitude: details.geometry.location.lng,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
-              })
-            } else {
-              setUbicacion({
-                calle: details.address_components[1].long_name,
-                numero: details.address_components[0].long_name,
-                localidad: details.address_components[2].long_name,
-                latitude: details.geometry.location.lat,
-                longitude: details.geometry.location.lng,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
+      //</ScrollView>
+    );
+  } else {
+    return (
+      <View style={styles.containerjuegos}>
+        <View style={styles.iconoDivisor2}>
+          <Text style={styles.title}> JUEGOS!</Text>
+        </View>
+        <View style={styles.iconoDivisor}>
+          <Pressable style={styles.icono} onPress={onPressRandomDrink}>
+            <Text style={styles.text}>Random Drink</Text>
+          </Pressable>
+          <Pressable style={styles.icono} onPress={onPressNumSym}>
+            <Text style={styles.text}>N&S</Text>
+          </Pressable>
+        </View>
+        <View>
 
-              })
-            }
-
-          }}
-          query={{
-            key: process.env.GOOGLE_MAPS_KEY,
-            language: 'es',
-            components: "country:ar",
-          }}
-          styles={{
-            container: {
-              flex: 0,
-            },
-            textInputContainer: {
-              height: 39,
-              marginBottom: 8,
-            },
-            textInput: {
-              padding: 10,
-              width: "80%",
-              heigt: 10,
-              borderRadius: 30,
-              backgroundColor: '#f1f1f1',
-              fontFamily: "Roboto-Medium",
-              paddingStart: 30,
-              fontSize: 16,
-              elevation: 10,
-            },
-            poweredContainer: {
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderBottomRightRadius: 5,
-              borderBottomLeftRadius: 5,
-              borderColor: '#c8c7cc',
-              borderTopWidth: 0.5,
-              //placeholderTextColor: 'white',
-            },
-            loader: {
-              flexDirection: 'row',
-              justifyContent: 'center',
-              height: 20,
-            },
-            row: {
-              zIndex: 1,
-              backgroundColor: '#FFFFFF',
-              padding: 10,
-              height: 40,
-              flexDirection: 'row',
-            },
-            separator: {
-              position: 'absolute',
-              zIndex: 1,
-              height: 0.2,
-              backgroundColor: '#c8c7cc',
-            },
-          }}
-        />
-        <View style={{ justifyContent: 'center' }}>
-          <Text style={{ position: 'absolute', right: 0, fontSize: 20, fontWeight: 'bold' }}>{rango} km</Text>
-          <Slider
-            containerStyle={{ width: '75%', marginVertical: 10 }}
-            value={rango}
-            minimumValue={0}
-            maximumValue={50}
-            minimumTrackTintColor='#641c34'
-            step={1}
-            onValueChange={value => setRango(value)}
-            thumbStyle={styles.thumb}
-            trackStyle={styles.track}
-          /></View>
-
-        <Pressable onPress={onPressMap}>
-          <LinearGradient
-            // Button Linear Gradient
-            colors={['#C2454A', '#A32934', '#680008']}
-            start={{ x: 1, y: 0 }}
-            end={{ x: 0, y: 1 }}
-            style={styles.button}>
-            <Text style={styles.text}>BUSCAR</Text>
-          </LinearGradient>
-        </Pressable>
-        <StatusBar style="white" />
-
+        </View>
+        <View style={styles.tabCambio}>
+          <Pressable style={styles.tabPress} onPress={() => changeCambio(true)}>
+            <Text>Boliches</Text>
+          </Pressable>
+          <Pressable style={styles.tabPress2} onPress={() => changeCambio(false)}>
+            <Text>Juegos</Text>
+          </Pressable>
+        </View>
       </View>
-    </View>
-    //</ScrollView>
-  );
+    );
+  }
+
 }
+
+
 const styles = StyleSheet.create({
   scrollView: {
     flexGrow: 1,
+  },
+  icono: {
+    borderWidth: 2,
+    width: '30%',
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'orange',
+
+  },
+  iconoDivisor: {
+    flex: 0.18,
+    width: '100%',
+    //height: 20,
+    marginTop: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
+  iconoDivisor2: {
+    flex: 0.18,
+    width: '100%',
+    //height: 20,
+    marginTop: 15,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 40,
+    fontWeight: "bold",
   },
   container: {
     flex: 1,
@@ -182,6 +259,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#ebe6d9',
+
+  },
+  containerjuegos: {
+    flex: 1,
+    height: '100%',
+    //flexDirection: 'column',
+
+    //alignItems: 'center',
+    backgroundColor: '#ebe6d9',
+
   },
   container2: {
     width: '80%',
@@ -218,6 +305,48 @@ const styles = StyleSheet.create({
     width: '80%',
     marginStart: "10%",
     marginTop: 50
+  },
+  tabCambio: {
+    //flex: 1,
+    //width: '100%',
+    height: '7%',
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    alignItems: "center",
+    justifyContent: "center",
+    //borderColor: 'gray',
+    //borderTopWidth: 1,
+    position: 'absolute',
+    bottom: 0,
+  },
+  tabPress: {
+    //flex: 1,
+    width: '50%',
+    height: '100%',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: 'white',
+  },
+  tabPress2: {
+    //flex: 1,
+    width: '50%',
+    height: '100%',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: 'white',
+    borderColor: 'lightgray',
+    borderLeftWidth: 1,
+  },
+  textInput: {
+    padding: 10,
+    width: "80%",
+    heigt: 10,
+    borderRadius: 30,
+    backgroundColor: '#f1f1f1',
+    fontFamily: "Roboto-Medium",
+    paddingStart: 30,
+    fontSize: 16,
+    elevation: 10,
   },
   text: {
     fontSize: 16,
