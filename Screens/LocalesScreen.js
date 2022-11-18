@@ -89,7 +89,7 @@ export function LocalesScreen({ route, navigation }) {
 
   const list = () => {
     return locales.map((element) => {
-      console.log("LISTAAAAAAAAA LOCAL", element);
+      //console.log("LISTAAAAAAAAA LOCAL", element);
       return (
         <ScrollView style={styles.container2}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -166,10 +166,25 @@ export function LocalesScreen({ route, navigation }) {
               <Text style={styles.text}>VER INFO</Text>
             </Pressable>
           </View>
-          <View style={{ marginTop: "35%", width: "100%", alignItems: 'center' }}>
+          <View style={{ marginTop: "35%", width: "100%", flex: 1, justifyContent: "space-between", alignItems: 'center', flexDirection: 'row' }}>
+            <Pressable
+              style={styles.button4}
+              onPress={() => {
+              navigation.navigate("EditarLocal", {
+                latitud: latitud,
+                longitud: longitud,
+                localidad: localidad,
+                idLocalidad: idLocalidad,
+                idDueno: idDueno,
+                calle: calle,
+                numero: numero
+              });
+              }}
+            >
+              <Text style={styles.text}>EDITAR</Text>
+            </Pressable>
             <Pressable
               style={styles.button3}
-
               onPress={() => Alert.alert(
                         "Eliminar",
                         "¿Desea eliminar el local?",
@@ -182,11 +197,8 @@ export function LocalesScreen({ route, navigation }) {
                           {
                             text: "Aceptar",
                             onPress: () => Backend.deleteLocal(element.id).then((items) => Alert.alert("Local eliminado con éxito"), setCant(false)
-
                             )
                           }
-
-
                         ]
                       )}
             >
