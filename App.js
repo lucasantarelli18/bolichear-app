@@ -16,6 +16,8 @@ import { EventosScreen } from "./Screens/EventosScreen";
 import { PromocionesScreen } from './Screens/PromocionesScreen';
 import { VerPromocionesScreen } from './Screens/VerPromocionesScreen';
 import { VerEventosScreen } from "./Screens/VerEventosScreen";
+import { SignInScreen } from "./Screens/SignInScreen";
+import { PreloginScreen } from "./Screens/PreloginScreen";
 import { LinearGradient } from 'expo-linear-gradient';
 import { RandomDrinkScreen } from "./Screens/RandomDrinkScreen";
 import { NumSymScreen } from "./Screens/NumSymScreen";
@@ -25,61 +27,12 @@ import 'react-native-url-polyfill/auto';
 //import ImageBlurShadow from 'react-native-image-blur-shadow';
 import * as Font from 'expo-font';
 import { LogBox } from "react-native";
+import AuthContext from "./AuthContext"
  
 LogBox.ignoreAllLogs();
 
-const AuthContext = React.createContext();
+//const AuthContext = React.createContext();
 const image = { uri: "./assets/FondoDesenfocado.jpg" };
-
-function SignInScreen() {
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
-
-  const { signIn } = React.useContext(AuthContext);
-
-  return (
-
-    <ImageBackground
-      source={require("./assets/fondoLogIn.jpg")}
-      style={styles.container}
-    >
-      <Image style={styles.imagen} source={require("./assets/logo.png")} />
-      <View style={styles.container2}>
-        <TextInput
-          style={styles.input}
-          placeholder="Usuario"
-          value={username}
-          onChangeText={setUsername}
-        //secureTextEntry
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Contraseña"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={true}
-        />
-        <Text style={styles.texto}>Olvidé mi contraseña</Text>
-        <Pressable
-          style={styles.container3}
-          onPress={() => signIn({ username, password })}>
-          <LinearGradient
-            // Button Linear Gradient
-            colors={['#C2454A', '#A32934', '#680008']}
-            start={{ x: 1, y: 0 }}
-            end={{ x: 0, y: 1 }}
-            style={styles.button}>
-            <Text style={styles.text}>INICIAR SESIÓN</Text>
-          </LinearGradient>
-        </Pressable>
-        <Pressable>
-          <Text style={styles.texto}>CREAR CUENTA</Text>
-        </Pressable>
-      </View>
-      <StatusBar style="dark" />
-    </ImageBackground>
-  );
-}
 
 const Stack = createNativeStackNavigator();
 
@@ -177,6 +130,17 @@ export default function App({ navigation }) {
             <Stack.Screen name="Splash" component={SplashScreen} />
           ) : state.userToken == null ? (
             // No token found, user isn't signed in
+          <>
+            <Stack.Screen
+              name="Prelogin"
+              component={PreloginScreen}
+              options={{
+                title: "Bienvenido!",
+                headerShown: false,
+                // When logging out, a pop animation feels intuitive
+                animationTypeForReplace: state.isSignout ? "pop" : "push",
+              }}
+            />
             <Stack.Screen
               name="SignIn"
               component={SignInScreen}
@@ -187,6 +151,7 @@ export default function App({ navigation }) {
                 animationTypeForReplace: state.isSignout ? "pop" : "push",
               }}
             />
+          </>
           ) : (
             // User is signed in
 
