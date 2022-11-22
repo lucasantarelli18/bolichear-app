@@ -3,6 +3,7 @@ import { Text, TextInput, View, Button, ScrollView, StyleSheet, Alert, ImageBack
 import * as Backend from '../backlog';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 //import DropDownPicker from 'react-native-dropdown-picker';
 //import Constants from 'expo-constants';
 
