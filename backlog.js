@@ -9,7 +9,10 @@ export const getLocalesXUser = async (idDueno) => {
     .select(`
     *,
     Domicilio (
-      *
+      *,
+      Localidad( 
+        *
+      )
     )
   `)
     .eq('idDueño', idDueno)

@@ -20,6 +20,7 @@ export function EditarLocalScreen({ route, navigation: { goBack } }) {
   //  const [localidadSeleccionada, setLocalidadSeleccionada] = React.useState([]);
   const [nombreLocal, setNombreLocal] = React.useState(nombre.toUpperCase());
   const [idDomicilio, setIdDomicilio] = React.useState(idDomic);
+  const [idLocalidad2, setIdLocalidad2] = React.useState(idLocalidad);
   const [image, setImage] = React.useState(imagen);
   const [isImage, setIsImage] = React.useState(false);
 
@@ -30,7 +31,8 @@ const [ubicacion, setUbicacion] = React.useState({
     latitude: -34.904625,
     longitude: -57.925738,
     latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421
+    longitudeDelta: 0.0421,
+    cambia: false
   });
 
   const pickImage = async () => {
@@ -91,10 +93,10 @@ const [ubicacion, setUbicacion] = React.useState({
                 latitude: details.geometry.location.lat,
                 longitude: details.geometry.location.lng,
                 latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
+                longitudeDelta: 0.0421,
+                cambia: true
               })
             } else {
-              console.log("entra por aca");
               setModificaDomicilio(true)
               setUbicacion({
                 calle: details.address_components[1].long_name,
@@ -103,11 +105,26 @@ const [ubicacion, setUbicacion] = React.useState({
                 latitude: details.geometry.location.lat,
                 longitude: details.geometry.location.lng,
                 latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
-
+                longitudeDelta: 0.0421,
+                cambia: true
               })
             }
-                                 console.log(ubicacion);
+
+            if (ubicacion.localidad == "Berisso") {
+              setIdLocalidad2(5)
+            } else if (ubicacion.localidad == "La Plata") {
+              setIdLocalidad2(1)
+            } else if (ubicacion.localidad == "Tolosa") {
+              setIdLocalidad2(9)
+            } else if (ubicacion.localidad == "Los Hornos") {
+              setIdLocalidad2(8)
+            } else if (ubicacion.localidad == "Quilmes") {
+              setIdLocalidad2(2)
+            } else if (ubicacion.localidad == "Bernal Oeste") {
+              setIdLocalidad2(3)
+            } else if (ubicacion.localidad == "Villa Gessel") {
+              setIdLocalidad2(4)
+            }
 
           }}
           query={{
@@ -165,7 +182,20 @@ const [ubicacion, setUbicacion] = React.useState({
             },
           }}
         />
+
+        {(() => {
+              if (ubicacion.cambia){
+                  return (
+                      <Text style={styles.text2}>Domicilio cargado!</Text>
+                  )
+              }
+              
+              return null;
+        })()}
+        {/*{ ubicacion.cambia ? <Text style={styles.text}>Domicilio cargado</Text> : }*/}
+
         </View>
+
 
         <Text style={styles.titulos}>Foto del Local</Text>
         <View style={styles.container2}>
@@ -188,7 +218,7 @@ const [ubicacion, setUbicacion] = React.useState({
         <Pressable onPress={() => {
           if (modificaDomicilio) {
             console.log("modifica domicilio " + modificaDomicilio)
-            Backend.insertDomicilioSinPiso(ubicacion.calle, ubicacion.numero, idLocalidad)
+            Backend.insertDomicilioSinPiso(ubicacion.calle, ubicacion.numero, idLocalidad2)
               .then(() => {
                 Backend.getUltimoDomicilio().then((items) => {
                   setIdDomicilio(items[0].id),
@@ -312,6 +342,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 0.25,
     color: 'white',
+  },
+  text2: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'black',
   },
   botonImage: {
     backgroundColor: 'black',

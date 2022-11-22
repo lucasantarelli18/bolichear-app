@@ -113,7 +113,7 @@ export function LocalesScreen({ route, navigation }) {
           <View>
             <Text style={styles.info}>
               {" "}
-              Direccion: {element.Domicilio.calle} {element.Domicilio.numero}
+              Direccion: {element.Domicilio.calle} {element.Domicilio.numero}, {element.Domicilio.Localidad.nombre}
             </Text>
           </View>
 
