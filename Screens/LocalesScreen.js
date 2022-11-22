@@ -177,13 +177,13 @@ export function LocalesScreen({ route, navigation }) {
               style={styles.button4}
               onPress={() => {
               navigation.navigate("EditarLocal", {
-                latitud: latitud,
-                longitud: longitud,
+                latitud: element.latitud,
+                longitud: element.longitud,
                 idLocalidad: idLocalidad,
-                localidad: localidad,
+                localidad: element.Domicilio.Localidad.nombre,
                 idDueno: idDueno,
-                calle: calle,
-                numero: numero,
+                calle: element.Domicilio.calle,
+                numero: element.Domicilio.numero,
                 nombre: element.nombre,
                 idLocal: element.id,
                 idDomic: element.Domicilio.id, 
