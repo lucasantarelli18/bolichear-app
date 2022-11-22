@@ -21,6 +21,7 @@ export function LocalesScreen({ route, navigation }) {
 
   //traer del login
   const idDueno = 5;
+
   //console.log("Buenas, esta es la calle y el numero", calle, numero, idLocalidad, localidad)
   //traer del home
   //  const lat = -34.921296;
@@ -39,6 +40,8 @@ export function LocalesScreen({ route, navigation }) {
   const [visible, setVisible] = React.useState(false);
   const [idLocal, setIdLocal] = React.useState([]);
   const [image, setImage] = React.useState(null);
+
+  const [cambio, setCambio] = React.useState(false);
 
   React.useEffect(() => {
     //Tomo los locales del user
@@ -86,6 +89,9 @@ export function LocalesScreen({ route, navigation }) {
     });
   }
 
+  const changeCambio = (estado) => {
+    setCambio(estado)
+  } 
 
   const list = () => {
     return locales.map((element) => {
@@ -173,14 +179,15 @@ export function LocalesScreen({ route, navigation }) {
               navigation.navigate("EditarLocal", {
                 latitud: latitud,
                 longitud: longitud,
-                localidad: localidad,
                 idLocalidad: idLocalidad,
+                localidad: localidad,
                 idDueno: idDueno,
                 calle: calle,
                 numero: numero,
                 nombre: element.nombre,
                 idLocal: element.id,
-                idDomic: element.Domicilio.id
+                idDomic: element.Domicilio.id, 
+                imagen: element.image
               });
               }}
             >

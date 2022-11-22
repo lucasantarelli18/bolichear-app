@@ -8,20 +8,20 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 export function EditarLocalScreen({ route, navigation: { goBack } }) {
 
-  const { idLocal, latitud, longitud, localidad, idLocalidad, idDueno, calle, numero, nombre, idDomic } = route.params;
+  const { idLocal, latitud, longitud, idLocalidad, localidad, idDueno, calle, numero, nombre, idDomic, imagen } = route.params;
 
   const [modificaNombre, setModificaNombre] = React.useState(false);
   const [modificaDomicilio, setModificaDomicilio] = React.useState(false);
+  const [modificaFoto, setModificaFoto] = React.useState(false);
 
   //  const [openLoc, setOpenLoc] = React.useState(false);
   //  const [valueLoc, setValueLoc] = React.useState(null); //para el picker
   //  const [localidadSeleccionada, setLocalidadSeleccionada] = React.useState([]);
   const [nombreLocal, setNombreLocal] = React.useState(nombre.toUpperCase());
   const [idDomicilio, setIdDomicilio] = React.useState(idDomic);
-  const [image, setImage] = React.useState(null);
+  const [image, setImage] = React.useState(imagen);
   const [isImage, setIsImage] = React.useState(false);
 
-  //console.log("Buenas, esta es la calle y el numero", latitud, longitud, idLocalidad, idDueno, calle, numero, localidad)
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -34,6 +34,7 @@ export function EditarLocalScreen({ route, navigation: { goBack } }) {
     if (!result.cancelled) {
       setImage(result.uri);
       setIsImage(true);
+      setModificaFoto(true);
       Backend.insertFoto(result.uri)
         .then((items) => { items })
     }
@@ -67,11 +68,11 @@ export function EditarLocalScreen({ route, navigation: { goBack } }) {
 
         <Text style={styles.titulos}>Foto del Local</Text>
         <View style={styles.container2}>
-          {!isImage ?
+          { image == null ?
             <Image
-              source={require("../assets/camara.jpg")}
-              style={{ margin: 15, width: 350, height: 200, borderRadius: 12, }}
-            /> :
+                source={require("../assets/camara.jpg")}
+                style={{ margin: 15, width: "90%", height: 250, borderRadius: 12, }}
+              /> :
             <Image
               source={{ uri: image }}
               style={{ margin: 15, width: 350, height: 200, borderRadius: 12, }} />}
@@ -90,16 +91,16 @@ export function EditarLocalScreen({ route, navigation: { goBack } }) {
                 Backend.getUltimoDomicilio().then((items) => {
                   setIdDomicilio(items[0].id),
                     console.log(items[0].id),
-                    Backend.updateLocal(idLocal, nombreLocal, parseFloat(latitud), parseFloat(longitud), parseInt(idDueno), parseInt(items[0].id), image)
+                    Backend.updateLocal(idLocal, nombreLocal, parseInt(items[0].id), parseFloat(latitud), parseFloat(longitud), image)
                       .then((items) => { });
                 });
               })
             /*Backend.insertLocal(nombreLocal, parseFloat(latitud), parseFloat(longitud), parseInt(idDueno), parseInt(idDomicilio))
               .then((items) => { })*/
             goBack();
-          } else if (modificaNombre) {
+          } else if (modificaNombre || modificaFoto) {
             //console.log(idLocal + " " + nombreLocal + " " + idDomicilio + " " + latitud + " " + longitud)
-            Backend.updateLocal(idLocal, nombreLocal, idDomicilio, parseFloat(latitud), parseFloat(longitud))
+            Backend.updateLocal(idLocal, nombreLocal, idDomicilio, parseFloat(latitud), parseFloat(longitud), image)
             .then((items) => {
               //console.log(items)
               Alert.alert('Datos modificados con éxito!!') 
