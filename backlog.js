@@ -374,6 +374,17 @@ export const updatePromocion = async (nombrePromo, descrip, fHInicio, fHFin, idL
     .eq('id', idLoc)
 }
 
+export const updateLocal = async (idLocal, nombre, idDomicilio, latitud, longitud) => {
+  const { data, error } = await supabase
+    .from('Local')
+    .update({
+      nombre: nombre,
+      idDomicilio: idDomicilio,
+      latitud: latitud,
+      longitud: longitud
+    })
+    .eq('id', idLocal)
+}
 
 
 //DELETES

@@ -8,20 +8,20 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 export function EditarLocalScreen({ route, navigation: { goBack } }) {
 
-  const { latitud, longitud, localidad, idLocalidad, idDueno, calle, numero } = route.params;
+  const { idLocal, latitud, longitud, localidad, idLocalidad, idDueno, calle, numero, nombre, idDomic } = route.params;
 
-  const [faltaIngresoNombre, setFaltaIngresoNombre] = React.useState(true);
-  //  const [faltaIngresoLoc, setFaltaIngresoLoc] = React.useState(true);
+  const [modificaNombre, setModificaNombre] = React.useState(false);
+  const [modificaDomicilio, setModificaDomicilio] = React.useState(false);
 
   //  const [openLoc, setOpenLoc] = React.useState(false);
   //  const [valueLoc, setValueLoc] = React.useState(null); //para el picker
   //  const [localidadSeleccionada, setLocalidadSeleccionada] = React.useState([]);
-  const [nombreLocal, setNombreLocal] = React.useState([]);
-  const [idDomicilio, setIdDomicilio] = React.useState([]);
+  const [nombreLocal, setNombreLocal] = React.useState(nombre.toUpperCase());
+  const [idDomicilio, setIdDomicilio] = React.useState(idDomic);
   const [image, setImage] = React.useState(null);
   const [isImage, setIsImage] = React.useState(false);
-  //console.log("Buenas, esta es la calle y el numero", latitud, longitud, idLocalidad, idDueno, calle, numero, localidad)
 
+  //console.log("Buenas, esta es la calle y el numero", latitud, longitud, idLocalidad, idDueno, calle, numero, localidad)
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -39,8 +39,6 @@ export function EditarLocalScreen({ route, navigation: { goBack } }) {
     }
   };
 
-
-
   return (
     <>
       <ScrollView style={styles.container}>
@@ -48,11 +46,12 @@ export function EditarLocalScreen({ route, navigation: { goBack } }) {
         <View style={styles.container2}>
           <TextInput
             style={styles.input}
+            defaultValue={nombreLocal}
             onChangeText={text => {
               setNombreLocal(text),
-                setFaltaIngresoNombre(false)
+                setModificaNombre(true)
             }}
-            placeholder="Ingrese nombre del local"
+            
           />
         </View>
 
@@ -85,21 +84,29 @@ export function EditarLocalScreen({ route, navigation: { goBack } }) {
 
 
         <Pressable onPress={() => {
-          if (faltaIngresoNombre/*||faltaIngresoLoc*/) {
-            Alert.alert('Complete los datos')
-          } else {
+          if (modificaDomicilio) {
             Backend.insertDomicilioSinPiso(calle, numero, idLocalidad)
               .then(() => {
                 Backend.getUltimoDomicilio().then((items) => {
                   setIdDomicilio(items[0].id),
                     console.log(items[0].id),
-                    Backend.updateLocal(nombreLocal, parseFloat(latitud), parseFloat(longitud), parseInt(idDueno), parseInt(items[0].id), image)
+                    Backend.updateLocal(idLocal, nombreLocal, parseFloat(latitud), parseFloat(longitud), parseInt(idDueno), parseInt(items[0].id), image)
                       .then((items) => { });
                 });
               })
             /*Backend.insertLocal(nombreLocal, parseFloat(latitud), parseFloat(longitud), parseInt(idDueno), parseInt(idDomicilio))
               .then((items) => { })*/
             goBack();
+          } else if (modificaNombre) {
+            //console.log(idLocal + " " + nombreLocal + " " + idDomicilio + " " + latitud + " " + longitud)
+            Backend.updateLocal(idLocal, nombreLocal, idDomicilio, parseFloat(latitud), parseFloat(longitud))
+            .then((items) => {
+              //console.log(items)
+              Alert.alert('Datos modificados con éxito!!') 
+            });
+            goBack();
+          } else {
+            Alert.alert('No se modificó ningún dato')
           }
 
         }}>

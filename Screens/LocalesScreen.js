@@ -21,7 +21,7 @@ export function LocalesScreen({ route, navigation }) {
 
   //traer del login
   const idDueno = 5;
-  console.log("Buenas, esta es la calle y el numero", calle, numero, idLocalidad, localidad)
+  //console.log("Buenas, esta es la calle y el numero", calle, numero, idLocalidad, localidad)
   //traer del home
   //  const lat = -34.921296;
   //  const long = -57.954208;
@@ -177,7 +177,10 @@ export function LocalesScreen({ route, navigation }) {
                 idLocalidad: idLocalidad,
                 idDueno: idDueno,
                 calle: calle,
-                numero: numero
+                numero: numero,
+                nombre: element.nombre,
+                idLocal: element.id,
+                idDomic: element.Domicilio.id
               });
               }}
             >
