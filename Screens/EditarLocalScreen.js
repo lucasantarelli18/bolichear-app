@@ -110,6 +110,8 @@ const [ubicacion, setUbicacion] = React.useState({
               })
             }
 
+            //console.log(ubicacion)
+
             if (ubicacion.localidad == "Berisso") {
               setIdLocalidad2(5)
             } else if (ubicacion.localidad == "La Plata") {
@@ -125,6 +127,8 @@ const [ubicacion, setUbicacion] = React.useState({
             } else if (ubicacion.localidad == "Villa Gessel") {
               setIdLocalidad2(4)
             }
+
+            //console.log(idLocalidad2)
 
           }}
           query={{
@@ -183,15 +187,15 @@ const [ubicacion, setUbicacion] = React.useState({
           }}
         />
 
-        {(() => {
-              if (ubicacion.cambia){
+        {/*(() => {
+              if (!ubicacion.cambia){
                   return (
                       <Text style={styles.text2}>Domicilio cargado!</Text>
                   )
               }
               
               return null;
-        })()}
+        })()*/}
         {/*{ ubicacion.cambia ? <Text style={styles.text}>Domicilio cargado</Text> : }*/}
 
         </View>
@@ -232,6 +236,7 @@ const [ubicacion, setUbicacion] = React.useState({
             /*Backend.insertLocal(nombreLocal, parseFloat(latitud), parseFloat(longitud), parseInt(idDueno), parseInt(idDomicilio))
               .then((items) => { })*/
             goBack();
+            goBack();
           } else if (modificaNombre || modificaFoto) {
             //console.log(idLocal + " " + nombreLocal + " " + idDomicilio + " " + latitud + " " + longitud)
             Backend.updateLocal(idLocal, nombreLocal, idDomicilio, parseFloat(latitud), parseFloat(longitud), image)
@@ -240,8 +245,8 @@ const [ubicacion, setUbicacion] = React.useState({
               Alert.alert('Datos modificados con éxito!!') 
             });
             goBack();
+            goBack();
           } else {
-            console.log(ubicacion)
             Alert.alert('No se modificó ningún dato')
           }
 

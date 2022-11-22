@@ -21,7 +21,18 @@ export function AltaLocalScreen({ route, navigation: { goBack } }) {
   const [idDomicilio, setIdDomicilio] = React.useState([]);
   const [image, setImage] = React.useState(null);
   const [isImage, setIsImage] = React.useState(false);
-  console.log("Buenas, esta es la calle y el numero", latitud, longitud, idLocalidad, idDueno, calle, numero, localidad)
+  const [idLocalidad2, setIdLocalidad2] = React.useState(idLocalidad);
+  
+  const [ubicacion, setUbicacion] = React.useState({
+    calle: "Av. del Petroleo Argentino",
+    numero: 417,
+    localidad: "Berisso",
+    latitude: -34.904625,
+    longitude: -57.925738,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+    cambia: false
+  });
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -44,7 +55,7 @@ export function AltaLocalScreen({ route, navigation: { goBack } }) {
 
   return (
     <>
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} keyboardShouldPersistTaps='handled'>
         <Text style={styles.titulos}>Nombre del Local</Text>
         <View style={styles.container2}>
           <TextInput
@@ -58,6 +69,7 @@ export function AltaLocalScreen({ route, navigation: { goBack } }) {
         </View>
 
         <Text style={styles.titulos}>Ubicación del Local</Text>
+        {/*
         <View style={styles.container2}>
           <TextInput
             style={styles.input}
@@ -66,6 +78,129 @@ export function AltaLocalScreen({ route, navigation: { goBack } }) {
             disabled={true}
           />
         </View>
+        */}
+
+        <View style={styles.container2}>
+          <GooglePlacesAutocomplete
+          placeholder={calle + ' ' + numero + ', ' + localidad}
+          fetchDetails={true}
+          onPress={(data, details = null) => {
+            if (details.address_components[0].long_name == "AGN") {
+              setModificaDomicilio(true)
+              setUbicacion({
+                calle: details.address_components[2].long_name,
+                numero: details.address_components[1].long_name,
+                localidad: details.address_components[3].long_name,
+                latitude: details.geometry.location.lat,
+                longitude: details.geometry.location.lng,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+                cambia: true
+              })
+            } else {
+              setModificaDomicilio(true)
+              setUbicacion({
+                calle: details.address_components[1].long_name,
+                numero: details.address_components[0].long_name,
+                localidad: details.address_components[2].long_name,
+                latitude: details.geometry.location.lat,
+                longitude: details.geometry.location.lng,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+                cambia: true
+              })
+            }
+
+            //console.log(ubicacion)
+
+            if (ubicacion.localidad == "Berisso") {
+              setIdLocalidad2(5)
+            } else if (ubicacion.localidad == "La Plata") {
+              setIdLocalidad2(1)
+            } else if (ubicacion.localidad == "Tolosa") {
+              setIdLocalidad2(9)
+            } else if (ubicacion.localidad == "Los Hornos") {
+              setIdLocalidad2(8)
+            } else if (ubicacion.localidad == "Quilmes") {
+              setIdLocalidad2(2)
+            } else if (ubicacion.localidad == "Bernal Oeste") {
+              setIdLocalidad2(3)
+            } else if (ubicacion.localidad == "Villa Gessel") {
+              setIdLocalidad2(4)
+            }
+
+            //console.log(idLocalidad2)
+
+          }}
+          query={{
+            key: process.env.GOOGLE_MAPS_KEY,
+            language: 'es',
+            components: "country:ar",
+          }}
+          styles={{
+            container: {
+              flex: 0,
+            },
+            textInputContainer: {
+              height: 39,
+              width:"80%",
+              marginBottom: 8,
+              marginTop: 8,
+            },
+            textInput: {
+              padding: 10,
+              width: "80%",
+              heigt: 10,
+              borderRadius: 30,
+              backgroundColor: '#f1f1f1',
+              fontFamily: "Roboto-Medium",
+              paddingStart: 30,
+              fontSize: 16,
+              elevation: 10,
+            },
+            poweredContainer: {
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderBottomRightRadius: 5,
+              borderBottomLeftRadius: 5,
+              borderColor: '#c8c7cc',
+              borderTopWidth: 0.5,
+              //placeholderTextColor: 'white',
+            },
+            loader: {
+              flexDirection: 'row',
+              justifyContent: 'center',
+              height: 20,
+            },
+            row: {
+              zIndex: 1,
+              backgroundColor: '#FFFFFF',
+              padding: 10,
+              height: 40,
+              flexDirection: 'row',
+            },
+            separator: {
+              position: 'absolute',
+              zIndex: 1,
+              height: 0.2,
+              backgroundColor: '#c8c7cc',
+            },
+          }}
+        />
+
+        {/*(() => {
+              if (!ubicacion.cambia){
+                  return (
+                      <Text style={styles.text2}>Domicilio cargado!</Text>
+                  )
+              }
+              
+              return null;
+        })()*/}
+        {/*{ ubicacion.cambia ? <Text style={styles.text}>Domicilio cargado</Text> : }*/}
+
+        </View>
+
 
         <Text style={styles.titulos}>Foto del Local</Text>
         <View style={styles.container2}>
@@ -89,17 +224,18 @@ export function AltaLocalScreen({ route, navigation: { goBack } }) {
           if (faltaIngresoNombre/*||faltaIngresoLoc*/) {
             Alert.alert('Complete los datos')
           } else {
-            Backend.insertDomicilioSinPiso(calle, numero, idLocalidad)
+            Backend.insertDomicilioSinPiso(calle, numero, idLocalidad2)
               .then(() => {
                 Backend.getUltimoDomicilio().then((items) => {
                   setIdDomicilio(items[0].id),
                     console.log(items[0].id),
-                    Backend.insertLocal(nombreLocal, parseFloat(latitud), parseFloat(longitud), parseInt(idDueno), parseInt(items[0].id), image)
+                    Backend.insertLocal(nombreLocal, parseFloat(ubicacion.latitude), parseFloat(ubicacion.longitude), parseInt(idDueno), parseInt(items[0].id), image)
                       .then((items) => { });
                 });
               })
             /*Backend.insertLocal(nombreLocal, parseFloat(latitud), parseFloat(longitud), parseInt(idDueno), parseInt(idDomicilio))
               .then((items) => { })*/
+            goBack();
             goBack();
           }
 
