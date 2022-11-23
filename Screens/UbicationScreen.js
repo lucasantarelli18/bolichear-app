@@ -190,20 +190,49 @@ export function UbicationScreen({ navigation }) {
   } else {
     return (
       <View style={styles.containerjuegos}>
-        <View style={styles.iconoDivisor2}>
+        <View style={{ marginTop: 35, alignItems: 'center' }}>
           <Text style={styles.title}> JUEGOS!</Text>
         </View>
-        <View style={styles.iconoDivisor}>
-          <Pressable style={styles.icono} onPress={onPressRandomDrink}>
-            <Text style={styles.text}>Random Drink</Text>
-          </Pressable>
-          <Pressable style={styles.icono} onPress={onPressNumSym}>
-            <Text style={styles.text}>N&S</Text>
-          </Pressable>
-        </View>
-        <View>
+        <View style={{ marginTop: 50 }}>
+          <View style={{ alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+              <View>
+                <Text style={{
+                  width: 200, textAlign: 'center', fontWeight: "bold",
+                  fontSize: 25,
+                  margin: 5
+                }}>Random Drink</Text>
+              </View>
+              <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+            </View>
+            <Pressable style={styles.icono} onPress={onPressRandomDrink}>
+              <Image style={styles.image} source={require("../assets/randrink.jpg")} />
+            </Pressable>
+          </View>
+          <View style={{ alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+              <View>
+                <Text style={{
+                  width: 200, textAlign: 'center', fontWeight: "bold",
+                  fontSize: 25,
+                  margin: 5
+                }}>Number & Symbol</Text>
+              </View>
+              <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+            </View>
+            <Pressable style={styles.icono} onPress={onPressNumSym}>
+              <Image style={styles.image} source={require("../assets/nands.jpg")} />
+            </Pressable>
+            <StatusBar style="white" />
+          </View></View>
 
+
+
+        <View>
         </View>
+
         <View style={styles.tabCambio}>
           <Pressable style={styles.tabPress} onPress={() => changeCambio(true)}>
             <Text>Boliches</Text>
@@ -225,11 +254,13 @@ const styles = StyleSheet.create({
   },
   icono: {
     borderWidth: 2,
-    width: '30%',
+    width: 200,
+    height: 150,
     borderRadius: 20,
+    marginVertical: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'orange',
+    borderColor: '#A32934'
 
   },
   iconoDivisor: {
@@ -244,7 +275,8 @@ const styles = StyleSheet.create({
     flex: 0.18,
     width: '100%',
     //height: 20,
-    marginTop: 15,
+    marginTop: 30,
+    marginBottom: 30,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -373,5 +405,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#d0d0d0',
     borderRadius: 5,
     height: 5,
+  },
+  image: {
+    height: "100%",
+    width: "100%",
+    borderRadius: 20,
+    bordercolor: 'black',
+    borderWidth: 10
   },
 });

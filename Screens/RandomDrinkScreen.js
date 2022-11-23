@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 
 
+
 export function RandomDrinkScreen({ navigation }) {
   const [number, setNumber] = React.useState(1);
   const [bebida, setBebida] = React.useState('agua');
@@ -37,17 +38,22 @@ export function RandomDrinkScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>REGLAS</Text>
       <View style={styles.innerContainer2}>
-        <Text style={styles.title}>REGLAS</Text>
         <Text style={styles.text2}>1. Prepara las siguientes bebidas:</Text>
-        <Text style={styles.text3}>Vodka - Fernet - Ron - Vino - Birra</Text>
+        <View style={styles.innerContainer3}>
+          <Text style={styles.text3}>Vodka - Fernet - Ron - Vino - Birra</Text>
+        </View>
         <Text style={styles.text3}>2. Establezcan los turnos</Text>
         <Text style={styles.text2}>3. A Probar suerte y TOMAR!</Text>
       </View>
       <View style={styles.innerContainer}>
         <View style={styles.numberContainer}>
-          <Text style={styles.text}>Toma {number} tragos de {bebida}</Text>
+          <Text style={styles.text}>Toma {number} trago/s de</Text>
+          <Text style={styles.text}>{bebida}</Text>
         </View>
+      </View>
+      <View style={styles.innerContainer4}>
         <Pressable onPress={getRandomNumber}>
           <LinearGradient
             // Button Linear Gradient
@@ -55,11 +61,11 @@ export function RandomDrinkScreen({ navigation }) {
             start={{ x: 1, y: 0 }}
             end={{ x: 0, y: 1 }}
             style={styles.button}>
-            <Text style={styles.text}>A TOMAR!</Text>
+            <Text style={styles.text4}>A TOMAR!</Text>
           </LinearGradient>
-        </Pressable>
+        </Pressable></View>
 
-      </View>
+      <StatusBar style="white" />
     </View>
   );
 }
@@ -67,20 +73,29 @@ export function RandomDrinkScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //justifyContent: 'center',
+    backgroundColor: '#ebe6d9',
     alignItems: 'center',
   },
   innerContainer: {
     width: '90 %',
     height: '30%',
     borderRadius: 30,
-    backgroundColor: 'red',
+    backgroundColor: '#C2454A',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
   },
   innerContainer2: {
     width: '80 %',
+    justifyContent: 'center',
+  },
+  innerContainer3: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  innerContainer4: {
+    width: '80%',
+    marginTop: 50,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -89,7 +104,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
-    width: '50%',
+    width: '80%',
     height: 50,
     borderRadius: 30,
     padding: 10,
@@ -97,23 +112,28 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: 16,
+    fontSize: 35,
+    fontWeight: "bold",
+    color: "white",
+  },
+  text4: {
+    fontSize: 18,
     fontWeight: "bold",
     color: "white",
   },
   text2: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
   },
   text3: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 6,
+    marginVertical: 6,
   },
   title: {
-    fontSize: 25,
+    fontSize: 30,
     fontWeight: "bold",
-    color: "red",
+    color: "#A32934",
     marginBottom: 15,
     marginTop: 40,
   },
