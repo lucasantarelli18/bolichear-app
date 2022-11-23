@@ -7,23 +7,24 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 //import DropDownPicker from 'react-native-dropdown-picker';
 //import Constants from 'expo-constants';
 
-export function AltaLocalScreen({ route, navigation: { goBack } }) {
+export function EditarLocalScreen({ route, navigation: { goBack } }) {
 
-  const { latitud, longitud, localidad, idLocalidad, idDueno, calle, numero } = route.params;
+  const { idLocal, latitud, longitud, idLocalidad, localidad, idDueno, calle, numero, nombre, idDomic, imagen } = route.params;
 
-  const [faltaIngresoNombre, setFaltaIngresoNombre] = React.useState(true);
-  //  const [faltaIngresoLoc, setFaltaIngresoLoc] = React.useState(true);
+  const [modificaNombre, setModificaNombre] = React.useState(false);
+  const [modificaDomicilio, setModificaDomicilio] = React.useState(false);
+  const [modificaFoto, setModificaFoto] = React.useState(false);
 
   //  const [openLoc, setOpenLoc] = React.useState(false);
   //  const [valueLoc, setValueLoc] = React.useState(null); //para el picker
   //  const [localidadSeleccionada, setLocalidadSeleccionada] = React.useState([]);
-  const [nombreLocal, setNombreLocal] = React.useState([]);
-  const [idDomicilio, setIdDomicilio] = React.useState([]);
-  const [image, setImage] = React.useState(null);
-  const [isImage, setIsImage] = React.useState(false);
+  const [nombreLocal, setNombreLocal] = React.useState(nombre.toUpperCase());
+  const [idDomicilio, setIdDomicilio] = React.useState(idDomic);
   const [idLocalidad2, setIdLocalidad2] = React.useState(idLocalidad);
-  
-  const [ubicacion, setUbicacion] = React.useState({
+  const [image, setImage] = React.useState(imagen);
+  const [isImage, setIsImage] = React.useState(false);
+
+const [ubicacion, setUbicacion] = React.useState({
     calle: "Av. del Petroleo Argentino",
     numero: 417,
     localidad: "Berisso",
@@ -46,12 +47,11 @@ export function AltaLocalScreen({ route, navigation: { goBack } }) {
     if (!result.cancelled) {
       setImage(result.uri);
       setIsImage(true);
+      setModificaFoto(true);
       Backend.insertFoto(result.uri)
         .then((items) => { items })
     }
   };
-
-
 
   return (
     <>
@@ -60,11 +60,12 @@ export function AltaLocalScreen({ route, navigation: { goBack } }) {
         <View style={styles.container2}>
           <TextInput
             style={styles.input}
+            defaultValue={nombreLocal}
             onChangeText={text => {
               setNombreLocal(text),
-                setFaltaIngresoNombre(false)
+                setModificaNombre(true)
             }}
-            placeholder="Ingrese nombre del local"
+            
           />
         </View>
 
@@ -73,13 +74,11 @@ export function AltaLocalScreen({ route, navigation: { goBack } }) {
         <View style={styles.container2}>
           <TextInput
             style={styles.input}
-            editable={false}
-            placeholder={calle + ' ' + numero + ', ' + localidad}
+            defaultValue={calle + ' ' + numero + ', ' + localidad}
             disabled={true}
           />
         </View>
         */}
-
         <View style={styles.container2}>
           <GooglePlacesAutocomplete
           placeholder={calle + ' ' + numero + ', ' + localidad}
@@ -204,11 +203,11 @@ export function AltaLocalScreen({ route, navigation: { goBack } }) {
 
         <Text style={styles.titulos}>Foto del Local</Text>
         <View style={styles.container2}>
-          {!isImage ?
+          { image == null ?
             <Image
-              source={require("../assets/camara.jpg")}
-              style={{ margin: 15, width: 350, height: 200, borderRadius: 12, }}
-            /> :
+                source={require("../assets/camara.jpg")}
+                style={{ margin: 15, width: "90%", height: 250, borderRadius: 12, }}
+              /> :
             <Image
               source={{ uri: image }}
               style={{ margin: 15, width: 350, height: 200, borderRadius: 12, }} />}
@@ -221,22 +220,34 @@ export function AltaLocalScreen({ route, navigation: { goBack } }) {
 
 
         <Pressable onPress={() => {
-          if (faltaIngresoNombre/*||faltaIngresoLoc*/) {
-            Alert.alert('Complete los datos')
-          } else {
-            Backend.insertDomicilioSinPiso(calle, numero, idLocalidad2)
+          if (modificaDomicilio) {
+            console.log("modifica domicilio " + modificaDomicilio)
+            Backend.insertDomicilioSinPiso(ubicacion.calle, ubicacion.numero, idLocalidad2)
               .then(() => {
                 Backend.getUltimoDomicilio().then((items) => {
                   setIdDomicilio(items[0].id),
                     console.log(items[0].id),
-                    Backend.insertLocal(nombreLocal, parseFloat(ubicacion.latitude), parseFloat(ubicacion.longitude), parseInt(idDueno), parseInt(items[0].id), image)
-                      .then((items) => { });
+                    Backend.updateLocal(idLocal, nombreLocal, parseInt(items[0].id), parseFloat(ubicacion.latitude), parseFloat(ubicacion.longitude), image)
+                      .then((items) => {
+              Alert.alert('Datos modificados con éxito!!') 
+                       });
                 });
               })
             /*Backend.insertLocal(nombreLocal, parseFloat(latitud), parseFloat(longitud), parseInt(idDueno), parseInt(idDomicilio))
               .then((items) => { })*/
             goBack();
             goBack();
+          } else if (modificaNombre || modificaFoto) {
+            //console.log(idLocal + " " + nombreLocal + " " + idDomicilio + " " + latitud + " " + longitud)
+            Backend.updateLocal(idLocal, nombreLocal, idDomicilio, parseFloat(latitud), parseFloat(longitud), image)
+            .then((items) => {
+              //console.log(items)
+              Alert.alert('Datos modificados con éxito!!') 
+            });
+            goBack();
+            goBack();
+          } else {
+            Alert.alert('No se modificó ningún dato')
           }
 
         }}>
@@ -246,7 +257,7 @@ export function AltaLocalScreen({ route, navigation: { goBack } }) {
             start={{ x: 1, y: 0 }}
             end={{ x: 0, y: 1 }}
             style={styles.button}>
-            <Text style={styles.text}>DAR DE ALTA</Text>
+            <Text style={styles.text}>GUARDAR CAMBIOS</Text>
           </LinearGradient>
 
         </Pressable>
@@ -336,6 +347,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 0.25,
     color: 'white',
+  },
+  text2: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'black',
   },
   botonImage: {
     backgroundColor: 'black',

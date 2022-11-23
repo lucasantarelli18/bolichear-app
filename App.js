@@ -11,6 +11,7 @@ import { UbicationScreen } from './Screens/UbicationScreen';
 import { DetailsScreen } from './Screens/DetailsScreen';
 import { LocalesScreen } from './Screens/LocalesScreen';
 import { AltaLocalScreen } from './Screens/AltaLocalScreen';
+import { EditarLocalScreen } from './Screens/EditarLocalScreen';
 import { VerInfoScreen } from "./Screens/VerInfoScreen";
 import { EventosScreen } from "./Screens/EventosScreen";
 import { PromocionesScreen } from './Screens/PromocionesScreen';
@@ -179,6 +180,11 @@ export default function App({ navigation }) {
               }} />
               <Stack.Screen name="AltaLocal" component={AltaLocalScreen} options={{
                 title: 'Carga tu Local', headerTitleAlign: "center",
+                headerTitleStyle: { color: 'black' },
+                headerStyle: { backgroundColor: '#ebe6d9', justifyContent: "center", fontColor: 'white' }
+              }} />
+              <Stack.Screen name="EditarLocal" component={EditarLocalScreen} options={{
+                title: 'Edita tu Local', headerTitleAlign: "center",
                 headerTitleStyle: { color: 'black' },
                 headerStyle: { backgroundColor: '#ebe6d9', justifyContent: "center", fontColor: 'white' }
               }} />

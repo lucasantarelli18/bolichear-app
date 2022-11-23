@@ -9,7 +9,10 @@ export const getLocalesXUser = async (idDueno) => {
     .select(`
     *,
     Domicilio (
-      *
+      *,
+      Localidad( 
+        *
+      )
     )
   `)
     .eq('idDueño', idDueno)
@@ -374,6 +377,18 @@ export const updatePromocion = async (nombrePromo, descrip, fHInicio, fHFin, idL
     .eq('id', idLoc)
 }
 
+export const updateLocal = async (idLocal, nombre, idDomicilio, latitud, longitud, foto) => {
+  const { data, error } = await supabase
+    .from('Local')
+    .update({
+      nombre: nombre,
+      idDomicilio: idDomicilio,
+      latitud: latitud,
+      longitud: longitud,
+      image: foto
+    })
+    .eq('id', idLocal)
+}
 
 
 //DELETES

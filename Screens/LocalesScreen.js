@@ -21,7 +21,8 @@ export function LocalesScreen({ route, navigation }) {
 
   //traer del login
   const idDueno = 5;
-  console.log("Buenas, esta es la calle y el numero", calle, numero, idLocalidad, localidad)
+
+  //console.log("Buenas, esta es la calle y el numero", calle, numero, idLocalidad, localidad)
   //traer del home
   //  const lat = -34.921296;
   //  const long = -57.954208;
@@ -39,6 +40,8 @@ export function LocalesScreen({ route, navigation }) {
   const [visible, setVisible] = React.useState(false);
   const [idLocal, setIdLocal] = React.useState([]);
   const [image, setImage] = React.useState(null);
+
+  const [cambio, setCambio] = React.useState(false);
 
   React.useEffect(() => {
     //Tomo los locales del user
@@ -86,10 +89,13 @@ export function LocalesScreen({ route, navigation }) {
     });
   }
 
+  const changeCambio = (estado) => {
+    setCambio(estado)
+  } 
 
   const list = () => {
     return locales.map((element) => {
-      console.log("LISTAAAAAAAAA LOCAL", element);
+      //console.log("LISTAAAAAAAAA LOCAL", element);
       return (
         <ScrollView style={styles.container2}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -107,7 +113,7 @@ export function LocalesScreen({ route, navigation }) {
           <View>
             <Text style={styles.info}>
               {" "}
-              Direccion: {element.Domicilio.calle} {element.Domicilio.numero}
+              Direccion: {element.Domicilio.calle} {element.Domicilio.numero}, {element.Domicilio.Localidad.nombre}
             </Text>
           </View>
 
@@ -166,15 +172,45 @@ export function LocalesScreen({ route, navigation }) {
               <Text style={styles.text}>VER INFO</Text>
             </Pressable>
           </View>
-          <View style={{ marginTop: "35%", width: "100%", alignItems: 'center' }}>
+          <View style={{ marginTop: "35%", width: "100%", flex: 1, justifyContent: "space-between", alignItems: 'center', flexDirection: 'row' }}>
+            <Pressable
+              style={styles.button4}
+              onPress={() => {
+              navigation.navigate("EditarLocal", {
+                latitud: element.latitud,
+                longitud: element.longitud,
+                idLocalidad: idLocalidad,
+                localidad: element.Domicilio.Localidad.nombre,
+                idDueno: idDueno,
+                calle: element.Domicilio.calle,
+                numero: element.Domicilio.numero,
+                nombre: element.nombre,
+                idLocal: element.id,
+                idDomic: element.Domicilio.id, 
+                imagen: element.image
+              });
+              }}
+            >
+              <Text style={styles.text}>EDITAR</Text>
+            </Pressable>
             <Pressable
               style={styles.button3}
-              onPress={() =>
-                Backend.deleteLocal(element.id).then((items) => {
-                  console.log("Borrando local: ", element.id);
-                  setCant(false)
-                })
-              }
+              onPress={() => Alert.alert(
+                        "Eliminar",
+                        "¿Desea eliminar el local?",
+                        [
+                          {
+                            text: "Cancelar",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel"
+                          },
+                          {
+                            text: "Aceptar",
+                            onPress: () => Backend.deleteLocal(element.id).then((items) => Alert.alert("Local eliminado con éxito"), setCant(false)
+                            )
+                          }
+                        ]
+                      )}
             >
               <Text style={styles.text}>BORRAR</Text>
             </Pressable></View>
