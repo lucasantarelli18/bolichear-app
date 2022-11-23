@@ -19,7 +19,7 @@ export function HomeScreen({ route, navigation }) {
   React.useEffect(() => {
     Backend.getLocalxDomicilio()
       .then((items) => {
-        //        console.log(items)
+        //console.log(items)
 
         const arr = [];
         for (const i in items) {
@@ -41,6 +41,7 @@ export function HomeScreen({ route, navigation }) {
         arr.sort(function (a, b) {
           return a.dist - b.dist
         })
+        //console.log(arr)
         setLocales(arr)
       })
     Backend.getLocalidadXNombre(localidad).then((items) => {

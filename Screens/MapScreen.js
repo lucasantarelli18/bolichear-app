@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from "react";
 import * as Backend from '../backlog';
 import { Text, View, Button, ScrollView, StyleSheet, Alert, Image, TextInput, Pressable, ImageBackground } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -10,13 +11,15 @@ import TabScreen from './TabScreen';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Checkbox } from 'react-native-paper';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
+import DropDownPicker from "react-native-dropdown-picker";
 
 export function MapScreen({ route, navigation }) {
   const [locales, setLocales] = React.useState([]);
+  const [localesFiltrados, setLocalesFiltrados] = React.useState([]);
 
   const { calle, numero, localidad, latitud, longitud, rango } = route.params;
 
-  console.log("Buenas, esta es la calle y el numero", calle, numero, localidad)
+  //console.log("Buenas, esta es la calle y el numero", calle, numero, localidad)
 
   const [origin, setOrigin] = React.useState({
     latitude: route.params.latitud,
@@ -29,15 +32,41 @@ export function MapScreen({ route, navigation }) {
   });
 
   const [cambio, setCambio] = React.useState(true);
+  const [filtrar, setFiltrar] = React.useState(0);
   const [evento, setEvento] = React.useState([]);
   const [tipoEvento, setTipoEvento] = React.useState([]);
   const [idLocalidad, setIdLocalidad] = React.useState([]);
-  const [checked1, setChecked1] = React.useState(false);
-  const [checked2, setChecked2] = React.useState(false);
-  const [checked3, setChecked3] = React.useState(false);
-  const [checked4, setChecked4] = React.useState(false);
-  const [checked5, setChecked5] = React.useState(false);
-
+//  const [checked1, setChecked1] = React.useState(false);
+//  const [checked2, setChecked2] = React.useState(false);
+//  const [checked3, setChecked3] = React.useState(false);
+//  const [checked4, setChecked4] = React.useState(false);
+//  const [checked5, setChecked5] = React.useState(false);
+  const [openTE, setOpenTE] = useState(false);
+  const [valueTE, setValueTE] = useState(null);
+  const [itemsTE, setItemsTE] = useState([
+    {label: "Todos", value: 0},
+    {label: "Fiesta", value: 1},
+    {label: "Show en vivo", value: 2},
+    {label: "Tematica", value: 3},
+    {label: "Noche cachengue", value: 4},
+    {label: "Noche electronica", value: 5}    
+    ]);
+/*
+  const [openTL, setOpenTL] = useState(false);
+  const [valueTL, setValueTL] = useState(null);
+  const [itemsTL, setItemsTL] = useState([
+    {label: "Todos", value: 0},
+    {label: "Boliche", value: 1},
+    {label: "Bar", value: 2}
+    ]);
+  const [openPR, setOpenPR] = useState(false);
+  const [valuePR, setValuePR] = useState(null);
+  const [itemsPR, setItemsPR] = useState([
+    {label: "Todos", value: 0},
+    {label: "Ascendente", value: 1},
+    {label: "Descendente", value: 2}
+    ]);
+*/
   const hideMenu = () => setVisible(false);
 
   const showMenu = () => setVisible(true);
@@ -57,7 +86,8 @@ export function MapScreen({ route, navigation }) {
 
           if (dist < rango) {
             //console.log("dentro del rango")
-            console.log(items[i].dist = distkm)
+            //console.log(items[i].dist = distkm)
+            //console.log(items[i])
             arr.push(items[i])
           } else {
             //console.log("fuera del rango")
@@ -82,6 +112,10 @@ export function MapScreen({ route, navigation }) {
 
   const changeCambio = (elem) => {
     setCambio(elem);
+  };
+
+  const changeFiltrar = (elem) => {
+    setFiltrar(elem);
   };
 
   /*const filtroTipoEvento = () =>{
@@ -129,7 +163,7 @@ export function MapScreen({ route, navigation }) {
   }*/
 
   const list = () => {
-    if (cambio) {
+    if (cambio && filtrar == 0) {
       return locales.map((element) => {
         return (
           <Marker tappable tooltip
@@ -152,9 +186,71 @@ export function MapScreen({ route, navigation }) {
         );
       });
 
-    } else {
+    } else if (cambio) {
+      return localesFiltrados.map((element) => {
+        return (
+          <Marker tappable tooltip
+            pinColor='gold'
+            coordinate={{ latitude: element.latitud, longitude: element.longitud, }}>
+
+
+            <Callout style={styles.cal} onPress={() => {
+              navigation.navigate("VerEventos", {
+                idLocal: element.id,
+              });
+            }}>
+              <View style={styles.bubble}>
+                <Text style={styles.name}>{element.nombre}</Text>
+              </View>
+            </Callout>
+
+
+          </Marker>
+        );
+      });
+
+    } else if (filtrar == 0) {
       return locales.map((element) => {
-        console.log(element.dist)
+        //console.log(element.dist)
+        return (
+          <Pressable
+            onPress={() => {
+              navigation.navigate("VerEventos", {
+                idLocal: element.id,
+              });
+            }}>
+            <ImageBackground
+              imageStyle={{ borderRadius: 15 }}
+              source={require("../assets/fondoLogIn.jpg")}
+              blurRadius={25}
+              style={styles.boliches}
+            >
+              <View style={styles.boliches2}>
+                <Text style={styles.titulos} key="{element.id}">
+                  {element.nombre}
+                </Text>
+              </View>
+
+              <View style={styles.boliches3}>
+                <Text style={styles.km}>Estás a {element.dist} km</Text>
+              </View>
+
+              <View style={styles.boliches4}>
+                <View>
+                  <Text style={styles.info}>
+                    {" "}
+                    Direccion: {element.Domicilio.calle} {element.Domicilio.numero}
+                  </Text>
+                  <Text style={styles.info}> Asistiran 300 personas </Text>
+                </View>
+              </View>
+            </ImageBackground>
+          </Pressable>
+        );
+      });
+    } else {
+      return localesFiltrados.map((element) => {
+        //console.log(element.dist)
         return (
           <Pressable
             onPress={() => {
@@ -235,6 +331,86 @@ export function MapScreen({ route, navigation }) {
           <Text style={styles.info}> Dirección actual: {calle} {numero} </Text>
           {/*<Text>{filtroTipoEvento()}</Text>*/}
         </View>
+
+
+{/*
+      <View style={styles.container2}>
+        <DropDownPicker
+          style={styles.input2}
+          open={openTL}
+          value={valueTL}
+          items={itemsTL}
+          setOpen={setOpenTL}
+          setValue={setValueTL}
+          setItems={setItemsTL}
+          placeholder="Tipo de local"
+        />
+      </View>
+      <View style={styles.container2}>
+        <DropDownPicker
+          style={styles.input2}
+          open={openPR}
+          value={valuePR}
+          items={itemsPR}
+          setOpen={setOpenPR}
+          setValue={setValuePR}
+          setItems={setItemsPR}
+          placeholder="Precio de entradas"
+        />
+      </View>
+*/}
+
+        <Pressable style={styles.button} onPress={() => {
+          const array = locales
+          const arrayFiltrado = []
+
+          if (valueTE == null) {
+            for (const i in array){
+              arrayFiltrado.push(array[i])
+            }
+          } else if (valueTE == 0) {
+            for (const i in array){
+            //console.log(array[i]);
+            if (array[i].Evento.length > 0) {
+              arrayFiltrado.push(array[i])
+            }}
+          } else {
+            
+              for (const i in array){
+                const tiposDeEvento = []    
+                for (const j in array[i].Evento){
+                  tiposDeEvento.push(array[i].Evento[j].idTipoEvento)
+                }
+                //console.log(tiposDeEvento)
+                if (tiposDeEvento.includes(valueTE)) {
+                  arrayFiltrado.push(array[i])
+                } 
+
+            }
+            }
+          
+          setLocalesFiltrados(arrayFiltrado)
+
+          changeFiltrar(filtrar+1)
+        } } >
+            <Text style={styles.text}>FILTRAR FIESTAS</Text>
+        </Pressable>
+
+
+      <View style={styles.container2}>
+        <DropDownPicker
+          style={styles.input2}
+          open={openTE}
+          value={valueTE}
+          items={itemsTE}
+          setOpen={setOpenTE}
+          setValue={setValueTE}
+          setItems={setItemsTE}
+          placeholder="Tipo de evento"
+        />
+      </View>
+
+
         <ScrollView style={styles.container}>{list()}</ScrollView>
 
         <Pressable style={styles.button} onPress={() => {
@@ -432,5 +608,20 @@ const styles = StyleSheet.create({
     borderBottomEndRadius: 500,
     borderBottomStartRadius: 500,
 
+  },
+    input2: {
+    padding: 7,
+    width: "80%",
+    marginTop: 10,
+    marginHorizontal: "10%",
+    alignItems: "center",
+    borderRadius: 30,
+    backgroundColor: '#f1f1f1',
+    fontFamily: "Roboto-Medium",
+    paddingStart: 30,
+
+    fontSize: 16,
+    elevation: 10,
   }
+
 });
