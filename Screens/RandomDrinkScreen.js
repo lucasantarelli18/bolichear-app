@@ -63,7 +63,8 @@ export function RandomDrinkScreen({ navigation }) {
             style={styles.button}>
             <Text style={styles.text4}>A TOMAR!</Text>
           </LinearGradient>
-        </Pressable></View>
+        </Pressable>
+      </View>
 
       <StatusBar style="white" />
     </View>
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     marginVertical: 6,
   },
   title: {
-    fontSize: 30,
+    fontSize: 40,
     fontWeight: "bold",
     color: "#A32934",
     marginBottom: 15,
