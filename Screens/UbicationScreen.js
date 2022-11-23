@@ -254,8 +254,8 @@ const styles = StyleSheet.create({
   },
   icono: {
     borderWidth: 2,
-    width: 200,
-    height: 150,
+    width: 250,
+    height: 200,
     borderRadius: 20,
     marginVertical: 20,
     justifyContent: 'center',
