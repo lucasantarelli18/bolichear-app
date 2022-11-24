@@ -9,18 +9,16 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 
 export function EditarLocalScreen({ route, navigation: { goBack } }) {
 
-  const { idLocal, latitud, longitud, idLocalidad, localidad, idDueno, calle, numero, nombre, idDomic, imagen, ig } = route.params;
+  const { idLocal, latitud, longitud, idLocalidad, localidad, idDueno, calle, numero, nombre, idDomic, imagen } = route.params;
 
   const [modificaNombre, setModificaNombre] = React.useState(false);
   const [modificaDomicilio, setModificaDomicilio] = React.useState(false);
   const [modificaFoto, setModificaFoto] = React.useState(false);
-  const [modificaIg, setModificaIg] = React.useState(false);
 
   //  const [openLoc, setOpenLoc] = React.useState(false);
   //  const [valueLoc, setValueLoc] = React.useState(null); //para el picker
   //  const [localidadSeleccionada, setLocalidadSeleccionada] = React.useState([]);
   const [nombreLocal, setNombreLocal] = React.useState(nombre.toUpperCase());
-  const [nombreIg, setNombreIg] = React.useState(ig);
   const [idDomicilio, setIdDomicilio] = React.useState(idDomic);
   const [idLocalidad2, setIdLocalidad2] = React.useState(idLocalidad);
   const [image, setImage] = React.useState(imagen);
@@ -37,7 +35,6 @@ const [ubicacion, setUbicacion] = React.useState({
     cambia: false
   });
 
-  console.log(ig)
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -203,18 +200,7 @@ const [ubicacion, setUbicacion] = React.useState({
 
         </View>
 
-        <Text style={styles.titulos}>Usuario de instagram</Text>
-        <View style={styles.container2}>
-          <TextInput
-            style={styles.input}
-            defaultValue={nombreIg}
-            onChangeText={text => {
-              setNombreIg(text),
-                setModificaIg(true)
-            }}
-            
-          />
-        </View>
+
         <Text style={styles.titulos}>Foto del Local</Text>
         <View style={styles.container2}>
           { image == null ?
@@ -241,7 +227,7 @@ const [ubicacion, setUbicacion] = React.useState({
                 Backend.getUltimoDomicilio().then((items) => {
                   setIdDomicilio(items[0].id),
                     console.log(items[0].id),
-                    Backend.updateLocal(idLocal, nombreLocal, parseInt(items[0].id), parseFloat(ubicacion.latitude), parseFloat(ubicacion.longitude), image, nombreIg)
+                    Backend.updateLocal(idLocal, nombreLocal, parseInt(items[0].id), parseFloat(ubicacion.latitude), parseFloat(ubicacion.longitude), image)
                       .then((items) => {
               Alert.alert('Datos modificados con éxito!!') 
                        });
@@ -251,9 +237,9 @@ const [ubicacion, setUbicacion] = React.useState({
               .then((items) => { })*/
             goBack();
             goBack();
-          } else if (modificaNombre || modificaFoto || modificaIg) {
+          } else if (modificaNombre || modificaFoto) {
             //console.log(idLocal + " " + nombreLocal + " " + idDomicilio + " " + latitud + " " + longitud)
-            Backend.updateLocal(idLocal, nombreLocal, idDomicilio, parseFloat(latitud), parseFloat(longitud), image, nombreIg)
+            Backend.updateLocal(idLocal, nombreLocal, idDomicilio, parseFloat(latitud), parseFloat(longitud), image)
             .then((items) => {
               //console.log(items)
               Alert.alert('Datos modificados con éxito!!') 

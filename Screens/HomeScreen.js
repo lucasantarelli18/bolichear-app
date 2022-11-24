@@ -5,7 +5,6 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-url-polyfill/auto';
 import TabScreen from './TabScreen';
 import { LinearGradient } from 'expo-linear-gradient';
-import { openBrowserAsync } from 'expo-web-browser';
 
 //import MapView, { Marker, Polyline } from 'react-native-maps';
 //import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';

@@ -257,7 +257,7 @@ export const insertPromocion = async (nombrePromo, descrip, fHInicio, fHFin, idL
   ]);
 };
 
-export const insertLocal = async (nombreLocal, lat, long, idDuen, idDomicili, image, ig) => {
+export const insertLocal = async (nombreLocal, lat, long, idDuen, idDomicili, image) => {
   console.log(nombreLocal, lat, long, idDuen, idDomicili);
   const { data, error } = await supabase
     .from('Local')
@@ -268,8 +268,7 @@ export const insertLocal = async (nombreLocal, lat, long, idDuen, idDomicili, im
         longitud: long,
         idDueño: parseInt(idDuen),
         idDomicilio: parseInt(idDomicili),
-        image: image,
-        insta: ig
+        image: image
       },
     ])
   if (error) { console.log(error) }
@@ -373,8 +372,6 @@ export const updatePromocion = async (id, nombrePromo, descrip, fHInicio, fHFin,
     .eq('id', id)
 }
 
-
-
 export const updateEvento = async (id,nombre, descrip, fHInicio, fHFin, idTipoEvento,path) => {
   const { data, error } = await supabase
     .from('Evento')
@@ -390,7 +387,7 @@ export const updateEvento = async (id,nombre, descrip, fHInicio, fHFin, idTipoEv
 }
 
 
-export const updateLocal = async (idLocal, nombre, idDomicilio, latitud, longitud, foto, ig) => {
+export const updateLocal = async (idLocal, nombre, idDomicilio, latitud, longitud, foto) => {
   const { data, error } = await supabase
     .from('Local')
     .update({
@@ -398,8 +395,7 @@ export const updateLocal = async (idLocal, nombre, idDomicilio, latitud, longitu
       idDomicilio: idDomicilio,
       latitud: latitud,
       longitud: longitud,
-      image: foto,
-      insta: ig
+      image: foto
     })
     .eq('id', idLocal)
 }

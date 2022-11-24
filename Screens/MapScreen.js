@@ -217,7 +217,6 @@ export function MapScreen({ route, navigation }) {
             onPress={() => {
               navigation.navigate("VerEventos", {
                 idLocal: element.id,
-                insta: element.insta
               });
             }}>
             <ImageBackground
@@ -251,13 +250,12 @@ export function MapScreen({ route, navigation }) {
       });
     } else {
       return localesFiltrados.map((element) => {
-        //console.log(element)
+        //console.log(element.dist)
         return (
           <Pressable
             onPress={() => {
               navigation.navigate("VerEventos", {
                 idLocal: element.id,
-                insta: element.insta
               });
             }}>
             <ImageBackground
