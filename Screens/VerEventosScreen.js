@@ -72,6 +72,7 @@ export function VerEventosScreen({ route, navigation }) {
 
   // Mapeo y agrego los eventos y promos a dataEventos y dataPromos
   eventos.map((element) => {
+    console.log(element)
     if (idLocal == element.idLocal) {
       const fechaHoraInicio = Moment(element.fechaHoraInicio).format('DD/MM/YYYY [a las] HH:mm ');
       const fechaHoraFin = Moment(element.fechaHoraFin).format('DD/MM/YYYY [a las] HH:mm ');
@@ -82,9 +83,10 @@ export function VerEventosScreen({ route, navigation }) {
           idLocal: element.idLocal,
           title: element.nombre,
           description: element.descripcion,
-          image: { uri: element.path },
+          image:  element.path,
           fechaInicio: fechaHoraInicio,
-          fechaFin: fechaHoraFin
+          fechaFin: fechaHoraFin,
+          idTipoEvento: element.idTipoEvento
         }
       )
     }
@@ -120,7 +122,7 @@ export function VerEventosScreen({ route, navigation }) {
   } else {
     localDueño.push(0)
   }
-
+/* 
   const evento = () =>{
     eventos.map((item) =>{
       return (
@@ -187,7 +189,7 @@ export function VerEventosScreen({ route, navigation }) {
       );
     })
     
-  }
+  } */
   const sinEventos = () => {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -247,7 +249,14 @@ export function VerEventosScreen({ route, navigation }) {
             const mes = item.fechaFin.substring(3,5)
             const anio = item.fechaFin.substring(6,10)
             const FechaFin = anio + '-'+ mes +'-'+dia
+            const hora = item.fechaFin.substring(17,19)
+            const mins = item.fechaFin.substring(20,22)
+            const seg = '00'
+            const horaFin = hora +':'+mins+':'+seg
+            const fechaYHoraFinal= FechaFin + ' '+horaFin 
+
             if((new Date(FechaFin)) >= fecha){
+              //console.log('EVENTO',item.idTipoEvento)
               return (
                 <SafeAreaView style={{
                   backgroundColor: "#e8ded3",
@@ -302,6 +311,25 @@ export function VerEventosScreen({ route, navigation }) {
                       >
                         <Text style={styles.titleButton}>Eliminar</Text>
                       </Pressable>
+                      <Pressable
+                        style={styles.button2}
+                        onPress={() =>
+                          {
+                            navigation.navigate("EditarEvento", {
+                              nombre: item.title,
+                              descripcion: item.description,
+                              fechaHoraInicio: fechaYHoraFinal,
+                              fechaHoraFin: fechaYHoraFinal,
+                              id: item.id,
+                              imagen: item.image,
+                              idEvento: item.idTipoEvento
+                          
+
+                            });
+                            }}
+                      >
+                        <Text style={styles.titleButton}>Editar</Text>
+                      </Pressable>
                     </View>
                     :
                     console.log(fecha)
@@ -311,7 +339,7 @@ export function VerEventosScreen({ route, navigation }) {
              
               );
             }else{
-              //console.log(eventos.length)
+        
               if((new Date(FechaFin)) < fecha){
                 return (
                   <SafeAreaView style={{
@@ -324,7 +352,7 @@ export function VerEventosScreen({ route, navigation }) {
                   }}>
                                    
                     <Image
-                      source={item.image}
+                      source={{uri: item.image}}
                       style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
                     />
                     <Text style={styles.titleText}>{item.title}</Text>
@@ -368,6 +396,25 @@ export function VerEventosScreen({ route, navigation }) {
                         >
                           <Text style={styles.titleButton}>Eliminar</Text>
                         </Pressable>
+                        <Pressable
+                        style={styles.button2}
+                        onPress={() =>
+                        
+                          {
+                            navigation.navigate("EditarEvento", {
+                              nombre: item.title,
+                              descripcion: item.description,
+                              fechaHoraInicio: fechaYHoraFinal,
+                              fechaHoraFin: fechaYHoraFinal,
+                              id: item.id,
+                              imagen: item.image,
+                              idTipoEvento: item.idTipoEvento
+
+                            });
+                            }}
+                      >
+                        <Text style={styles.titleButton}>Editar</Text>
+                      </Pressable>
                       </View>
                       :
                       console.log(fecha)
