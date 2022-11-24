@@ -16,7 +16,9 @@ import { VerInfoScreen } from "./Screens/VerInfoScreen";
 import { EventosScreen } from "./Screens/EventosScreen";
 import { PromocionesScreen } from './Screens/PromocionesScreen';
 import { VerPromocionesScreen } from './Screens/VerPromocionesScreen';
+import { EditarPromocionScreen } from './Screens/EditarPromocionScreen'
 import { VerEventosScreen } from "./Screens/VerEventosScreen";
+import { EditarEventoScreen } from './Screens/EditarEventoScreen';
 import { SignInScreen } from "./Screens/SignInScreen";
 import { PreloginScreen } from "./Screens/PreloginScreen";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -193,6 +195,11 @@ export default function App({ navigation }) {
                 headerTitleStyle: { color: 'black' },
                 headerStyle: { backgroundColor: '#ebe6d9', justifyContent: "center", fontColor: 'white' }
               }} />
+              <Stack.Screen name="EditarEvento" component={EditarEventoScreen} options={{
+                title: 'Edita tu evento', headerTitleAlign: "center",
+                headerTitleStyle: { color: 'black' },
+                headerStyle: { backgroundColor: '#ebe6d9', justifyContent: "center", fontColor: 'white' }
+              }} />
               <Stack.Screen name="VerEventos" component={VerEventosScreen} options={{
                 title: 'Detalles', headerTitleAlign: "center",
                 headerTitleStyle: { color: 'black' },
@@ -200,6 +207,11 @@ export default function App({ navigation }) {
               }} />
               <Stack.Screen name="Promociones" component={PromocionesScreen} options={{
                 title: 'Nueva Promocion', headerTitleAlign: "center",
+                headerTitleStyle: { color: 'black' },
+                headerStyle: { backgroundColor: '#ebe6d9', justifyContent: "center", fontColor: 'white' }
+              }} />
+              <Stack.Screen name="EditarPromocion" component={EditarPromocionScreen} options={{
+                title: 'Edita tu Promoción', headerTitleAlign: "center",
                 headerTitleStyle: { color: 'black' },
                 headerStyle: { backgroundColor: '#ebe6d9', justifyContent: "center", fontColor: 'white' }
               }} />
