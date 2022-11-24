@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
-    width: '50%',
+    width: '51%',
     height: 50,
     borderRadius: 30,
     padding: 10,
