@@ -440,6 +440,7 @@ export function VerEventosScreen({ route, navigation }) {
           } />
       </View >
     )
+  
   }
 
 
@@ -623,68 +624,6 @@ export function VerEventosScreen({ route, navigation }) {
                   }
                 </SafeAreaView>
               );
-            } else {
-              console.log(new Date(FechaFin), fecha)
-              if ((new Date(FechaFin)) < fecha) {
-                return (
-                  console.log(item),
-                  <SafeAreaView style={{
-                    backgroundColor: "#e8ded3",
-                    width: width * 0.8 - 20,
-                    marginHorizontal: 10,
-                    paddingBottom: 20,
-                    borderRadius: 12,
-                    opacity: 0.35,
-                  }}>
-                    <Image
-                      source={item.image}
-                      style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
-                    />
-                    <Text style={styles.titleText}>{item.title}</Text>
-                    <Text style={styles.descriptionText}>
-                      {item.description}
-                    </Text>
-                    <Text style={styles.fechaText}>
-                      Vigente desde el {item.fechaInicio}
-                      Hasta el {item.fechaFin}
-                    </Text>
-                    {item.idLocal == localDueño[0] ?
-                      <View style={{ alignItems: 'center' }}>
-                        <Pressable
-                          style={styles.button2}
-                          onPress={() => Alert.alert(
-                            "Eliminar",
-                            "¿Desea eliminar la promoción?",
-                            [
-                              {
-                                text: "Cancelar",
-                                onPress: () => console.log("Cancel Pressed"),
-                                style: "cancel"
-                              },
-                              {
-                                text: "Aceptar",
-                                onPress: () => Backend.deletePromocion(item.id).then((items) => Alert.alert("Promoción eliminada con éxito"), navigation.dispatch({
-                                  ...StackActions.replace('VerEventos', {
-                                    idLocal: idLocal, latitud: latitud, longitud: longitud
-                                  }),
-                                  source: route.key,
-                                  target: navigation.getState().key,
-
-                                }))
-                              }
-
-
-                            ]
-                          )}
-                        >
-                          <Text style={styles.titleButton}>Eliminar</Text>
-                        </Pressable>
-                      </View>
-                      :
-                      console.log('bien')
-                    }
-                  </SafeAreaView>
-                );
               }
 
             }
@@ -693,6 +632,8 @@ export function VerEventosScreen({ route, navigation }) {
       </View >
     )
   }
+
+    
 
   const sinPromos = () => {
     return (
