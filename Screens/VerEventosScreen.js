@@ -21,7 +21,7 @@ export function VerEventosScreen({ route, navigation }) {
   const { idLocal, latitud, longitud } = route.params;
   const { width } = Dimensions.get('window')
   const idDueno = 5;
-  const fecha=new Date();
+  const fecha = new Date();
 
 
 
@@ -83,7 +83,7 @@ export function VerEventosScreen({ route, navigation }) {
           idLocal: element.idLocal,
           title: element.nombre,
           description: element.descripcion,
-          image:  element.path,
+          image: element.path,
           fechaInicio: fechaHoraInicio,
           fechaFin: fechaHoraFin,
           idTipoEvento: element.idTipoEvento
@@ -122,74 +122,74 @@ export function VerEventosScreen({ route, navigation }) {
   } else {
     localDueño.push(0)
   }
-/* 
-  const evento = () =>{
-    eventos.map((item) =>{
-      return (
-        <SafeAreaView style={{
-          backgroundColor: "#e8ded3",
-          width: width * 0.8 - 20,
-          marginHorizontal: 10,
-          paddingBottom: 20,
-          borderRadius: 12,
-        }}>
-                         
-          <Image
-            source={item.image}
-            style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
-          />
-          <Text style={styles.titleText}>{item.title}</Text>
-          <Text style={styles.descriptionText}>
-            {item.description}
-          </Text>
-          <Text style={styles.fechaText}>
-            Vigente desde el {item.fechaInicio}
-            Hasta el {item.fechaFin}
-          </Text>
-          {item.idLocal == localDueño[0] ?
-            <View style={{ alignItems: 'center' }}>
-              <Pressable
-                style={styles.button2}
-                onPress={() => Alert.alert(
-                  "Eliminar",
-                  "¿Desea eliminar el evento?",
-                  [
-                    {
-                      text: "Cancelar",
-                      onPress: () => console.log("Cancel Pressed"),
-                      style: "cancel"
-                    },
-                    {
-                      text: "Aceptar",
-                      onPress: () => Backend.deleteEvento(item.id).then((items) => Alert.alert("Evento eliminado con éxito"), navigation.dispatch({
-                        ...StackActions.replace('VerEventos', {
-                          idLocal: idLocal, latitud: latitud, longitud: longitud
-                        }),
-                        source: route.key,
-                        target: navigation.getState().key,
-  
-                      })
-  
-                      )
-                    }
-  
-  
-                  ]
-                )}
-              >
-                <Text style={styles.titleButton}>Eliminar</Text>
-              </Pressable>
-            </View>
-            :
-            console.log(fecha)
-          }
-  
-        </SafeAreaView>
-     
-      );
-    })
+  /* 
+    const evento = () =>{
+      eventos.map((item) =>{
+        return (
+          <SafeAreaView style={{
+            backgroundColor: "#e8ded3",
+            width: width * 0.8 - 20,
+            marginHorizontal: 10,
+            paddingBottom: 20,
+            borderRadius: 12,
+          }}>
+                           
+            <Image
+              source={item.image}
+              style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
+            />
+            <Text style={styles.titleText}>{item.title}</Text>
+            <Text style={styles.descriptionText}>
+              {item.description}
+            </Text>
+            <Text style={styles.fechaText}>
+              Vigente desde el {item.fechaInicio}
+              Hasta el {item.fechaFin}
+            </Text>
+            {item.idLocal == localDueño[0] ?
+              <View style={{ alignItems: 'center' }}>
+                <Pressable
+                  style={styles.button2}
+                  onPress={() => Alert.alert(
+                    "Eliminar",
+                    "¿Desea eliminar el evento?",
+                    [
+                      {
+                        text: "Cancelar",
+                        onPress: () => console.log("Cancel Pressed"),
+                        style: "cancel"
+                      },
+                      {
+                        text: "Aceptar",
+                        onPress: () => Backend.deleteEvento(item.id).then((items) => Alert.alert("Evento eliminado con éxito"), navigation.dispatch({
+                          ...StackActions.replace('VerEventos', {
+                            idLocal: idLocal, latitud: latitud, longitud: longitud
+                          }),
+                          source: route.key,
+                          target: navigation.getState().key,
     
-  } */
+                        })
+    
+                        )
+                      }
+    
+    
+                    ]
+                  )}
+                >
+                  <Text style={styles.titleButton}>Eliminar</Text>
+                </Pressable>
+              </View>
+              :
+              console.log(fecha)
+            }
+    
+          </SafeAreaView>
+       
+        );
+      })
+      
+    } */
   const sinEventos = () => {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -231,7 +231,7 @@ export function VerEventosScreen({ route, navigation }) {
 
   //console.log("DUEÑOOOOOO", localDueño[0])
   // Creo constantes para mostrar el FlatList en la pantalla
-  const flatlistEventos = () => {  
+  const flatlistEventos = () => {
     return (
       <View>
         <FlatList
@@ -245,17 +245,17 @@ export function VerEventosScreen({ route, navigation }) {
           decelerationRate='fast'
           style={{ marginBottom: 20 }}
           renderItem={({ item }) => {
-            const dia = item.fechaFin.substring(0,2)
-            const mes = item.fechaFin.substring(3,5)
-            const anio = item.fechaFin.substring(6,10)
-            const FechaFin = anio + '-'+ mes +'-'+dia
-            const hora = item.fechaFin.substring(17,19)
-            const mins = item.fechaFin.substring(20,22)
+            const dia = item.fechaFin.substring(0, 2)
+            const mes = item.fechaFin.substring(3, 5)
+            const anio = item.fechaFin.substring(6, 10)
+            const FechaFin = anio + '-' + mes + '-' + dia
+            const hora = item.fechaFin.substring(17, 19)
+            const mins = item.fechaFin.substring(20, 22)
             const seg = '00'
-            const horaFin = hora +':'+mins+':'+seg
-            const fechaYHoraFinal= FechaFin + ' '+horaFin 
+            const horaFin = hora + ':' + mins + ':' + seg
+            const fechaYHoraFinal = FechaFin + ' ' + horaFin
 
-            if((new Date(FechaFin)) >= fecha){
+            if ((new Date(FechaFin)) >= fecha) {
               //console.log('EVENTO',item.idTipoEvento)
               return (
                 <SafeAreaView style={{
@@ -265,9 +265,9 @@ export function VerEventosScreen({ route, navigation }) {
                   paddingBottom: 20,
                   borderRadius: 12,
                 }}>
-                                 
+
                   <Image
-                    source={{uri: item.image}}
+                    source={{ uri: item.image }}
                     style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
                   />
                   <Text style={styles.titleText}>{item.title}</Text>
@@ -299,13 +299,13 @@ export function VerEventosScreen({ route, navigation }) {
                                 }),
                                 source: route.key,
                                 target: navigation.getState().key,
-          
+
                               })
-          
+
                               )
                             }
-          
-          
+
+
                           ]
                         )}
                       >
@@ -313,20 +313,19 @@ export function VerEventosScreen({ route, navigation }) {
                       </Pressable>
                       <Pressable
                         style={styles.button2}
-                        onPress={() =>
-                          {
-                            navigation.navigate("EditarEvento", {
-                              nombre: item.title,
-                              descripcion: item.description,
-                              fechaHoraInicio: fechaYHoraFinal,
-                              fechaHoraFin: fechaYHoraFinal,
-                              id: item.id,
-                              imagen: item.image,
-                              idEvento: item.idTipoEvento
-                          
+                        onPress={() => {
+                          navigation.navigate("EditarEvento", {
+                            nombre: item.title,
+                            descripcion: item.description,
+                            fechaHoraInicio: fechaYHoraFinal,
+                            fechaHoraFin: fechaYHoraFinal,
+                            id: item.id,
+                            imagen: item.image,
+                            idEvento: item.idTipoEvento
 
-                            });
-                            }}
+
+                          });
+                        }}
                       >
                         <Text style={styles.titleButton}>Editar</Text>
                       </Pressable>
@@ -334,13 +333,13 @@ export function VerEventosScreen({ route, navigation }) {
                     :
                     console.log(fecha)
                   }
-          
+
                 </SafeAreaView>
-             
+
               );
-            }else{
-        
-              if((new Date(FechaFin)) < fecha){
+            } else {
+
+              if ((new Date(FechaFin)) < fecha) {
                 return (
                   <SafeAreaView style={{
                     backgroundColor: "#e8ded3",
@@ -350,9 +349,9 @@ export function VerEventosScreen({ route, navigation }) {
                     borderRadius: 12,
                     opacity: 0.35,
                   }}>
-                                   
+
                     <Image
-                      source={{uri: item.image}}
+                      source={{ uri: item.image }}
                       style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
                     />
                     <Text style={styles.titleText}>{item.title}</Text>
@@ -384,23 +383,21 @@ export function VerEventosScreen({ route, navigation }) {
                                   }),
                                   source: route.key,
                                   target: navigation.getState().key,
-            
+
                                 })
-            
+
                                 )
                               }
-            
-            
+
+
                             ]
                           )}
                         >
                           <Text style={styles.titleButton}>Eliminar</Text>
                         </Pressable>
                         <Pressable
-                        style={styles.button2}
-                        onPress={() =>
-                        
-                          {
+                          style={styles.button2}
+                          onPress={() => {
                             navigation.navigate("EditarEvento", {
                               nombre: item.title,
                               descripcion: item.description,
@@ -411,31 +408,31 @@ export function VerEventosScreen({ route, navigation }) {
                               idTipoEvento: item.idTipoEvento
 
                             });
-                            }}
-                      >
-                        <Text style={styles.titleButton}>Editar</Text>
-                      </Pressable>
+                          }}
+                        >
+                          <Text style={styles.titleButton}>Editar</Text>
+                        </Pressable>
                       </View>
                       :
                       console.log(fecha)
                     }
-            
+
                   </SafeAreaView>
-               
+
                 );
               }
-              
+
             }
-            
-         
+
+
           }
-  
-        }/>
+
+          } />
       </View >
     )
   }
 
- 
+
 
 
   const flatlistPromos = () => {
@@ -452,72 +449,12 @@ export function VerEventosScreen({ route, navigation }) {
           decelerationRate='fast'
           style={{ marginBottom: 20 }}
           renderItem={({ item }) => {
-            const dia = item.fechaFin.substring(0,2)
-            const mes = item.fechaFin.substring(3,5)
-            const anio = item.fechaFin.substring(6,10)
-            const FechaFin = anio + '-'+ mes +'-'+dia
+            const dia = item.fechaFin.substring(0, 2)
+            const mes = item.fechaFin.substring(3, 5)
+            const anio = item.fechaFin.substring(6, 10)
+            const FechaFin = anio + '-' + mes + '-' + dia
             //console.log(new Date(FechaFin), fecha)
-            if((new Date(FechaFin)) >= fecha){
-            return (
-              console.log(item),
-              <SafeAreaView style={{
-                backgroundColor: "#e8ded3",
-                width: width * 0.8 - 20,
-                marginHorizontal: 10,
-                paddingBottom: 20,
-                borderRadius: 12,
-              }}>
-                <Image
-                  source={item.image}
-                  style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
-                />
-                <Text style={styles.titleText}>{item.title}</Text>
-                <Text style={styles.descriptionText}>
-                  {item.description}
-                </Text>
-                <Text style={styles.fechaText}>
-                  Vigente desde el {item.fechaInicio}
-                  Hasta el {item.fechaFin}
-                </Text>
-                {item.idLocal == localDueño[0] ?
-                  <View style={{ alignItems: 'center' }}>
-                    <Pressable
-                      style={styles.button2}
-                      onPress={() => Alert.alert(
-                        "Eliminar",
-                        "¿Desea eliminar la promoción?",
-                        [
-                          {
-                            text: "Cancelar",
-                            onPress: () => console.log("Cancel Pressed"),
-                            style: "cancel"
-                          },
-                          {
-                            text: "Aceptar",
-                            onPress: () => Backend.deletePromocion(item.id).then((items) => Alert.alert("Promoción eliminada con éxito"), navigation.dispatch({
-                              ...StackActions.replace('VerEventos', {
-                                idLocal: idLocal, latitud: latitud, longitud: longitud
-                              }),
-                              source: route.key,
-                              target: navigation.getState().key,
-
-                            }))
-                          }
-
-
-                        ]
-                      )}
-                    >
-                      <Text style={styles.titleButton}>Eliminar</Text>
-                    </Pressable>
-                  </View>
-                  :
-                  console.log('bien')
-                }
-              </SafeAreaView>
-            );}else{
-              console.log(new Date(FechaFin), fecha)
-              if((new Date(FechaFin)) < fecha){
+            if ((new Date(FechaFin)) >= fecha) {
               return (
                 console.log(item),
                 <SafeAreaView style={{
@@ -526,7 +463,6 @@ export function VerEventosScreen({ route, navigation }) {
                   marginHorizontal: 10,
                   paddingBottom: 20,
                   borderRadius: 12,
-                  opacity:0.35,
                 }}>
                   <Image
                     source={item.image}
@@ -561,11 +497,11 @@ export function VerEventosScreen({ route, navigation }) {
                                 }),
                                 source: route.key,
                                 target: navigation.getState().key,
-  
+
                               }))
                             }
-  
-  
+
+
                           ]
                         )}
                       >
@@ -576,8 +512,71 @@ export function VerEventosScreen({ route, navigation }) {
                     console.log('bien')
                   }
                 </SafeAreaView>
-              );}
-              
+              );
+            } else {
+              console.log(new Date(FechaFin), fecha)
+              if ((new Date(FechaFin)) < fecha) {
+                return (
+                  console.log(item),
+                  <SafeAreaView style={{
+                    backgroundColor: "#e8ded3",
+                    width: width * 0.8 - 20,
+                    marginHorizontal: 10,
+                    paddingBottom: 20,
+                    borderRadius: 12,
+                    opacity: 0.35,
+                  }}>
+                    <Image
+                      source={item.image}
+                      style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
+                    />
+                    <Text style={styles.titleText}>{item.title}</Text>
+                    <Text style={styles.descriptionText}>
+                      {item.description}
+                    </Text>
+                    <Text style={styles.fechaText}>
+                      Vigente desde el {item.fechaInicio}
+                      Hasta el {item.fechaFin}
+                    </Text>
+                    {item.idLocal == localDueño[0] ?
+                      <View style={{ alignItems: 'center' }}>
+                        <Pressable
+                          style={styles.button2}
+                          onPress={() => Alert.alert(
+                            "Eliminar",
+                            "¿Desea eliminar la promoción?",
+                            [
+                              {
+                                text: "Cancelar",
+                                onPress: () => console.log("Cancel Pressed"),
+                                style: "cancel"
+                              },
+                              {
+                                text: "Aceptar",
+                                onPress: () => Backend.deletePromocion(item.id).then((items) => Alert.alert("Promoción eliminada con éxito"), navigation.dispatch({
+                                  ...StackActions.replace('VerEventos', {
+                                    idLocal: idLocal, latitud: latitud, longitud: longitud
+                                  }),
+                                  source: route.key,
+                                  target: navigation.getState().key,
+
+                                }))
+                              }
+
+
+                            ]
+                          )}
+                        >
+                          <Text style={styles.titleButton}>Eliminar</Text>
+                        </Pressable>
+                      </View>
+                      :
+                      console.log('bien')
+                    }
+                  </SafeAreaView>
+                );
+              }
+
             }
           }
           } />
@@ -746,7 +745,8 @@ const styles = StyleSheet.create({
     elevation: 3,
     backgroundColor: "#a73d4c",
     marginVertical: 10,
-    width: "50%"
+    width: "45%",
+    display: "block"
   },
   titulos: {
     fontSize: 19,
@@ -767,8 +767,8 @@ const styles = StyleSheet.create({
     color: "black",
     textAlign: "center",
   },
-  deshabilitar:{
-      opacity: 0.5,
-    
+  deshabilitar: {
+    opacity: 0.5,
+
   }
 });

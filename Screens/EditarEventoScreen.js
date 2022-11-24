@@ -12,7 +12,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 //import DropDownPicker from 'react-native-dropdown-picker';
 //import Constants from 'expo-constants';
 
-export function EditarEventoScreen({ route, navigation: { goBack }}) {
+export function EditarEventoScreen({ route, navigation: { goBack } }) {
 
   const { nombre, descripcion, fechaHoraInicio, fechaHoraFin, id, imagen, idTipoEvento } = route.params;
 
@@ -47,7 +47,7 @@ export function EditarEventoScreen({ route, navigation: { goBack }}) {
       console.log(arr);
       setItems(arr);
     });
- 
+
   }, []);
 
 
@@ -85,42 +85,42 @@ export function EditarEventoScreen({ route, navigation: { goBack }}) {
         .then((items) => { items })
     }
   };
-  
+
 
   return (
     <>
       <ScrollView style={styles.container}>
 
-      <Text style={styles.titulos}>Nombre del Evento</Text>
+        <Text style={styles.titulos}>Nombre del Evento</Text>
         <View style={styles.container2}>
           <TextInput
             style={styles.input}
             isRequired
             defaultValue={nombreEvento}
             onChangeText={(text) => {
-                setNombreEvento(text),
+              setNombreEvento(text),
                 setModificaNombre(true)
-              }}
+            }}
             placeholder="Ingrese un nombre"
           />
         </View>
 
         <Text style={styles.titulos}>Tipo del Evento</Text>
-      <View style={styles.container2}>
-        <DropDownPicker
-        defaultValue={value}
-          setIdEvento={setIdEvento}
-          setModificaIdEvento={true}
-          style={styles.input2}
-          open={open}
-          value={value}
-          setValue={setValue}
-          items={items}
-          setOpen={setOpen}
-          setItems={setItems}
-          placeholder="Tipo de evento"
-        />
-      </View>
+        <View style={styles.container2}>
+          <DropDownPicker
+            defaultValue={value}
+            setIdEvento={setIdEvento}
+            setModificaIdEvento={true}
+            style={styles.input2}
+            open={open}
+            value={value}
+            setValue={setValue}
+            items={items}
+            setOpen={setOpen}
+            setItems={setItems}
+            placeholder="Tipo de evento"
+          />
+        </View>
 
         <Text style={styles.titulos}>Descripción del Evento</Text>
         <View style={styles.container2}>
@@ -129,14 +129,14 @@ export function EditarEventoScreen({ route, navigation: { goBack }}) {
             defaultValue={descripcionEvento}
             placeholder=" Descripción"
             onChangeText={(text) => {
-                setDescripcionEvento(text),
-                  setModificaDescripcion(true)
-              }}
+              setDescripcionEvento(text),
+                setModificaDescripcion(true)
+            }}
           />
         </View>
 
         <Text style={styles.titulos}>Vigencia</Text>
-       <View style={styles.container2}>
+        <View style={styles.container2}>
           <Pressable style={styles.buttonF} title="Inicio" onPress={showDateTimePicker}>
             <Text style={styles.text}>INICIO</Text>
           </Pressable>
@@ -161,19 +161,19 @@ export function EditarEventoScreen({ route, navigation: { goBack }}) {
           <DateTimePickerModal
             isVisible={fechaYHoraFinMuestra}
             mode="datetime"
-            onConfirm={(datetime) => { hideDateTimePicker2(); setFechaFin(Moment(datetime).format('YYYY-MM-DD HH:mm:ss')), setModificaFechaFin(true)}}
+            onConfirm={(datetime) => { hideDateTimePicker2(); setFechaFin(Moment(datetime).format('YYYY-MM-DD HH:mm:ss')), setModificaFechaFin(true) }}
             onCancel={hideDateTimePicker2}
           />
 
-        </View> 
+        </View>
 
         <Text style={styles.titulos}>Foto del evento</Text>
         <View style={styles.container2}>
-        { image == null ?
-          <Image
-            source={require("../assets/camara.jpg")}
-            style={{ margin: 15, width: 350, height: 200, borderRadius: 12, }}
-          /> :
+          {image == null ?
+            <Image
+              source={require("../assets/camara.jpg")}
+              style={{ margin: 15, width: 350, height: 200, borderRadius: 12, }}
+            /> :
             <Image
               source={{ uri: image }}
               style={{ margin: 15, width: 350, height: 200, borderRadius: 12, }} />}
@@ -186,13 +186,13 @@ export function EditarEventoScreen({ route, navigation: { goBack }}) {
 
 
         <Pressable onPress={() => {
-        if (modificaNombre || modificaFoto || modificaDescripcion || modificaFechaFin || modificaFechaInicio || modificaIdEvento) {
-            console.log(id + " " + nombreEvento + " " + descripcionEvento + " " + fechaInicio + " " + fechaFin+' '+image)
+          if (modificaNombre || modificaFoto || modificaDescripcion || modificaFechaFin || modificaFechaInicio || modificaIdEvento) {
+            console.log(id + " " + nombreEvento + " " + descripcionEvento + " " + fechaInicio + " " + fechaFin + ' ' + image)
             Backend.updateEvento(id, nombreEvento, descripcionEvento, fechaInicio, fechaFin, value, image)
-            .then((items) => {
-              //console.log(items)
-              Alert.alert('Datos modificados con éxito!') 
-            });
+              .then((items) => {
+                //console.log(items)
+                Alert.alert('Datos modificados con éxito!')
+              });
             goBack();
             goBack();
           } else {
@@ -215,7 +215,7 @@ export function EditarEventoScreen({ route, navigation: { goBack }}) {
 
     </>
   );
-  
+
 }
 
 const styles = StyleSheet.create({
@@ -324,5 +324,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     width: '50%',
     marginTop: 10
+  },
+  input2: {
+    padding: 7,
+    width: "80%",
+    marginTop: 10,
+    marginHorizontal: "10%",
+    alignItems: "center",
+    borderRadius: 30,
+    backgroundColor: '#f1f1f1',
+    fontFamily: "Roboto-Medium",
+    paddingStart: 30,
+
+    fontSize: 16,
+    elevation: 10,
   },
 });
