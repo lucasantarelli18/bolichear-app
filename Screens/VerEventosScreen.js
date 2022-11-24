@@ -6,7 +6,7 @@ import Moment from 'moment';
 import 'moment/locale/es';
 import { Icon } from '@rneui/themed';
 import { useNavigation, CommonActions, StackActions } from '@react-navigation/native';
-
+import { openBrowserAsync } from 'expo-web-browser';
 
 
 
@@ -21,7 +21,7 @@ export function VerEventosScreen({ route, navigation }) {
   const { idLocal, latitud, longitud } = route.params;
   const { width } = Dimensions.get('window')
   const idDueno = 5;
-  const fecha=new Date();
+  const fecha = new Date();
 
 
 
@@ -113,15 +113,18 @@ export function VerEventosScreen({ route, navigation }) {
   });
 
   const localDueño = [];
+  const insta = [];
 
   if (cant) {
     locales.map((element) => {
       console.log("id local del dueño 5", element.id)
+      insta.push(element.insta)
       localDueño.push(element.id)
     })
   } else {
     localDueño.push(0)
   }
+
 /* 
   const evento = () =>{
     eventos.map((item) =>{
@@ -133,7 +136,7 @@ export function VerEventosScreen({ route, navigation }) {
           paddingBottom: 20,
           borderRadius: 12,
         }}>
-                         
+
           <Image
             source={item.image}
             style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
@@ -167,13 +170,13 @@ export function VerEventosScreen({ route, navigation }) {
                         }),
                         source: route.key,
                         target: navigation.getState().key,
-  
+
                       })
-  
+
                       )
                     }
-  
-  
+
+
                   ]
                 )}
               >
@@ -183,13 +186,14 @@ export function VerEventosScreen({ route, navigation }) {
             :
             console.log(fecha)
           }
-  
+
         </SafeAreaView>
-     
+
       );
     })
     
   } */
+
   const sinEventos = () => {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -231,7 +235,7 @@ export function VerEventosScreen({ route, navigation }) {
 
   //console.log("DUEÑOOOOOO", localDueño[0])
   // Creo constantes para mostrar el FlatList en la pantalla
-  const flatlistEventos = () => {  
+  const flatlistEventos = () => {
     return (
       <View>
         <FlatList
@@ -257,6 +261,7 @@ export function VerEventosScreen({ route, navigation }) {
 
             if((new Date(FechaFin)) >= fecha){
               //console.log('EVENTO',item.idTipoEvento)
+
               return (
                 <SafeAreaView style={{
                   backgroundColor: "#e8ded3",
@@ -265,7 +270,7 @@ export function VerEventosScreen({ route, navigation }) {
                   paddingBottom: 20,
                   borderRadius: 12,
                 }}>
-                                 
+
                   <Image
                     source={{uri: item.image}}
                     style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
@@ -299,13 +304,13 @@ export function VerEventosScreen({ route, navigation }) {
                                 }),
                                 source: route.key,
                                 target: navigation.getState().key,
-          
+
                               })
-          
+
                               )
                             }
-          
-          
+
+
                           ]
                         )}
                       >
@@ -334,13 +339,15 @@ export function VerEventosScreen({ route, navigation }) {
                     :
                     console.log(fecha)
                   }
-          
+
                 </SafeAreaView>
-             
+
               );
+
             }else{
         
               if((new Date(FechaFin)) < fecha){
+
                 return (
                   <SafeAreaView style={{
                     backgroundColor: "#e8ded3",
@@ -350,7 +357,7 @@ export function VerEventosScreen({ route, navigation }) {
                     borderRadius: 12,
                     opacity: 0.35,
                   }}>
-                                   
+
                     <Image
                       source={{uri: item.image}}
                       style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
@@ -384,13 +391,13 @@ export function VerEventosScreen({ route, navigation }) {
                                   }),
                                   source: route.key,
                                   target: navigation.getState().key,
-            
+
                                 })
-            
+
                                 )
                               }
-            
-            
+
+
                             ]
                           )}
                         >
@@ -419,23 +426,23 @@ export function VerEventosScreen({ route, navigation }) {
                       :
                       console.log(fecha)
                     }
-            
+
                   </SafeAreaView>
-               
+
                 );
               }
-              
+
             }
-            
-         
+
+
           }
-  
-        }/>
+
+          } />
       </View >
     )
   }
 
- 
+
 
 
   const flatlistPromos = () => {
@@ -539,6 +546,7 @@ export function VerEventosScreen({ route, navigation }) {
             );}else{
               //console.log(new Date(FechaFin), fecha)
               if((new Date(FechaFin)) < fecha){
+
               return (
                 console.log(item),
                 <SafeAreaView style={{
@@ -547,7 +555,6 @@ export function VerEventosScreen({ route, navigation }) {
                   marginHorizontal: 10,
                   paddingBottom: 20,
                   borderRadius: 12,
-                  opacity:0.35,
                 }}>
                   <Image
                     source={item.image}
@@ -582,11 +589,11 @@ export function VerEventosScreen({ route, navigation }) {
                                 }),
                                 source: route.key,
                                 target: navigation.getState().key,
-  
+
                               }))
                             }
-  
-  
+
+
                           ]
                         )}
                       >
@@ -615,8 +622,71 @@ export function VerEventosScreen({ route, navigation }) {
                     console.log('bien')
                   }
                 </SafeAreaView>
-              );}
-              
+              );
+            } else {
+              console.log(new Date(FechaFin), fecha)
+              if ((new Date(FechaFin)) < fecha) {
+                return (
+                  console.log(item),
+                  <SafeAreaView style={{
+                    backgroundColor: "#e8ded3",
+                    width: width * 0.8 - 20,
+                    marginHorizontal: 10,
+                    paddingBottom: 20,
+                    borderRadius: 12,
+                    opacity: 0.35,
+                  }}>
+                    <Image
+                      source={item.image}
+                      style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
+                    />
+                    <Text style={styles.titleText}>{item.title}</Text>
+                    <Text style={styles.descriptionText}>
+                      {item.description}
+                    </Text>
+                    <Text style={styles.fechaText}>
+                      Vigente desde el {item.fechaInicio}
+                      Hasta el {item.fechaFin}
+                    </Text>
+                    {item.idLocal == localDueño[0] ?
+                      <View style={{ alignItems: 'center' }}>
+                        <Pressable
+                          style={styles.button2}
+                          onPress={() => Alert.alert(
+                            "Eliminar",
+                            "¿Desea eliminar la promoción?",
+                            [
+                              {
+                                text: "Cancelar",
+                                onPress: () => console.log("Cancel Pressed"),
+                                style: "cancel"
+                              },
+                              {
+                                text: "Aceptar",
+                                onPress: () => Backend.deletePromocion(item.id).then((items) => Alert.alert("Promoción eliminada con éxito"), navigation.dispatch({
+                                  ...StackActions.replace('VerEventos', {
+                                    idLocal: idLocal, latitud: latitud, longitud: longitud
+                                  }),
+                                  source: route.key,
+                                  target: navigation.getState().key,
+
+                                }))
+                              }
+
+
+                            ]
+                          )}
+                        >
+                          <Text style={styles.titleButton}>Eliminar</Text>
+                        </Pressable>
+                      </View>
+                      :
+                      console.log('bien')
+                    }
+                  </SafeAreaView>
+                );
+              }
+
             }
           }
           } />
@@ -668,6 +738,11 @@ export function VerEventosScreen({ route, navigation }) {
     return (
       <View>
         <ScrollView>
+          <View style={styles.tabPress2}>
+            <Pressable style={styles.insta} onPress={() => openBrowserAsync("https://www.instagram.com/" + insta[0])} >
+              <Text>INSTAGRAM</Text>
+            </Pressable>
+          </View>
           {cantPromos ?
             <View>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -718,8 +793,14 @@ export function VerEventosScreen({ route, navigation }) {
   else {
 
     return (
+
       <View>
         <ScrollView>
+          <View style={styles.tabPress2}>
+            <Pressable style={styles.insta} onPress={() => openBrowserAsync("https://www.instagram.com/" + insta)} >
+              <Text>INSTAGRAM</Text>
+            </Pressable>
+          </View>
           <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
           <View>{sinPromos()}</View>
           <View>{sinEventos()}</View>
@@ -776,6 +857,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#ebe6d9",
     marginVertical: 10,
   },
+  insta: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 30,
+    backgroundColor: "#ebe6d9",
+    padding: 8,
+  },
   button2: {
     alignItems: "center",
     justifyContent: "center",
@@ -786,6 +874,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#a73d4c",
     marginVertical: 10,
     width: "50%"
+  },
+  tabPress2: {
+    //flex: 1,
+    width: '100%',
+    height: '5%',
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 10,
   },
   titulos: {
     fontSize: 19,
@@ -806,8 +902,8 @@ const styles = StyleSheet.create({
     color: "black",
     textAlign: "center",
   },
-  deshabilitar:{
-      opacity: 0.5,
-    
+  deshabilitar: {
+    opacity: 0.5,
+
   }
 });

@@ -95,6 +95,7 @@ export function LocalesScreen({ route, navigation }) {
 
   const list = () => {
     return locales.map((element) => {
+      console.log(element)
       //console.log("LISTAAAAAAAAA LOCAL", element);
       return (
         <ScrollView style={styles.container2}>
@@ -187,7 +188,8 @@ export function LocalesScreen({ route, navigation }) {
                 nombre: element.nombre,
                 idLocal: element.id,
                 idDomic: element.Domicilio.id, 
-                imagen: element.image
+                imagen: element.image,
+                ig: element.insta
               });
               }}
             >
