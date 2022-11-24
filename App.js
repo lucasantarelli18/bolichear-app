@@ -17,6 +17,7 @@ import { EventosScreen } from "./Screens/EventosScreen";
 import { PromocionesScreen } from './Screens/PromocionesScreen';
 import { VerPromocionesScreen } from './Screens/VerPromocionesScreen';
 import { VerEventosScreen } from "./Screens/VerEventosScreen";
+import { EditarEventoScreen } from './Screens/EditarEventoScreen';
 import { SignInScreen } from "./Screens/SignInScreen";
 import { PreloginScreen } from "./Screens/PreloginScreen";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -190,6 +191,11 @@ export default function App({ navigation }) {
               }} />
               <Stack.Screen name="Eventos" component={EventosScreen} options={{
                 title: "Nuevo Evento", headerTitleAlign: "center",
+                headerTitleStyle: { color: 'black' },
+                headerStyle: { backgroundColor: '#ebe6d9', justifyContent: "center", fontColor: 'white' }
+              }} />
+              <Stack.Screen name="EditarEvento" component={EditarEventoScreen} options={{
+                title: 'Edita tu evento', headerTitleAlign: "center",
                 headerTitleStyle: { color: 'black' },
                 headerStyle: { backgroundColor: '#ebe6d9', justifyContent: "center", fontColor: 'white' }
               }} />
