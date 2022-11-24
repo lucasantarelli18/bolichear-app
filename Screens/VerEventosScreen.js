@@ -102,7 +102,7 @@ export function VerEventosScreen({ route, navigation }) {
           idLocal: element.idLocal,
           title: element.nombre,
           description: element.descripcion,
-          image: { uri: element.idPromocion },
+          image: element.idPromocion,
           fechaInicio: fechaHoraInicio,
           fechaFin: fechaHoraFin
         }
@@ -258,7 +258,7 @@ export function VerEventosScreen({ route, navigation }) {
                 }}>
                                  
                   <Image
-                    source={item.image}
+                    source={{uri: item.image}}
                     style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
                   />
                   <Text style={styles.titleText}>{item.title}</Text>
@@ -408,8 +408,13 @@ export function VerEventosScreen({ route, navigation }) {
             const dia = item.fechaFin.substring(0,2)
             const mes = item.fechaFin.substring(3,5)
             const anio = item.fechaFin.substring(6,10)
+            const hora = item.fechaFin.substring(17,19)
+            const mins = item.fechaFin.substring(20,22)
+            const seg = '00'
             const FechaFin = anio + '-'+ mes +'-'+dia
-            //console.log(new Date(FechaFin), fecha)
+            const horaFin = hora +':'+mins+':'+seg
+            const fechaYHoraFinal= FechaFin + ' '+horaFin 
+            //console.log((fechaYHoraFinal))
             if((new Date(FechaFin)) >= fecha){
             return (
               console.log(item),
@@ -421,7 +426,7 @@ export function VerEventosScreen({ route, navigation }) {
                 borderRadius: 12,
               }}>
                 <Image
-                  source={item.image}
+                  source={{uri: item.image}}
                   style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
                 />
                 <Text style={styles.titleText}>{item.title}</Text>
@@ -456,20 +461,36 @@ export function VerEventosScreen({ route, navigation }) {
 
                             }))
                           }
-
-
                         ]
                       )}
                     >
                       <Text style={styles.titleButton}>Eliminar</Text>
                     </Pressable>
+                    <Pressable
+                        style={styles.button2}
+                        onPress={() =>
+                          {
+                            navigation.navigate("EditarPromocion", {
+                              nombre: item.title,
+                              descripcion: item.description,
+                              fechaHoraInicio: fechaYHoraFinal,
+                              fechaHoraFin: fechaYHoraFinal,
+                              id: item.id,
+                              imagen: item.image,
+                              idLocal: item.idLocal
+                              
+                            });
+                            }}
+                      >
+                        <Text style={styles.titleButton}>Editar</Text>
+                      </Pressable>
                   </View>
                   :
                   console.log('bien')
                 }
               </SafeAreaView>
             );}else{
-              console.log(new Date(FechaFin), fecha)
+              //console.log(new Date(FechaFin), fecha)
               if((new Date(FechaFin)) < fecha){
               return (
                 console.log(item),
@@ -523,6 +544,24 @@ export function VerEventosScreen({ route, navigation }) {
                         )}
                       >
                         <Text style={styles.titleButton}>Eliminar</Text>
+                      </Pressable>
+                      <Pressable
+                        style={styles.button2}
+                        onPress={() =>
+                          {
+                            navigation.navigate("EditarPromocion", {
+                              nombre: item.title,
+                              descripcion: item.description,
+                              fechaHoraInicio: fechaYHoraFinal,
+                              fechaHoraFin: fechaYHoraFinal,
+                              id: item.id,
+                              imagen: item.idPromocion,
+                              idLocal: item.idLocal
+                              
+                            });
+                            }}
+                      >
+                        <Text style={styles.titleButton}>Editar</Text>
                       </Pressable>
                     </View>
                     :

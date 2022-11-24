@@ -16,6 +16,7 @@ import { VerInfoScreen } from "./Screens/VerInfoScreen";
 import { EventosScreen } from "./Screens/EventosScreen";
 import { PromocionesScreen } from './Screens/PromocionesScreen';
 import { VerPromocionesScreen } from './Screens/VerPromocionesScreen';
+import { EditarPromocionScreen } from './Screens/EditarPromocionScreen'
 import { VerEventosScreen } from "./Screens/VerEventosScreen";
 import { SignInScreen } from "./Screens/SignInScreen";
 import { PreloginScreen } from "./Screens/PreloginScreen";
@@ -200,6 +201,11 @@ export default function App({ navigation }) {
               }} />
               <Stack.Screen name="Promociones" component={PromocionesScreen} options={{
                 title: 'Nueva Promocion', headerTitleAlign: "center",
+                headerTitleStyle: { color: 'black' },
+                headerStyle: { backgroundColor: '#ebe6d9', justifyContent: "center", fontColor: 'white' }
+              }} />
+              <Stack.Screen name="EditarPromocion" component={EditarPromocionScreen} options={{
+                title: 'Edita tu Promoción', headerTitleAlign: "center",
                 headerTitleStyle: { color: 'black' },
                 headerStyle: { backgroundColor: '#ebe6d9', justifyContent: "center", fontColor: 'white' }
               }} />
