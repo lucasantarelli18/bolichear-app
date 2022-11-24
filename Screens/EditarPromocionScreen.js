@@ -55,7 +55,7 @@ export function EditarPromocionScreen({ route, navigation: { goBack }}) {
       quality: 1,
     });
 
-    console.log(result);
+    console.log('imagen',result);
     if (!result.cancelled) {
       setImage(result.uri);
       setIsImage(true);
@@ -131,7 +131,7 @@ export function EditarPromocionScreen({ route, navigation: { goBack }}) {
 
         <Text style={styles.titulos}>Foto de la Promoción</Text>
         <View style={styles.container2}>
-        { image  ?
+        { image == null ?
             <Image
                 source={require("../assets/camara.jpg")}
                 style={{ margin: 15, width: "90%", height: 250, borderRadius: 12, }}
@@ -150,7 +150,7 @@ export function EditarPromocionScreen({ route, navigation: { goBack }}) {
         <Pressable onPress={() => {
         if (modificaNombre || modificaFoto || modificaDescripcion || modificaFechaFin || modificaFechaInicio) {
             console.log(id + " " + nombrePromo + " " + descripcionPromo + " " + fechaInicio + " " + fechaFin+' '+image)
-            Backend.updatePromocion(id, nombrePromo, descripcionPromo, fechaInicio, fechaFin, imagen)
+            Backend.updatePromocion(id, nombrePromo, descripcionPromo, fechaInicio, fechaFin, image)
             .then((items) => {
               //console.log(items)
               Alert.alert('Datos modificados con éxito!') 

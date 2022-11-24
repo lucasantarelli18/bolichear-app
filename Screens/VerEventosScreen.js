@@ -102,7 +102,7 @@ export function VerEventosScreen({ route, navigation }) {
           idLocal: element.idLocal,
           title: element.nombre,
           description: element.descripcion,
-          image: { uri: element.idPromocion },
+          image: element.idPromocion,
           fechaInicio: fechaHoraInicio,
           fechaFin: fechaHoraFin
         }
@@ -258,7 +258,7 @@ export function VerEventosScreen({ route, navigation }) {
                 }}>
                                  
                   <Image
-                    source={item.image}
+                    source={{uri: item.image}}
                     style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
                   />
                   <Text style={styles.titleText}>{item.title}</Text>
@@ -426,7 +426,7 @@ export function VerEventosScreen({ route, navigation }) {
                 borderRadius: 12,
               }}>
                 <Image
-                  source={item.image}
+                  source={{uri: item.image}}
                   style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
                 />
                 <Text style={styles.titleText}>{item.title}</Text>
@@ -555,7 +555,7 @@ export function VerEventosScreen({ route, navigation }) {
                               fechaHoraInicio: fechaYHoraFinal,
                               fechaHoraFin: fechaYHoraFinal,
                               id: item.id,
-                              imagen: item.image,
+                              imagen: item.idPromocion,
                               idLocal: item.idLocal
                               
                             });
