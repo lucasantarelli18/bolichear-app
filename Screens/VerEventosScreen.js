@@ -18,7 +18,7 @@ export function VerEventosScreen({ route, navigation }) {
   const [cantEventosActuales, setCantEventosActuales] = React.useState([]);
   const [cantPromos, setCantPromos] = React.useState([]);
   const [cant, setCant] = React.useState([]);
-  const { idLocal, latitud, longitud, insta } = route.params;
+  const { idLocal, latitud, longitud } = route.params;
   const { width } = Dimensions.get('window')
   const idDueno = 5;
   const fecha = new Date();
@@ -111,10 +111,12 @@ export function VerEventosScreen({ route, navigation }) {
   });
 
   const localDueño = [];
+  const insta = [];
 
   if (cant) {
     locales.map((element) => {
       console.log("id local del dueño 5", element.id)
+      insta.push(element.insta)
       localDueño.push(element.id)
     })
   } else {
@@ -585,7 +587,7 @@ export function VerEventosScreen({ route, navigation }) {
       <View>
         <ScrollView>
           <View style={styles.tabPress2}>
-            <Pressable style={styles.insta} onPress={() => openBrowserAsync("https://www.instagram.com/" + insta)} >
+            <Pressable style={styles.insta} onPress={() => openBrowserAsync("https://www.instagram.com/" + insta[0])} >
               <Text>INSTAGRAM</Text>
             </Pressable>
           </View>
