@@ -169,7 +169,7 @@ export function EditarEventoScreen({ route, navigation: { goBack }}) {
 
         <Text style={styles.titulos}>Foto del evento</Text>
         <View style={styles.container2}>
-        {!isImage ?
+        { image == null ?
           <Image
             source={require("../assets/camara.jpg")}
             style={{ margin: 15, width: 350, height: 200, borderRadius: 12, }}

@@ -83,7 +83,7 @@ export function VerEventosScreen({ route, navigation }) {
           idLocal: element.idLocal,
           title: element.nombre,
           description: element.descripcion,
-          image: { uri: element.path },
+          image:  element.path,
           fechaInicio: fechaHoraInicio,
           fechaFin: fechaHoraFin,
           idTipoEvento: element.idTipoEvento
@@ -267,7 +267,7 @@ export function VerEventosScreen({ route, navigation }) {
                 }}>
                                  
                   <Image
-                    source={item.image}
+                    source={{uri: item.image}}
                     style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
                   />
                   <Text style={styles.titleText}>{item.title}</Text>
@@ -352,7 +352,7 @@ export function VerEventosScreen({ route, navigation }) {
                   }}>
                                    
                     <Image
-                      source={item.image}
+                      source={{uri: item.image}}
                       style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
                     />
                     <Text style={styles.titleText}>{item.title}</Text>
