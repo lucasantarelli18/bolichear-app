@@ -18,6 +18,7 @@ export function AltaLocalScreen({ route, navigation: { goBack } }) {
   //  const [valueLoc, setValueLoc] = React.useState(null); //para el picker
   //  const [localidadSeleccionada, setLocalidadSeleccionada] = React.useState([]);
   const [nombreLocal, setNombreLocal] = React.useState([]);
+  const [nombreIg, setNombreIg] = React.useState([]);
   const [idDomicilio, setIdDomicilio] = React.useState([]);
   const [image, setImage] = React.useState(null);
   const [isImage, setIsImage] = React.useState(false);
@@ -67,6 +68,8 @@ export function AltaLocalScreen({ route, navigation: { goBack } }) {
             placeholder="Ingrese nombre del local"
           />
         </View>
+
+        
 
         <Text style={styles.titulos}>Ubicación del Local</Text>
         {/*
@@ -201,6 +204,16 @@ export function AltaLocalScreen({ route, navigation: { goBack } }) {
 
         </View>
 
+        <Text style={styles.titulos}>Usuario de instagram</Text>
+        <View style={styles.container2}>
+          <TextInput
+            style={styles.input}
+            onChangeText={text => {
+              setNombreIg(text)
+            }}
+            placeholder="Ingrese su usuario de instagram"
+          />
+        </View>
 
         <Text style={styles.titulos}>Foto del Local</Text>
         <View style={styles.container2}>
@@ -229,7 +242,7 @@ export function AltaLocalScreen({ route, navigation: { goBack } }) {
                 Backend.getUltimoDomicilio().then((items) => {
                   setIdDomicilio(items[0].id),
                     console.log(items[0].id),
-                    Backend.insertLocal(nombreLocal, parseFloat(ubicacion.latitude), parseFloat(ubicacion.longitude), parseInt(idDueno), parseInt(items[0].id), image)
+                    Backend.insertLocal(nombreLocal, parseFloat(ubicacion.latitude), parseFloat(ubicacion.longitude), parseInt(idDueno), parseInt(items[0].id), image, nombreIg)
                       .then((items) => { });
                 });
               })
