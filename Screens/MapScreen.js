@@ -83,10 +83,10 @@ export function MapScreen({ route, navigation }) {
           const val = Math.pow(latMts, 2) + Math.pow(lonMts, 2);
           const dist = Math.sqrt(val);
           const distkm = (dist / 1000).toFixed(2);
-
+          
           if (dist < rango) {
             //console.log("dentro del rango")
-            //console.log(items[i].dist = distkm)
+            console.log(items[i].dist = distkm)
             //console.log(items[i])
             arr.push(items[i])
           } else {
