@@ -6,9 +6,9 @@ import Moment from 'moment';
 import 'moment/locale/es';
 import { Icon } from '@rneui/themed';
 import { useNavigation, CommonActions, StackActions } from '@react-navigation/native';
+import * as Device from "expo-device";
 
-
-
+const uniqueId = Device.osBuildFingerprint;
 
 export function VerEventosScreen({ route, navigation }) {
   const [eventos, setEventos] = React.useState([])
@@ -582,6 +582,12 @@ export function VerEventosScreen({ route, navigation }) {
     return (
       <View>
         <ScrollView>
+        <Pressable
+        style={styles.button2}
+        onPress={() => Backend.insertAsistencia(fecha, idLocal, uniqueId)}
+        >
+          <Text style={styles.titleButton}>VOY!</Text>
+        </Pressable>
           {cantPromos ?
             <View>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -634,6 +640,12 @@ export function VerEventosScreen({ route, navigation }) {
     return (
       <View>
         <ScrollView>
+        <Pressable
+        style={styles.button2}
+        onPress={() => Backend.insertAsistencia(fecha, idLocal, uniqueId)}
+        >
+          <Text style={styles.titleButton}>VOY!</Text>
+        </Pressable>
           <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
           <View>{sinPromos()}</View>
           <View>{sinEventos()}</View>

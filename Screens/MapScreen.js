@@ -12,15 +12,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Checkbox } from 'react-native-paper';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import DropDownPicker from "react-native-dropdown-picker";
-import * as Device from "expo-device";
 
 export function MapScreen({ route, navigation }) {
   const [locales, setLocales] = React.useState([]);
   const [localesFiltrados, setLocalesFiltrados] = React.useState([]);
 
   const { calle, numero, localidad, latitud, longitud, rango } = route.params;
-
-  const uniqueId = Device.osBuildFingerprint;
 
   //console.log("Buenas, esta es la calle y el numero", calle, numero, localidad)
 
@@ -89,7 +86,7 @@ export function MapScreen({ route, navigation }) {
 
           if (dist < rango) {
             //console.log("dentro del rango")
-            //console.log(items[i].dist = distkm)
+            console.log(items[i].dist = distkm)
             //console.log(items[i])
             arr.push(items[i])
           } else {
