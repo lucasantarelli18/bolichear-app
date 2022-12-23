@@ -619,12 +619,15 @@ export function VerEventosScreen({ route, navigation }) {
       <View>
         <ScrollView>
 
+
+<View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Pressable
         style={estiloAsistencia}
         onPress={() => funcionAsistencia()}
         >
           <Text style={styles.titleButton}>{voy}</Text>
         </Pressable>
+</View>
 
           {cantPromos ?
             <View>
@@ -649,7 +652,7 @@ export function VerEventosScreen({ route, navigation }) {
           }
           {cantEventos ?
             <View>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ alignItems: 'center' }}>
                 <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
                 <View>
                   <Text style={{
@@ -679,12 +682,15 @@ export function VerEventosScreen({ route, navigation }) {
       <View>
         <ScrollView>
 
+
+<View style={{ alignItems: 'center' }}>
         <Pressable
         style={estiloAsistencia}
         onPress={() => funcionAsistencia()}
         >
           <Text style={styles.titleButton}>{voy}</Text>
         </Pressable>
+</View>
 
           <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
           <View>{sinPromos()}</View>
