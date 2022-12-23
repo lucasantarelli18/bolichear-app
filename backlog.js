@@ -415,6 +415,13 @@ export const deletePromocion = async (idPromo) => {
     .match({ id: idPromo })
 }
 
+export const deleteAsistencia = async (idUsuario) => {
+  const { data, error } = await supabase
+    .from('Asistencia')
+    .delete()
+    .match({ idUsuario: idUsuario })
+}
+
 export const deleteEventoXLocal = async (idLocal) => {
   const { data, error } = await supabase
     .from('Evento')

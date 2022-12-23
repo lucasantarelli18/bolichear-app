@@ -145,7 +145,9 @@ export function VerEventosScreen({ route, navigation }) {
 
   const funcionAsistencia = () => {
     if(tieneAsist && tieneAsistEsteLocal) {
-      console.log("Tiene asist en ESTE local")
+      Backend.deleteAsistencia(uniqueId)
+      setEstiloAsistencia(styles.button2)
+      setVoy("VOY!")
     } else if (tieneAsist){
       console.log("Tiene asist en OTRO local")
     } else {
