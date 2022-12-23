@@ -26,6 +26,8 @@ export function VerEventosScreen({ route, navigation }) {
 
   const [tieneAsist, setTieneAsist] = React.useState(false)
   const [tieneAsistEsteLocal, setTieneAsistEsteLocal] = React.useState(false)
+  const [voy, setVoy] = React.useState("VOY!")
+  const [estiloAsistencia, setEstiloAsistencia] = React.useState(styles.button2)
 
   React.useEffect(() => {
 
@@ -33,12 +35,15 @@ export function VerEventosScreen({ route, navigation }) {
     .then((items) => {
         //console.log(items)
         const deHoy = items.filter(each => each.fecha == soloFecha)
-        console.log(soloFecha)
         if(deHoy.length > 0){
           setTieneAsist(true)
-          const deEsteLocal = items.filter(each => each.idLocal == idLocal)
+          setVoy("VOY!")
+          setEstiloAsistencia(styles.buttonDisabled)
+          const deEsteLocal = deHoy.filter(each => each.idLocal == idLocal)
           if (deEsteLocal.length > 0){
             setTieneAsistEsteLocal(true)
+            setVoy("NO VOY")
+            setEstiloAsistencia(styles.buttonDelete)
           } 
         }
         console.log(tieneAsist + ' ' + tieneAsistEsteLocal)
@@ -136,6 +141,18 @@ export function VerEventosScreen({ route, navigation }) {
     })
   } else {
     localDueño.push(0)
+  }
+
+  const funcionAsistencia = () => {
+    if(tieneAsist && tieneAsistEsteLocal) {
+      console.log("Tiene asist en ESTE local")
+    } else if (tieneAsist){
+      console.log("Tiene asist en OTRO local")
+    } else {
+      Backend.insertAsistencia(soloFecha, idLocal, uniqueId)
+      setEstiloAsistencia(styles.buttonDelete)
+      setVoy("NO VOY")
+    }
   }
 
   const evento = () =>{
@@ -599,12 +616,14 @@ export function VerEventosScreen({ route, navigation }) {
     return (
       <View>
         <ScrollView>
+
         <Pressable
-        style={styles.button2}
-        onPress={() => Backend.insertAsistencia(soloFecha, idLocal, uniqueId)}
+        style={estiloAsistencia}
+        onPress={() => funcionAsistencia()}
         >
-          <Text style={styles.titleButton}>VOY!</Text>
+          <Text style={styles.titleButton}>{voy}</Text>
         </Pressable>
+
           {cantPromos ?
             <View>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -657,12 +676,14 @@ export function VerEventosScreen({ route, navigation }) {
     return (
       <View>
         <ScrollView>
+
         <Pressable
-        style={styles.button2}
-        onPress={() => Backend.insertAsistencia(fecha, idLocal, uniqueId)}
+        style={estiloAsistencia}
+        onPress={() => funcionAsistencia()}
         >
-          <Text style={styles.titleButton}>VOY!</Text>
+          <Text style={styles.titleButton}>{voy}</Text>
         </Pressable>
+
           <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
           <View>{sinPromos()}</View>
           <View>{sinEventos()}</View>
@@ -727,6 +748,28 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     elevation: 3,
     backgroundColor: "#a73d4c",
+    marginVertical: 10,
+    width: "50%"
+  },
+  buttonDelete: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 30,
+    elevation: 3,
+    backgroundColor: "#8B0000",
+    marginVertical: 10,
+    width: "50%"
+  },
+  buttonDisabled: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 30,
+    elevation: 3,
+    backgroundColor: "#A9A9A9",
     marginVertical: 10,
     width: "50%"
   },
