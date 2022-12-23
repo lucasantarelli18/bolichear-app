@@ -22,10 +22,27 @@ export function VerEventosScreen({ route, navigation }) {
   const { width } = Dimensions.get('window')
   const idDueno = 5;
   const fecha=new Date();
+  const soloFecha = fecha.getFullYear() + '-' + (fecha.getMonth()+1) + '-' + fecha.getDate()
 
-
+  const [tieneAsist, setTieneAsist] = React.useState(false)
+  const [tieneAsistEsteLocal, setTieneAsistEsteLocal] = React.useState(false)
 
   React.useEffect(() => {
+
+    Backend.getAsistenciasXUser(uniqueId)
+    .then((items) => {
+        //console.log(items)
+        const deHoy = items.filter(each => each.fecha == soloFecha)
+        console.log(soloFecha)
+        if(deHoy.length > 0){
+          setTieneAsist(true)
+          const deEsteLocal = items.filter(each => each.idLocal == idLocal)
+          if (deEsteLocal.length > 0){
+            setTieneAsistEsteLocal(true)
+          } 
+        }
+        console.log(tieneAsist + ' ' + tieneAsistEsteLocal)
+      }),
 
     Backend.getEventosxIdLocal(idLocal)
       .then((items) => {
@@ -36,7 +53,7 @@ export function VerEventosScreen({ route, navigation }) {
           setCantEventos(false);
           sinEventos();
         }
-        console.log(items.length)
+        //console.log(items.length)
 
       }),
       Backend.getPromosxIdLocal(idLocal)
@@ -48,13 +65,13 @@ export function VerEventosScreen({ route, navigation }) {
             setCantPromos(false);
 
           }
-          console.log(items.length)
+          //console.log(items.length)
 
         }),
 
       Backend.getLocalesXUser(idDueno).then((items) => {
         setLocales(items);
-        console.log("EL LOCAL QUE ESTAS BUSCANDO ES ESTE: ", items)
+        //console.log("EL LOCAL QUE ESTAS BUSCANDO ES ESTE: ", items)
         if (items.length > 0) {
 
           setCant(true);
@@ -114,7 +131,7 @@ export function VerEventosScreen({ route, navigation }) {
 
   if (cant) {
     locales.map((element) => {
-      console.log("id local del dueño 5", element.id)
+      //console.log("id local del dueño 5", element.id)
       localDueño.push(element.id)
     })
   } else {
@@ -412,7 +429,7 @@ export function VerEventosScreen({ route, navigation }) {
             //console.log(new Date(FechaFin), fecha)
             if((new Date(FechaFin)) >= fecha){
             return (
-              console.log(item),
+              //console.log(item),
               <SafeAreaView style={{
                 backgroundColor: "#e8ded3",
                 width: width * 0.8 - 20,
@@ -469,10 +486,10 @@ export function VerEventosScreen({ route, navigation }) {
                 }
               </SafeAreaView>
             );}else{
-              console.log(new Date(FechaFin), fecha)
+              //console.log(new Date(FechaFin), fecha)
               if((new Date(FechaFin)) < fecha){
               return (
-                console.log(item),
+                //console.log(item),
                 <SafeAreaView style={{
                   backgroundColor: "#e8ded3",
                   width: width * 0.8 - 20,
@@ -584,7 +601,7 @@ export function VerEventosScreen({ route, navigation }) {
         <ScrollView>
         <Pressable
         style={styles.button2}
-        onPress={() => Backend.insertAsistencia(fecha, idLocal, uniqueId)}
+        onPress={() => Backend.insertAsistencia(soloFecha, idLocal, uniqueId)}
         >
           <Text style={styles.titleButton}>VOY!</Text>
         </Pressable>
