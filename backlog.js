@@ -252,17 +252,6 @@ export const insertDomicilioSinPiso = async (calle, num, idLocalidad) => {
     ]);
 };
 
-/* export const insertPromocion = async (nombrePromo, descrip, fHInicio, fHFin, idLocal, idPromo) => {  
-  const { data, error } = await supabase
-  .from('Domicilio')
-  .insert([
-    { calle: calle,
-      numero: num,
-      idLocalidad: idLocalidad
-
-    },
-  ]);
-}; */
 
 export const insertPromocion = async (nombrePromo, descrip, fHInicio, fHFin, idLocal, idPromo) => {
   const { data, error } = await supabase.from("Promocion").insert([
@@ -277,7 +266,7 @@ export const insertPromocion = async (nombrePromo, descrip, fHInicio, fHFin, idL
   ]);
 };
 
-export const insertLocal = async (nombreLocal, lat, long, idDuen, idDomicili, image) => {
+export const insertLocal = async (nombreLocal, lat, long, idDuen, idDomicili, image, ig) => {
   console.log(nombreLocal, lat, long, idDuen, idDomicili);
   const { data, error } = await supabase
     .from('Local')
@@ -288,7 +277,8 @@ export const insertLocal = async (nombreLocal, lat, long, idDuen, idDomicili, im
         longitud: long,
         idDueño: parseInt(idDuen),
         idDomicilio: parseInt(idDomicili),
-        image: image
+        image: image,
+        insta: ig
       },
     ])
   if (error) { console.log(error) }
@@ -379,7 +369,7 @@ export const updateLocalidad = async (idLoc, nombreLoc, codPostal) => {
     .eq('id', idLoc)
 }
 
-export const updatePromocion = async (nombrePromo, descrip, fHInicio, fHFin, idLocal) => {
+export const updatePromocion = async (id, nombrePromo, descrip, fHInicio, fHFin, idPromo) => {
   const { data, error } = await supabase
     .from('Promocion')
     .update({
@@ -387,12 +377,29 @@ export const updatePromocion = async (nombrePromo, descrip, fHInicio, fHFin, idL
       descripcion: descrip,
       fechaHoraInicio: fHInicio,
       fechaHoraFin: fHFin,
-      idLocal: idLocal
+      idPromocion: idPromo
     })
-    .eq('id', idLoc)
+    .eq('id', id)
 }
 
-export const updateLocal = async (idLocal, nombre, idDomicilio, latitud, longitud, foto) => {
+
+
+export const updateEvento = async (id,nombre, descrip, fHInicio, fHFin, idTipoEvento,path) => {
+  const { data, error } = await supabase
+    .from('Evento')
+    .update({
+      nombre: nombre,
+      descripcion: descrip,
+      fechaHoraInicio: fHInicio,
+      fechaHoraFin: fHFin,
+      idTipoEvento: idTipoEvento,
+      path: path
+    })
+    .eq('id', id)
+}
+
+
+export const updateLocal = async (idLocal, nombre, idDomicilio, latitud, longitud, foto, ig) => {
   const { data, error } = await supabase
     .from('Local')
     .update({
@@ -400,7 +407,8 @@ export const updateLocal = async (idLocal, nombre, idDomicilio, latitud, longitu
       idDomicilio: idDomicilio,
       latitud: latitud,
       longitud: longitud,
-      image: foto
+      image: foto,
+      insta: ig
     })
     .eq('id', idLocal)
 }

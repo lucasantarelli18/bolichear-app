@@ -83,7 +83,7 @@ export function MapScreen({ route, navigation }) {
           const val = Math.pow(latMts, 2) + Math.pow(lonMts, 2);
           const dist = Math.sqrt(val);
           const distkm = (dist / 1000).toFixed(2);
-
+          
           if (dist < rango) {
             //console.log("dentro del rango")
             console.log(items[i].dist = distkm)
@@ -217,6 +217,7 @@ export function MapScreen({ route, navigation }) {
             onPress={() => {
               navigation.navigate("VerEventos", {
                 idLocal: element.id,
+                insta: element.insta
               });
             }}>
             <ImageBackground
@@ -250,12 +251,13 @@ export function MapScreen({ route, navigation }) {
       });
     } else {
       return localesFiltrados.map((element) => {
-        //console.log(element.dist)
+        //console.log(element)
         return (
           <Pressable
             onPress={() => {
               navigation.navigate("VerEventos", {
                 idLocal: element.id,
+                insta: element.insta
               });
             }}>
             <ImageBackground

@@ -6,9 +6,12 @@ import Moment from 'moment';
 import 'moment/locale/es';
 import { Icon } from '@rneui/themed';
 import { useNavigation, CommonActions, StackActions } from '@react-navigation/native';
+
 import * as Device from "expo-device";
 
 const uniqueId = Device.osBuildFingerprint;
+
+import { openBrowserAsync } from 'expo-web-browser';
 
 export function VerEventosScreen({ route, navigation }) {
   const [eventos, setEventos] = React.useState([])
@@ -21,6 +24,7 @@ export function VerEventosScreen({ route, navigation }) {
   const { idLocal, latitud, longitud } = route.params;
   const { width } = Dimensions.get('window')
   const idDueno = 5;
+
   const fecha=new Date();
   const soloFecha = fecha.getFullYear() + '-' + (fecha.getMonth()+1) + '-' + fecha.getDate()
 
@@ -94,6 +98,7 @@ export function VerEventosScreen({ route, navigation }) {
 
   // Mapeo y agrego los eventos y promos a dataEventos y dataPromos
   eventos.map((element) => {
+    console.log(element)
     if (idLocal == element.idLocal) {
       const fechaHoraInicio = Moment(element.fechaHoraInicio).format('DD/MM/YYYY [a las] HH:mm ');
       const fechaHoraFin = Moment(element.fechaHoraFin).format('DD/MM/YYYY [a las] HH:mm ');
@@ -104,9 +109,10 @@ export function VerEventosScreen({ route, navigation }) {
           idLocal: element.idLocal,
           title: element.nombre,
           description: element.descripcion,
-          image: { uri: element.path },
+          image:  element.path,
           fechaInicio: fechaHoraInicio,
-          fechaFin: fechaHoraFin
+          fechaFin: fechaHoraFin,
+          idTipoEvento: element.idTipoEvento
         }
       )
     }
@@ -124,7 +130,7 @@ export function VerEventosScreen({ route, navigation }) {
           idLocal: element.idLocal,
           title: element.nombre,
           description: element.descripcion,
-          image: { uri: element.idPromocion },
+          image: element.idPromocion,
           fechaInicio: fechaHoraInicio,
           fechaFin: fechaHoraFin
         }
@@ -133,10 +139,15 @@ export function VerEventosScreen({ route, navigation }) {
   });
 
   const localDueño = [];
+  const insta = [];
 
   if (cant) {
     locales.map((element) => {
+
       //console.log("id local del dueño 5", element.id)
+
+      insta.push(element.insta)
+
       localDueño.push(element.id)
     })
   } else {
@@ -167,7 +178,7 @@ export function VerEventosScreen({ route, navigation }) {
           paddingBottom: 20,
           borderRadius: 12,
         }}>
-                         
+
           <Image
             source={item.image}
             style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
@@ -201,13 +212,13 @@ export function VerEventosScreen({ route, navigation }) {
                         }),
                         source: route.key,
                         target: navigation.getState().key,
-  
+
                       })
-  
+
                       )
                     }
-  
-  
+
+
                   ]
                 )}
               >
@@ -217,13 +228,14 @@ export function VerEventosScreen({ route, navigation }) {
             :
             console.log(fecha)
           }
-  
+
         </SafeAreaView>
-     
+
       );
     })
     
-  }
+  } */
+
   const sinEventos = () => {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -265,7 +277,7 @@ export function VerEventosScreen({ route, navigation }) {
 
   //console.log("DUEÑOOOOOO", localDueño[0])
   // Creo constantes para mostrar el FlatList en la pantalla
-  const flatlistEventos = () => {  
+  const flatlistEventos = () => {
     return (
       <View>
         <FlatList
@@ -283,7 +295,15 @@ export function VerEventosScreen({ route, navigation }) {
             const mes = item.fechaFin.substring(3,5)
             const anio = item.fechaFin.substring(6,10)
             const FechaFin = anio + '-'+ mes +'-'+dia
+            const hora = item.fechaFin.substring(17,19)
+            const mins = item.fechaFin.substring(20,22)
+            const seg = '00'
+            const horaFin = hora +':'+mins+':'+seg
+            const fechaYHoraFinal= FechaFin + ' '+horaFin 
+
             if((new Date(FechaFin)) >= fecha){
+              //console.log('EVENTO',item.idTipoEvento)
+
               return (
                 <SafeAreaView style={{
                   backgroundColor: "#e8ded3",
@@ -292,9 +312,9 @@ export function VerEventosScreen({ route, navigation }) {
                   paddingBottom: 20,
                   borderRadius: 12,
                 }}>
-                                 
+
                   <Image
-                    source={item.image}
+                    source={{uri: item.image}}
                     style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
                   />
                   <Text style={styles.titleText}>{item.title}</Text>
@@ -326,29 +346,50 @@ export function VerEventosScreen({ route, navigation }) {
                                 }),
                                 source: route.key,
                                 target: navigation.getState().key,
-          
+
                               })
-          
+
                               )
                             }
-          
-          
+
+
                           ]
                         )}
                       >
                         <Text style={styles.titleButton}>Eliminar</Text>
                       </Pressable>
+                      <Pressable
+                        style={styles.button2}
+                        onPress={() =>
+                          {
+                            navigation.navigate("EditarEvento", {
+                              nombre: item.title,
+                              descripcion: item.description,
+                              fechaHoraInicio: fechaYHoraFinal,
+                              fechaHoraFin: fechaYHoraFinal,
+                              id: item.id,
+                              imagen: item.image,
+                              idEvento: item.idTipoEvento
+                          
+
+                            });
+                            }}
+                      >
+                        <Text style={styles.titleButton}>Editar</Text>
+                      </Pressable>
                     </View>
                     :
                     console.log(fecha)
                   }
-          
+
                 </SafeAreaView>
-             
+
               );
+
             }else{
-              //console.log(eventos.length)
+        
               if((new Date(FechaFin)) < fecha){
+
                 return (
                   <SafeAreaView style={{
                     backgroundColor: "#e8ded3",
@@ -358,9 +399,9 @@ export function VerEventosScreen({ route, navigation }) {
                     borderRadius: 12,
                     opacity: 0.35,
                   }}>
-                                   
+
                     <Image
-                      source={item.image}
+                      source={{uri: item.image}}
                       style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
                     />
                     <Text style={styles.titleText}>{item.title}</Text>
@@ -392,39 +433,59 @@ export function VerEventosScreen({ route, navigation }) {
                                   }),
                                   source: route.key,
                                   target: navigation.getState().key,
-            
+
                                 })
-            
+
                                 )
                               }
-            
-            
+
+
                             ]
                           )}
                         >
                           <Text style={styles.titleButton}>Eliminar</Text>
                         </Pressable>
+                        <Pressable
+                        style={styles.button2}
+                        onPress={() =>
+                        
+                          {
+                            navigation.navigate("EditarEvento", {
+                              nombre: item.title,
+                              descripcion: item.description,
+                              fechaHoraInicio: fechaYHoraFinal,
+                              fechaHoraFin: fechaYHoraFinal,
+                              id: item.id,
+                              imagen: item.image,
+                              idTipoEvento: item.idTipoEvento
+
+                            });
+                            }}
+                      >
+                        <Text style={styles.titleButton}>Editar</Text>
+                      </Pressable>
                       </View>
                       :
                       console.log(fecha)
                     }
-            
+
                   </SafeAreaView>
-               
+
                 );
               }
-              
+
             }
-            
-         
+
+
           }
-  
-        }/>
+
+          } />
       </View >
     )
+  
   }
 
- 
+
 
 
   const flatlistPromos = () => {
@@ -444,8 +505,13 @@ export function VerEventosScreen({ route, navigation }) {
             const dia = item.fechaFin.substring(0,2)
             const mes = item.fechaFin.substring(3,5)
             const anio = item.fechaFin.substring(6,10)
+            const hora = item.fechaFin.substring(17,19)
+            const mins = item.fechaFin.substring(20,22)
+            const seg = '00'
             const FechaFin = anio + '-'+ mes +'-'+dia
-            //console.log(new Date(FechaFin), fecha)
+            const horaFin = hora +':'+mins+':'+seg
+            const fechaYHoraFinal= FechaFin + ' '+horaFin 
+            //console.log((fechaYHoraFinal))
             if((new Date(FechaFin)) >= fecha){
             return (
               //console.log(item),
@@ -457,7 +523,7 @@ export function VerEventosScreen({ route, navigation }) {
                 borderRadius: 12,
               }}>
                 <Image
-                  source={item.image}
+                  source={{uri: item.image}}
                   style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
                 />
                 <Text style={styles.titleText}>{item.title}</Text>
@@ -492,13 +558,29 @@ export function VerEventosScreen({ route, navigation }) {
 
                             }))
                           }
-
-
                         ]
                       )}
                     >
                       <Text style={styles.titleButton}>Eliminar</Text>
                     </Pressable>
+                    <Pressable
+                        style={styles.button2}
+                        onPress={() =>
+                          {
+                            navigation.navigate("EditarPromocion", {
+                              nombre: item.title,
+                              descripcion: item.description,
+                              fechaHoraInicio: fechaYHoraFinal,
+                              fechaHoraFin: fechaYHoraFinal,
+                              id: item.id,
+                              imagen: item.image,
+                              idLocal: item.idLocal
+                              
+                            });
+                            }}
+                      >
+                        <Text style={styles.titleButton}>Editar</Text>
+                      </Pressable>
                   </View>
                   :
                   console.log('bien')
@@ -507,6 +589,7 @@ export function VerEventosScreen({ route, navigation }) {
             );}else{
               //console.log(new Date(FechaFin), fecha)
               if((new Date(FechaFin)) < fecha){
+
               return (
                 //console.log(item),
                 <SafeAreaView style={{
@@ -515,7 +598,6 @@ export function VerEventosScreen({ route, navigation }) {
                   marginHorizontal: 10,
                   paddingBottom: 20,
                   borderRadius: 12,
-                  opacity:0.35,
                 }}>
                   <Image
                     source={item.image}
@@ -550,29 +632,50 @@ export function VerEventosScreen({ route, navigation }) {
                                 }),
                                 source: route.key,
                                 target: navigation.getState().key,
-  
+
                               }))
                             }
-  
-  
+
+
                           ]
                         )}
                       >
                         <Text style={styles.titleButton}>Eliminar</Text>
+                      </Pressable>
+                      <Pressable
+                        style={styles.button2}
+                        onPress={() =>
+                          {
+                            navigation.navigate("EditarPromocion", {
+                              nombre: item.title,
+                              descripcion: item.description,
+                              fechaHoraInicio: fechaYHoraFinal,
+                              fechaHoraFin: fechaYHoraFinal,
+                              id: item.id,
+                              imagen: item.idPromocion,
+                              idLocal: item.idLocal
+                              
+                            });
+                            }}
+                      >
+                        <Text style={styles.titleButton}>Editar</Text>
                       </Pressable>
                     </View>
                     :
                     console.log('bien')
                   }
                 </SafeAreaView>
-              );}
-              
+              );
+              }
+
             }
           }
           } />
       </View >
     )
   }
+
+    
 
   const sinPromos = () => {
     return (
@@ -619,7 +722,6 @@ export function VerEventosScreen({ route, navigation }) {
       <View>
         <ScrollView>
 
-
 <View style={{ alignItems: 'center' }}>
         <Pressable
         style={estiloAsistencia}
@@ -628,6 +730,12 @@ export function VerEventosScreen({ route, navigation }) {
           <Text style={styles.titleButton}>{voy}</Text>
         </Pressable>
 </View>
+
+          <View style={styles.tabPress2}>
+            <Pressable style={styles.insta} onPress={() => openBrowserAsync("https://www.instagram.com/" + insta[0])} >
+              <Text>INSTAGRAM</Text>
+            </Pressable>
+          </View>
 
           {cantPromos ?
             <View>
@@ -679,9 +787,9 @@ export function VerEventosScreen({ route, navigation }) {
   else {
 
     return (
+
       <View>
         <ScrollView>
-
 
 <View style={{ alignItems: 'center' }}>
         <Pressable
@@ -691,6 +799,12 @@ export function VerEventosScreen({ route, navigation }) {
           <Text style={styles.titleButton}>{voy}</Text>
         </Pressable>
 </View>
+
+          <View style={styles.tabPress2}>
+            <Pressable style={styles.insta} onPress={() => openBrowserAsync("https://www.instagram.com/" + insta)} >
+              <Text>INSTAGRAM</Text>
+            </Pressable>
+          </View>
 
           <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
           <View>{sinPromos()}</View>
@@ -748,6 +862,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#ebe6d9",
     marginVertical: 10,
   },
+  insta: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 30,
+    backgroundColor: "#ebe6d9",
+    padding: 8,
+  },
   button2: {
     alignItems: "center",
     justifyContent: "center",
@@ -759,6 +880,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     width: "50%"
   },
+
   buttonDelete: {
     alignItems: "center",
     justifyContent: "center",
@@ -780,6 +902,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#A9A9A9",
     marginVertical: 10,
     width: "50%"
+
+  tabPress2: {
+    //flex: 1,
+    width: '100%',
+    height: '5%',
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 10,
+
   },
   titulos: {
     fontSize: 19,
@@ -800,8 +931,8 @@ const styles = StyleSheet.create({
     color: "black",
     textAlign: "center",
   },
-  deshabilitar:{
-      opacity: 0.5,
-    
+  deshabilitar: {
+    opacity: 0.5,
+
   }
 });
