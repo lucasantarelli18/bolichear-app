@@ -620,7 +620,7 @@ export function VerEventosScreen({ route, navigation }) {
         <ScrollView>
 
 
-<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+<View style={{ alignItems: 'center' }}>
         <Pressable
         style={estiloAsistencia}
         onPress={() => funcionAsistencia()}
@@ -652,7 +652,7 @@ export function VerEventosScreen({ route, navigation }) {
           }
           {cantEventos ?
             <View>
-              <View style={{ alignItems: 'center' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
                 <View>
                   <Text style={{
