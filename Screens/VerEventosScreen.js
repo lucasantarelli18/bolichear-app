@@ -112,7 +112,9 @@ export function VerEventosScreen({ route, navigation }) {
           image:  element.path,
           fechaInicio: fechaHoraInicio,
           fechaFin: fechaHoraFin,
-          idTipoEvento: element.idTipoEvento
+          idTipoEvento: element.idTipoEvento,
+          precio: element.precio
+
         }
       )
     }
@@ -186,6 +188,9 @@ export function VerEventosScreen({ route, navigation }) {
           <Text style={styles.titleText}>{item.title}</Text>
           <Text style={styles.descriptionText}>
             {item.description}
+          </Text>
+          <Text style={styles.descriptionText}>
+            {item.precio}
           </Text>
           <Text style={styles.fechaText}>
             Vigente desde el {item.fechaInicio}
@@ -275,6 +280,8 @@ export function VerEventosScreen({ route, navigation }) {
     );
   }
 
+   
+//console.log(dataEventos)
   //console.log("DUEÑOOOOOO", localDueño[0])
   // Creo constantes para mostrar el FlatList en la pantalla
   const flatlistEventos = () => {
@@ -300,9 +307,9 @@ export function VerEventosScreen({ route, navigation }) {
             const seg = '00'
             const horaFin = hora +':'+mins+':'+seg
             const fechaYHoraFinal= FechaFin + ' '+horaFin 
-
+    
             if((new Date(FechaFin)) >= fecha){
-              //console.log('EVENTO',item.idTipoEvento)
+              
 
               return (
                 <SafeAreaView style={{
@@ -320,6 +327,9 @@ export function VerEventosScreen({ route, navigation }) {
                   <Text style={styles.titleText}>{item.title}</Text>
                   <Text style={styles.descriptionText}>
                     {item.description}
+                  </Text>
+                  <Text style={styles.PrecioText}>
+                     Precio: ${item.precio}
                   </Text>
                   <Text style={styles.fechaText}>
                     Vigente desde el {item.fechaInicio}
@@ -369,7 +379,8 @@ export function VerEventosScreen({ route, navigation }) {
                               fechaHoraFin: fechaYHoraFinal,
                               id: item.id,
                               imagen: item.image,
-                              idEvento: item.idTipoEvento
+                              idEvento: item.idTipoEvento,
+                              //precio: item.precio,
                           
 
                             });
@@ -407,6 +418,9 @@ export function VerEventosScreen({ route, navigation }) {
                     <Text style={styles.titleText}>{item.title}</Text>
                     <Text style={styles.descriptionText}>
                       {item.description}
+                    </Text>
+                    <Text style={styles.PrecioText}>
+                     Precio: ${item.precio}
                     </Text>
                     <Text style={styles.fechaText}>
                       Vigente desde el {item.fechaInicio}
@@ -457,7 +471,8 @@ export function VerEventosScreen({ route, navigation }) {
                               fechaHoraFin: fechaYHoraFinal,
                               id: item.id,
                               imagen: item.image,
-                              idTipoEvento: item.idTipoEvento
+                              idTipoEvento: item.idTipoEvento,
+                              //precio: item.precio
 
                             });
                             }}
@@ -827,6 +842,11 @@ const styles = StyleSheet.create({
     paddingStart: 10,
   },
   descriptionText: {
+    paddingStart: 10,
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+  PrecioText: {
     paddingStart: 10,
     fontSize: 15,
     fontWeight: "bold",

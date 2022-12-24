@@ -308,7 +308,8 @@ export const insertEvento = async (
   fHoraFin,
   idTipoEvento,
   idLocal,
-  path
+  path,
+  precio
 ) => {
   const { data, error } = await supabase.from("Evento").insert([
     {
@@ -318,7 +319,8 @@ export const insertEvento = async (
       fechaHoraFin: fHoraFin,
       idTipoEvento: idTipoEvento,
       idLocal: idLocal,
-      path: path
+      path: path,
+      precio: precio
     },
   ]);
 };
@@ -384,7 +386,7 @@ export const updatePromocion = async (id, nombrePromo, descrip, fHInicio, fHFin,
 
 
 
-export const updateEvento = async (id,nombre, descrip, fHInicio, fHFin, idTipoEvento,path) => {
+export const updateEvento = async (id,nombre, descrip, fHInicio, fHFin, idTipoEvento,path, precio) => {
   const { data, error } = await supabase
     .from('Evento')
     .update({
@@ -393,7 +395,8 @@ export const updateEvento = async (id,nombre, descrip, fHInicio, fHFin, idTipoEv
       fechaHoraInicio: fHInicio,
       fechaHoraFin: fHFin,
       idTipoEvento: idTipoEvento,
-      path: path
+      path: path,
+      precio: precio
     })
     .eq('id', id)
 }

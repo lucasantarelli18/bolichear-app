@@ -18,12 +18,14 @@ export function EditarEventoScreen({ route, navigation: { goBack } }) {
 
   const [modificaNombre, setModificaNombre] = React.useState(false);
   const [modificaDescripcion, setModificaDescripcion] = React.useState(false);
+  //const [modificaPrecio, setModificaPrecio] = React.useState(false);
   const [modificaFoto, setModificaFoto] = React.useState(false);
   const [modificaFechaInicio, setModificaFechaInicio] = React.useState(false);
   const [modificaFechaFin, setModificaFechaFin] = React.useState(false);
   const [modificaIdEvento, setModificaIdEvento] = React.useState(true);
   const [nombreEvento, setNombreEvento] = React.useState(nombre);
   const [descripcionEvento, setDescripcionEvento] = React.useState(descripcion);
+  //const [precioEvento, setPrecioEvento] = React.useState(precio);
   const [fechaInicio, setFechaInicio] = React.useState(fechaHoraInicio);
   const [fechaFin, setFechaFin] = React.useState(fechaHoraFin);
   const [image, setImage] = React.useState(imagen);
@@ -134,7 +136,16 @@ export function EditarEventoScreen({ route, navigation: { goBack } }) {
             }}
           />
         </View>
-
+      {/*    <Text style={styles.titulos}>Precio de la entrada</Text>
+      <View style={styles.container2}>
+         <TextInput
+          style={styles.input}
+          defaultValue={precioEvento}
+          keyboardType="numeric"
+          placeholder="Ingrese el precio"
+          onChangeText={(text) => setPrecioEvento(text), setModificaPrecio(true)}
+        /> 
+      </View>  */}
         <Text style={styles.titulos}>Vigencia</Text>
         <View style={styles.container2}>
           <Pressable style={styles.buttonF} title="Inicio" onPress={showDateTimePicker}>
@@ -186,9 +197,9 @@ export function EditarEventoScreen({ route, navigation: { goBack } }) {
 
 
         <Pressable onPress={() => {
-          if (modificaNombre || modificaFoto || modificaDescripcion || modificaFechaFin || modificaFechaInicio || modificaIdEvento) {
+          if (modificaNombre || modificaFoto || modificaDescripcion || modificaFechaFin || modificaFechaInicio || modificaIdEvento || modificaPrecio) {
             console.log(id + " " + nombreEvento + " " + descripcionEvento + " " + fechaInicio + " " + fechaFin + ' ' + image)
-            Backend.updateEvento(id, nombreEvento, descripcionEvento, fechaInicio, fechaFin, value, image)
+            Backend.updateEvento(id, nombreEvento, descripcionEvento, fechaInicio, fechaFin, value, image, precioEvento)
               .then((items) => {
                 //console.log(items)
                 Alert.alert('Datos modificados con éxito!')
