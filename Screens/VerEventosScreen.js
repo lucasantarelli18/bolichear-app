@@ -234,7 +234,7 @@ export function VerEventosScreen({ route, navigation }) {
       );
     })
     
-  } */
+  } 
 
   const sinEventos = () => {
     return (
@@ -902,6 +902,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#A9A9A9",
     marginVertical: 10,
     width: "50%"
+  },
 
   tabPress2: {
     //flex: 1,
