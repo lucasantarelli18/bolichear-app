@@ -6,9 +6,12 @@ import Moment from 'moment';
 import 'moment/locale/es';
 import { Icon } from '@rneui/themed';
 import { useNavigation, CommonActions, StackActions } from '@react-navigation/native';
+
+import * as Device from "expo-device";
+
+const uniqueId = Device.osBuildFingerprint;
+
 import { openBrowserAsync } from 'expo-web-browser';
-
-
 
 export function VerEventosScreen({ route, navigation }) {
   const [eventos, setEventos] = React.useState([])
@@ -21,11 +24,34 @@ export function VerEventosScreen({ route, navigation }) {
   const { idLocal, latitud, longitud } = route.params;
   const { width } = Dimensions.get('window')
   const idDueno = 5;
-  const fecha = new Date();
 
+  const fecha=new Date();
+  const soloFecha = fecha.getFullYear() + '-' + (fecha.getMonth()+1) + '-' + fecha.getDate()
 
+  const [tieneAsist, setTieneAsist] = React.useState(false)
+  const [tieneAsistEsteLocal, setTieneAsistEsteLocal] = React.useState(false)
+  const [voy, setVoy] = React.useState("VOY!")
+  const [estiloAsistencia, setEstiloAsistencia] = React.useState(styles.button2)
 
   React.useEffect(() => {
+
+    Backend.getAsistenciasXUser(uniqueId)
+    .then((items) => {
+        //console.log(items)
+        const deHoy = items.filter(each => each.fecha == soloFecha)
+        if(deHoy.length > 0){
+          setTieneAsist(true)
+          setVoy("VOY!")
+          setEstiloAsistencia(styles.buttonDisabled)
+          const deEsteLocal = deHoy.filter(each => each.idLocal == idLocal)
+          if (deEsteLocal.length > 0){
+            setTieneAsistEsteLocal(true)
+            setVoy("NO VOY")
+            setEstiloAsistencia(styles.buttonDelete)
+          } 
+        }
+        console.log(tieneAsist + ' ' + tieneAsistEsteLocal)
+      }),
 
     Backend.getEventosxIdLocal(idLocal)
       .then((items) => {
@@ -36,7 +62,7 @@ export function VerEventosScreen({ route, navigation }) {
           setCantEventos(false);
           sinEventos();
         }
-        console.log(items.length)
+        //console.log(items.length)
 
       }),
       Backend.getPromosxIdLocal(idLocal)
@@ -48,13 +74,13 @@ export function VerEventosScreen({ route, navigation }) {
             setCantPromos(false);
 
           }
-          console.log(items.length)
+          //console.log(items.length)
 
         }),
 
       Backend.getLocalesXUser(idDueno).then((items) => {
         setLocales(items);
-        console.log("EL LOCAL QUE ESTAS BUSCANDO ES ESTE: ", items)
+        //console.log("EL LOCAL QUE ESTAS BUSCANDO ES ESTE: ", items)
         if (items.length > 0) {
 
           setCant(true);
@@ -117,15 +143,31 @@ export function VerEventosScreen({ route, navigation }) {
 
   if (cant) {
     locales.map((element) => {
-      console.log("id local del dueño 5", element.id)
+
+      //console.log("id local del dueño 5", element.id)
+
       insta.push(element.insta)
+
       localDueño.push(element.id)
     })
   } else {
     localDueño.push(0)
   }
 
-/* 
+  const funcionAsistencia = () => {
+    if(tieneAsist && tieneAsistEsteLocal) {
+      Backend.deleteAsistencia(uniqueId)
+      setEstiloAsistencia(styles.button2)
+      setVoy("VOY!")
+    } else if (tieneAsist){
+      console.log("Tiene asist en OTRO local")
+    } else {
+      Backend.insertAsistencia(soloFecha, idLocal, uniqueId)
+      setEstiloAsistencia(styles.buttonDelete)
+      setVoy("NO VOY")
+    }
+  }
+
   const evento = () =>{
     eventos.map((item) =>{
       return (
@@ -192,7 +234,7 @@ export function VerEventosScreen({ route, navigation }) {
       );
     })
     
-  } */
+  } 
 
   const sinEventos = () => {
     return (
@@ -472,7 +514,7 @@ export function VerEventosScreen({ route, navigation }) {
             //console.log((fechaYHoraFinal))
             if((new Date(FechaFin)) >= fecha){
             return (
-              console.log(item),
+              //console.log(item),
               <SafeAreaView style={{
                 backgroundColor: "#e8ded3",
                 width: width * 0.8 - 20,
@@ -549,7 +591,7 @@ export function VerEventosScreen({ route, navigation }) {
               if((new Date(FechaFin)) < fecha){
 
               return (
-                console.log(item),
+                //console.log(item),
                 <SafeAreaView style={{
                   backgroundColor: "#e8ded3",
                   width: width * 0.8 - 20,
@@ -679,11 +721,22 @@ export function VerEventosScreen({ route, navigation }) {
     return (
       <View>
         <ScrollView>
+
+<View style={{ alignItems: 'center' }}>
+        <Pressable
+        style={estiloAsistencia}
+        onPress={() => funcionAsistencia()}
+        >
+          <Text style={styles.titleButton}>{voy}</Text>
+        </Pressable>
+</View>
+
           <View style={styles.tabPress2}>
             <Pressable style={styles.insta} onPress={() => openBrowserAsync("https://www.instagram.com/" + insta[0])} >
               <Text>INSTAGRAM</Text>
             </Pressable>
           </View>
+
           {cantPromos ?
             <View>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -737,11 +790,22 @@ export function VerEventosScreen({ route, navigation }) {
 
       <View>
         <ScrollView>
+
+<View style={{ alignItems: 'center' }}>
+        <Pressable
+        style={estiloAsistencia}
+        onPress={() => funcionAsistencia()}
+        >
+          <Text style={styles.titleButton}>{voy}</Text>
+        </Pressable>
+</View>
+
           <View style={styles.tabPress2}>
             <Pressable style={styles.insta} onPress={() => openBrowserAsync("https://www.instagram.com/" + insta)} >
               <Text>INSTAGRAM</Text>
             </Pressable>
           </View>
+
           <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
           <View>{sinPromos()}</View>
           <View>{sinEventos()}</View>
@@ -816,6 +880,30 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     width: "50%"
   },
+
+  buttonDelete: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 30,
+    elevation: 3,
+    backgroundColor: "#8B0000",
+    marginVertical: 10,
+    width: "50%"
+  },
+  buttonDisabled: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 30,
+    elevation: 3,
+    backgroundColor: "#A9A9A9",
+    marginVertical: 10,
+    width: "50%"
+  },
+
   tabPress2: {
     //flex: 1,
     width: '100%',
@@ -823,6 +911,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 10,
+
   },
   titulos: {
     fontSize: 19,

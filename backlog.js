@@ -3,6 +3,15 @@ import { Text, View, Button } from "react-native";
 import { supabase } from "./supabase";
 import "react-native-url-polyfill/auto";
 
+export const getAsistenciasXUser = async (idUsuario) => {
+  let { data: Asistencia, error } = await supabase
+    .from("Asistencia")
+    .select("*")
+    .eq('idUsuario', idUsuario)
+    //.eq('fecha', fecha)
+  return Asistencia;
+};
+
 export const getLocalesXUser = async (idDueno) => {
   let { data: Local, error } = await supabase
     .from('Local')
@@ -412,6 +421,13 @@ export const deletePromocion = async (idPromo) => {
     .from('Promocion')
     .delete()
     .match({ id: idPromo })
+}
+
+export const deleteAsistencia = async (idUsuario) => {
+  const { data, error } = await supabase
+    .from('Asistencia')
+    .delete()
+    .match({ idUsuario: idUsuario })
 }
 
 export const deleteEventoXLocal = async (idLocal) => {
