@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Checkbox } from 'react-native-paper';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import DropDownPicker from "react-native-dropdown-picker";
+import { enableExpoCliLogging } from 'expo/build/logs/Logs';
 
 export function MapScreen({ route, navigation }) {
   const [locales, setLocales] = React.useState([]);
@@ -364,6 +365,8 @@ export function MapScreen({ route, navigation }) {
 
         <Pressable style={styles.button} onPress={() => {
           const array = locales
+
+     
           const arrayFiltrado = []
 
           if (valueTE == null) {
@@ -411,7 +414,21 @@ export function MapScreen({ route, navigation }) {
           placeholder="Tipo de evento"
         />
       </View>
+      <Pressable style={styles.button} onPress={() => {
+        const array = []
+        
+        locales.map(element => {
+          //console.log(element)
+          array.push(element.Evento, element.idLocal)
+        })
+        //console.log('original', array)
+        console.log('ordenado',array.sort((a,b) => a.precio - b.precio))
+       // setLocalesFiltrados(ordenados)
 
+
+        } } >
+          <Text style={styles.text}>Menor precio</Text>
+      </Pressable>
 
         <ScrollView style={styles.container}>{list()}</ScrollView>
 

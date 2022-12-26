@@ -55,7 +55,8 @@ export const getLocalxDomicilio = async () => {
       id,
       fechaHoraInicio,
       fechaHoraFin,
-      idTipoEvento
+      idTipoEvento,
+      precio
     )
   `);
   return data;
@@ -386,7 +387,7 @@ export const updatePromocion = async (id, nombrePromo, descrip, fHInicio, fHFin,
 
 
 
-export const updateEvento = async (id,nombre, descrip, fHInicio, fHFin, idTipoEvento,path, precio) => {
+export const updateEvento = async (id,nombre, descrip, fHInicio, fHFin, idTipoEvento,path) => {
   const { data, error } = await supabase
     .from('Evento')
     .update({
@@ -396,7 +397,7 @@ export const updateEvento = async (id,nombre, descrip, fHInicio, fHFin, idTipoEv
       fechaHoraFin: fHFin,
       idTipoEvento: idTipoEvento,
       path: path,
-      precio: precio
+      //precio: precio
     })
     .eq('id', id)
 }
