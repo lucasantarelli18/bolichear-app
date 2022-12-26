@@ -16,6 +16,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 export function MapScreen({ route, navigation }) {
 
   const mapa = new Map();
+  const date = new Date();
   const [mapaState, setMapaState] = React.useState([]);
   const [locales, setLocales] = React.useState([]);
   const [localesFiltrados, setLocalesFiltrados] = React.useState([]);
@@ -90,8 +91,14 @@ export function MapScreen({ route, navigation }) {
           if (dist < rango) {
             //console.log("dentro del rango")
             console.log(items[i].dist = distkm)
-            console.log(items[i])
-            mapa.set(items[i].id, 0)
+            //console.log(items[i])
+            let asistDelLocal = 0
+            for (const j in items[i].Asistencia){
+              if(items[i].Asistencia[j].created_at.split('T')[0] == date.toISOString().split('T')[0]){
+                asistDelLocal++;
+              }
+            }
+            mapa.set(items[i].id, asistDelLocal)
             arr.push(items[i])
           } else {
             //console.log("fuera del rango")

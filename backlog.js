@@ -60,7 +60,7 @@ export const getLocalxDomicilio = async () => {
     Asistencia(
       id,
       idLocal,
-      fecha
+      created_at
     )
   `);
   return data;
