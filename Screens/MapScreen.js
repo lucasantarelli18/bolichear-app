@@ -366,11 +366,18 @@ export function MapScreen({ route, navigation }) {
       </View>
 
       <Pressable style={styles.button} onPress={() => {
-         
-         const ordenados = locales.sort((a,b) => a.dist - b.dist)
-
-         setLocalesFiltrados(ordenados)
+         if(filtrar == 0){
+            const ordenados = locales.sort((a,b) => a.dist - b.dist) 
+            setLocalesFiltrados(ordenados)
+            changeFiltrar(filtrar+1)
      
+         } else {
+            const ordenados = localesFiltrados.sort((a,b) => a.dist - b.dist)
+            setLocalesFiltrados(ordenados)
+            changeFiltrar(filtrar+1)
+         }
+         
+
           
         } } >
             <Text style={styles.text}>Ordenar por distancia</Text>
