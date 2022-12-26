@@ -197,9 +197,9 @@ export function EditarEventoScreen({ route, navigation: { goBack } }) {
 
 
         <Pressable onPress={() => {
-          if (modificaNombre || modificaFoto || modificaDescripcion || modificaFechaFin || modificaFechaInicio || modificaIdEvento || modificaPrecio) {
+          if (modificaNombre || modificaFoto || modificaDescripcion || modificaFechaFin || modificaFechaInicio || modificaIdEvento ) {
             console.log(id + " " + nombreEvento + " " + descripcionEvento + " " + fechaInicio + " " + fechaFin + ' ' + image)
-            Backend.updateEvento(id, nombreEvento, descripcionEvento, fechaInicio, fechaFin, value, image, precioEvento)
+            Backend.updateEvento(id, nombreEvento, descripcionEvento, fechaInicio, fechaFin, value, image)
               .then((items) => {
                 //console.log(items)
                 Alert.alert('Datos modificados con éxito!')
