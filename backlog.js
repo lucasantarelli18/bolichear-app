@@ -56,6 +56,21 @@ export const getLocalxDomicilio = async () => {
       fechaHoraInicio,
       fechaHoraFin,
       idTipoEvento
+    ),
+    Asistencia(
+      id,
+      idLocal,
+      fecha
+    )
+  `);
+  return data;
+};
+
+export const getLocalxDomicilio2 = async () => {
+  const { data, error } = await supabase.from("Local").select(`
+    *,
+    Asistencia ( *,
+      {count: 'exact'}
     )
   `);
   return data;

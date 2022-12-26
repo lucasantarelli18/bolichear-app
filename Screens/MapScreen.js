@@ -14,6 +14,9 @@ import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import DropDownPicker from "react-native-dropdown-picker";
 
 export function MapScreen({ route, navigation }) {
+
+  const mapa = new Map();
+  const [mapaState, setMapaState] = React.useState([]);
   const [locales, setLocales] = React.useState([]);
   const [localesFiltrados, setLocalesFiltrados] = React.useState([]);
 
@@ -87,13 +90,15 @@ export function MapScreen({ route, navigation }) {
           if (dist < rango) {
             //console.log("dentro del rango")
             console.log(items[i].dist = distkm)
-            //console.log(items[i])
+            console.log(items[i])
+            mapa.set(items[i].id, 0)
             arr.push(items[i])
           } else {
             //console.log("fuera del rango")
           }
         }
         setLocales(arr)
+        setMapaState(mapa)
       })
     Backend.getLocalidadXNombre(localidad).then((items) => {
       setIdLocalidad(items[0].id);
@@ -242,7 +247,7 @@ export function MapScreen({ route, navigation }) {
                     {" "}
                     Direccion: {element.Domicilio.calle} {element.Domicilio.numero}
                   </Text>
-                  <Text style={styles.info}> Asistiran 300 personas </Text>
+                  <Text style={styles.info}> Asistiran {mapaState.get(element.id)} personas </Text>
                 </View>
               </View>
             </ImageBackground>
@@ -282,7 +287,7 @@ export function MapScreen({ route, navigation }) {
                     {" "}
                     Direccion: {element.Domicilio.calle} {element.Domicilio.numero}
                   </Text>
-                  <Text style={styles.info}> Asistiran 300 personas </Text>
+                  <Text style={styles.info}> Asistiran {mapaState.get(element.id)} personas </Text>
                 </View>
               </View>
             </ImageBackground>
