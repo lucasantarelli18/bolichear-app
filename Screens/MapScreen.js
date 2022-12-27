@@ -12,11 +12,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Checkbox } from 'react-native-paper';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import DropDownPicker from "react-native-dropdown-picker";
+import AuthContext from "../AuthContext"
 
 export function MapScreen({ route, navigation }) {
   const [locales, setLocales] = React.useState([]);
   const [localesFiltrados, setLocalesFiltrados] = React.useState([]);
   const { calle, numero, localidad, latitud, longitud, rango } = route.params;
+
+  const { token } = React.useContext(AuthContext);
 
   //console.log("Buenas, esta es la calle y el numero", calle, numero, localidad)
 
@@ -385,7 +388,14 @@ export function MapScreen({ route, navigation }) {
 
         <ScrollView style={styles.container}>{list()}</ScrollView>
 
-        <Pressable style={styles.button} onPress={() => {
+{ token()._W.userToken == 0 ? 
+
+  console.log("No esta logeado")
+  
+:
+
+  <Pressable style={styles.button} onPress={() => {
+      console.log(token()._W.userToken);
           navigation.navigate('Locales', {
             latitud: latitud,
             longitud: longitud,
@@ -396,7 +406,10 @@ export function MapScreen({ route, navigation }) {
           });
         }}>
           <Text style={styles.text}>IR A MI LOCAL</Text>
-        </Pressable>
+  </Pressable>
+
+}
+
         <View style={styles.tabCambio}>
           <Pressable style={styles.tabPress} onPress={() => changeCambio(true)}>
             <Text>Mapa</Text>
