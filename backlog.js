@@ -199,6 +199,17 @@ export const getUsuarios = async () => {
   return Usuario;
 };
 
+export const getUsuariosLogin = async (mail, pass) => {
+let { data: Usuario, error } = await supabase
+    .from('Usuario')
+    .select(`
+    *
+  `)
+    .eq("nombre", mail)
+    .eq("password", pass)
+  return Usuario
+};
+
 //Inserts
 
 /*
