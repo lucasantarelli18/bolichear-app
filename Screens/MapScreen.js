@@ -20,7 +20,6 @@ export function MapScreen({ route, navigation }) {
   const [mapaState, setMapaState] = React.useState([]);
   const [locales, setLocales] = React.useState([]);
   const [localesFiltrados, setLocalesFiltrados] = React.useState([]);
-
   const { calle, numero, localidad, latitud, longitud, rango } = route.params;
 
   //console.log("Buenas, esta es la calle y el numero", calle, numero, localidad)
@@ -40,11 +39,6 @@ export function MapScreen({ route, navigation }) {
   const [evento, setEvento] = React.useState([]);
   const [tipoEvento, setTipoEvento] = React.useState([]);
   const [idLocalidad, setIdLocalidad] = React.useState([]);
-//  const [checked1, setChecked1] = React.useState(false);
-//  const [checked2, setChecked2] = React.useState(false);
-//  const [checked3, setChecked3] = React.useState(false);
-//  const [checked4, setChecked4] = React.useState(false);
-//  const [checked5, setChecked5] = React.useState(false);
   const [openTE, setOpenTE] = useState(false);
   const [valueTE, setValueTE] = useState(null);
   const [itemsTE, setItemsTE] = useState([
@@ -87,9 +81,10 @@ export function MapScreen({ route, navigation }) {
           const val = Math.pow(latMts, 2) + Math.pow(lonMts, 2);
           const dist = Math.sqrt(val);
           const distkm = (dist / 1000).toFixed(2);
-          
+         
           if (dist < rango) {
             //console.log("dentro del rango")
+            //distancia.push(items[i].dist = distkm).sort((a,b)=> a -b)
             console.log(items[i].dist = distkm)
             //console.log(items[i])
             let asistDelLocal = 0
@@ -130,49 +125,7 @@ export function MapScreen({ route, navigation }) {
     setFiltrar(elem);
   };
 
-  /*const filtroTipoEvento = () =>{
-    return (
-      <View>
-         <Menu
-          visible={visible}
-          anchor={ <Pressable
-                    style={styles.button}
-                    onPress={showMenu}>
-                    <Text style={styles.titleButton}>Filtrp</Text>
-                    </Pressable>
-                  }
-          onRequestClose={hideMenu}
-        >
-        <MenuItem onPress={hideMenu}><Checkbox.Item label={tipoEvento ? 'Fiesta' : 'nada'} status={checked1 ? 'checked' : 'unchecked'}
-      onPress={() => {
-        setChecked1(!checked1);
-      }}/></MenuItem>
-        
-        <MenuItem onPress={hideMenu}><Checkbox.Item label={tipoEvento ? 'Show en vivo' : 'nada'} status={checked2 ? 'checked' : 'unchecked'}
-      onPress={() => {
-        setChecked2(!checked2);
-      }}/></MenuItem>
-      
-      <MenuItem onPress={hideMenu}><Checkbox.Item label={tipoEvento ? 'Tematica' : 'nada'} status={checked3 ? 'checked' : 'unchecked'}
-      onPress={() => {
-        setChecked3(!checked3);
-      }}/></MenuItem>
-      
-      <MenuItem onPress={hideMenu}><Checkbox.Item label={tipoEvento ? 'Noche cachengue' : 'nada'} status={checked4 ? 'checked' : 'unchecked'}
-      onPress={() => {
-        setChecked4(!checked4);
-      }}/></MenuItem>
-      
-      <MenuItem onPress={hideMenu}><Checkbox.Item label={tipoEvento ? 'Noche electronica' : 'nada'} status={checked5 ? 'checked' : 'unchecked'}
-      onPress={() => {
-        setChecked5(!checked5);
-      }}/></MenuItem>
-      </Menu>
-      </View>
-      
-    );
-    
-  }*/
+
 
   const list = () => {
     if (cambio && filtrar == 0) {
@@ -424,6 +377,23 @@ export function MapScreen({ route, navigation }) {
         />
       </View>
 
+      <Pressable style={styles.button} onPress={() => {
+         if(filtrar == 0){
+            const ordenados = locales.sort((a,b) => a.dist - b.dist) 
+            setLocalesFiltrados(ordenados)
+            changeFiltrar(filtrar+1)
+     
+         } else {
+            const ordenados = localesFiltrados.sort((a,b) => a.dist - b.dist)
+            setLocalesFiltrados(ordenados)
+            changeFiltrar(filtrar+1)
+         }
+         
+
+          
+        } } >
+            <Text style={styles.text}>Ordenar por distancia</Text>
+        </Pressable>
 
         <ScrollView style={styles.container}>{list()}</ScrollView>
 
