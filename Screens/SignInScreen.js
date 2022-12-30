@@ -8,7 +8,7 @@ export function SignInScreen() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const { signIn } = React.useContext(AuthContext);
+  const { signIn, token } = React.useContext(AuthContext);
 
   return (
 
@@ -35,6 +35,7 @@ export function SignInScreen() {
         <Text style={styles.texto}>Olvidé mi contraseña</Text>
         <Pressable
           style={styles.container3}
+                    //onPress={() => console.log(token()._W.userToken) }>
           onPress={() => signIn({ username, password })}>
           <LinearGradient
             // Button Linear Gradient

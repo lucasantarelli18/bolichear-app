@@ -95,7 +95,7 @@ export function LocalesScreen({ route, navigation }) {
 
   const list = () => {
     return locales.map((element) => {
-      console.log(element)
+      //console.log(element)
       //console.log("LISTAAAAAAAAA LOCAL", element);
       return (
         <ScrollView style={styles.container2}>

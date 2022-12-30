@@ -6,10 +6,10 @@ import { StatusBar } from 'expo-status-bar';
 
 export function PreloginScreen({ route, navigation }) {
 
-  const { signIn } = React.useContext(AuthContext);
+  const { signInSinPass } = React.useContext(AuthContext);
 
   return (
-
+    
     <ImageBackground
       source={require("../assets/fondoLogIn.jpg")}
       style={styles.container}
@@ -18,7 +18,7 @@ export function PreloginScreen({ route, navigation }) {
       <View style={styles.container2}>
         <Pressable
           style={styles.container3}
-          onPress={() => signIn({ })}>
+          onPress={() => signInSinPass({ })}>
           <LinearGradient
             // Button Linear Gradient
             colors={['#C2454A', '#A32934', '#680008']}

@@ -8,9 +8,12 @@ import { RealtimeClient } from '@supabase/supabase-js';
 import { Slider } from "@miblanchard/react-native-slider";
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
+import AuthContext from "../AuthContext"
 
 export function UbicationScreen({ navigation }) {
 
+  const { token } = React.useContext(AuthContext);
+      console.log(token()._W.userToken);
   const [ubicacion, setUbicacion] = React.useState({
     calle: "Av. del Petroleo Argentino",
     numero: 417,

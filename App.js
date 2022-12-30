@@ -31,6 +31,7 @@ import 'react-native-url-polyfill/auto';
 import * as Font from 'expo-font';
 import { LogBox } from "react-native";
 import AuthContext from "./AuthContext"
+import * as Backend from './backlog';
  
 LogBox.ignoreAllLogs();
 
@@ -103,12 +104,32 @@ export default function App({ navigation }) {
   const authContext = React.useMemo(
     () => ({
       signIn: async (data) => {
+        Backend.getUsuariosLogin(data.username, data.password).then((items) => {
+          if(items.length > 0){
+            console.log(items[0].id)
+            dispatch({ type: "SIGN_IN", token: items[0].id });
+          }else{
+            console.log("NO SE PUDO LOGEAR")
+          }
+        })
+
+        //dispatch({ type: "SIGN_IN", token: "dummy-auth-token" });
+      },
+      token: async () => {
         // In a production app, we need to send some data (usually username, password) to server and get a token
         // We will also need to handle errors if sign in failed
         // After getting token, we need to persist the token using `SecureStore` or any other encrypted storage
         // In the example, we'll use a dummy token
 
-        dispatch({ type: "SIGN_IN", token: "dummy-auth-token" });
+        return( state );
+      },
+      signInSinPass: async (data) => {
+        // In a production app, we need to send some data (usually username, password) to server and get a token
+        // We will also need to handle errors if sign in failed
+        // After getting token, we need to persist the token using `SecureStore` or any other encrypted storage
+        // In the example, we'll use a dummy token
+
+        dispatch({ type: "SIGN_IN", token: 0 });
       },
       signOut: () => dispatch({ type: "SIGN_OUT" }),
       signUp: async (data) => {
