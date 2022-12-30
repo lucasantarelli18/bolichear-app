@@ -14,6 +14,10 @@ import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import DropDownPicker from "react-native-dropdown-picker";
 
 export function MapScreen({ route, navigation }) {
+
+  const mapa = new Map();
+  const date = new Date();
+  const [mapaState, setMapaState] = React.useState([]);
   const [locales, setLocales] = React.useState([]);
   const [localesFiltrados, setLocalesFiltrados] = React.useState([]);
   const { calle, numero, localidad, latitud, longitud, rango } = route.params;
@@ -82,13 +86,21 @@ export function MapScreen({ route, navigation }) {
             //console.log("dentro del rango")
             //distancia.push(items[i].dist = distkm).sort((a,b)=> a -b)
             console.log(items[i].dist = distkm)
-            //console.log(items[i].dist)
+            //console.log(items[i])
+            let asistDelLocal = 0
+            for (const j in items[i].Asistencia){
+              if(items[i].Asistencia[j].created_at.split('T')[0] == date.toISOString().split('T')[0]){
+                asistDelLocal++;
+              }
+            }
+            mapa.set(items[i].id, asistDelLocal)
             arr.push(items[i])
           } else {
             //console.log("fuera del rango")
           }
         }
         setLocales(arr)
+        setMapaState(mapa)
       })
     Backend.getLocalidadXNombre(localidad).then((items) => {
       setIdLocalidad(items[0].id);
@@ -195,7 +207,7 @@ export function MapScreen({ route, navigation }) {
                     {" "}
                     Direccion: {element.Domicilio.calle} {element.Domicilio.numero}
                   </Text>
-                  <Text style={styles.info}> Asistiran 300 personas </Text>
+                  <Text style={styles.info}> Asistiran {mapaState.get(element.id)} personas </Text>
                 </View>
               </View>
             </ImageBackground>
@@ -235,7 +247,7 @@ export function MapScreen({ route, navigation }) {
                     {" "}
                     Direccion: {element.Domicilio.calle} {element.Domicilio.numero}
                   </Text>
-                  <Text style={styles.info}> Asistiran 300 personas </Text>
+                  <Text style={styles.info}> Asistiran {mapaState.get(element.id)} personas </Text>
                 </View>
               </View>
             </ImageBackground>
