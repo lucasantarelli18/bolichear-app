@@ -42,29 +42,29 @@ export function MapScreen({ route, navigation }) {
   const [openTE, setOpenTE] = useState(false);
   const [valueTE, setValueTE] = useState(null);
   const [itemsTE, setItemsTE] = useState([
-    {label: "Todos", value: 0},
-    {label: "Fiesta", value: 1},
-    {label: "Show en vivo", value: 2},
-    {label: "Tematica", value: 3},
-    {label: "Noche cachengue", value: 4},
-    {label: "Noche electronica", value: 5}    
-    ]);
-/*
-  const [openTL, setOpenTL] = useState(false);
-  const [valueTL, setValueTL] = useState(null);
-  const [itemsTL, setItemsTL] = useState([
-    {label: "Todos", value: 0},
-    {label: "Boliche", value: 1},
-    {label: "Bar", value: 2}
-    ]);
-  const [openPR, setOpenPR] = useState(false);
-  const [valuePR, setValuePR] = useState(null);
-  const [itemsPR, setItemsPR] = useState([
-    {label: "Todos", value: 0},
-    {label: "Ascendente", value: 1},
-    {label: "Descendente", value: 2}
-    ]);
-*/
+    { label: "Todos", value: 0 },
+    { label: "Fiesta", value: 1 },
+    { label: "Show en vivo", value: 2 },
+    { label: "Tematica", value: 3 },
+    { label: "Noche cachengue", value: 4 },
+    { label: "Noche electronica", value: 5 }
+  ]);
+  /*
+    const [openTL, setOpenTL] = useState(false);
+    const [valueTL, setValueTL] = useState(null);
+    const [itemsTL, setItemsTL] = useState([
+      {label: "Todos", value: 0},
+      {label: "Boliche", value: 1},
+      {label: "Bar", value: 2}
+      ]);
+    const [openPR, setOpenPR] = useState(false);
+    const [valuePR, setValuePR] = useState(null);
+    const [itemsPR, setItemsPR] = useState([
+      {label: "Todos", value: 0},
+      {label: "Ascendente", value: 1},
+      {label: "Descendente", value: 2}
+      ]);
+  */
   const hideMenu = () => setVisible(false);
 
   const showMenu = () => setVisible(true);
@@ -81,19 +81,21 @@ export function MapScreen({ route, navigation }) {
           const val = Math.pow(latMts, 2) + Math.pow(lonMts, 2);
           const dist = Math.sqrt(val);
           const distkm = (dist / 1000).toFixed(2);
-         
+
           if (dist < rango) {
             //console.log("dentro del rango")
             //distancia.push(items[i].dist = distkm).sort((a,b)=> a -b)
             console.log(items[i].dist = distkm)
             //console.log(items[i])
             let asistDelLocal = 0
-            for (const j in items[i].Asistencia){
-              if(items[i].Asistencia[j].created_at.split('T')[0] == date.toISOString().split('T')[0]){
+            for (const j in items[i].Asistencia) {
+              if (items[i].Asistencia[j].created_at.split('T')[0] == date.toISOString().split('T')[0]) {
                 asistDelLocal++;
               }
             }
             mapa.set(items[i].id, asistDelLocal)
+            items[i].Asistencia = asistDelLocal
+            console.log(items[i])
             arr.push(items[i])
           } else {
             //console.log("fuera del rango")
@@ -176,7 +178,6 @@ export function MapScreen({ route, navigation }) {
 
     } else if (filtrar == 0) {
       return locales.map((element) => {
-        //console.log(element.dist)
         return (
           <Pressable
             onPress={() => {
@@ -300,7 +301,7 @@ export function MapScreen({ route, navigation }) {
         </View>
 
 
-{/*
+        {/*
       <View style={styles.container2}>
         <DropDownPicker
           style={styles.input2}
@@ -332,67 +333,84 @@ export function MapScreen({ route, navigation }) {
           const arrayFiltrado = []
 
           if (valueTE == null) {
-            for (const i in array){
+            for (const i in array) {
               arrayFiltrado.push(array[i])
             }
           } else if (valueTE == 0) {
-            for (const i in array){
-            //console.log(array[i]);
-            if (array[i].Evento.length > 0) {
-              arrayFiltrado.push(array[i])
-            }}
+            for (const i in array) {
+              //console.log(array[i]);
+              if (array[i].Evento.length > 0) {
+                arrayFiltrado.push(array[i])
+              }
+            }
           } else {
-            
-              for (const i in array){
-                const tiposDeEvento = []    
-                for (const j in array[i].Evento){
-                  tiposDeEvento.push(array[i].Evento[j].idTipoEvento)
-                }
-                //console.log(tiposDeEvento)
-                if (tiposDeEvento.includes(valueTE)) {
-                  arrayFiltrado.push(array[i])
-                } 
+
+            for (const i in array) {
+              const tiposDeEvento = []
+              for (const j in array[i].Evento) {
+                tiposDeEvento.push(array[i].Evento[j].idTipoEvento)
+              }
+              //console.log(tiposDeEvento)
+              if (tiposDeEvento.includes(valueTE)) {
+                arrayFiltrado.push(array[i])
+              }
 
             }
-            }
-          
+          }
+
           setLocalesFiltrados(arrayFiltrado)
 
-          changeFiltrar(filtrar+1)
-        } } >
-            <Text style={styles.text}>FILTRAR FIESTAS</Text>
+          changeFiltrar(filtrar + 1)
+        }} >
+          <Text style={styles.text}>FILTRAR FIESTAS</Text>
         </Pressable>
 
 
-      <View style={styles.container2}>
-        <DropDownPicker
-          style={styles.input2}
-          open={openTE}
-          value={valueTE}
-          items={itemsTE}
-          setOpen={setOpenTE}
-          setValue={setValueTE}
-          setItems={setItemsTE}
-          placeholder="Tipo de evento"
-        />
-      </View>
+        <View style={styles.container2}>
+          <DropDownPicker
+            style={styles.input2}
+            open={openTE}
+            value={valueTE}
+            items={itemsTE}
+            setOpen={setOpenTE}
+            setValue={setValueTE}
+            setItems={setItemsTE}
+            placeholder="Tipo de evento"
+          />
+        </View>
 
-      <Pressable style={styles.button} onPress={() => {
-         if(filtrar == 0){
-            const ordenados = locales.sort((a,b) => a.dist - b.dist) 
+        <Pressable style={styles.button} onPress={() => {
+          if (filtrar == 0) {
+            const ordenados = locales.sort((a, b) => a.dist - b.dist)
             setLocalesFiltrados(ordenados)
-            changeFiltrar(filtrar+1)
-     
-         } else {
-            const ordenados = localesFiltrados.sort((a,b) => a.dist - b.dist)
-            setLocalesFiltrados(ordenados)
-            changeFiltrar(filtrar+1)
-         }
-         
+            changeFiltrar(filtrar + 1)
+            console.log(locales.id)
 
-          
-        } } >
-            <Text style={styles.text}>Ordenar por distancia</Text>
+          } else {
+            const ordenados = localesFiltrados.sort((a, b) => a.dist - b.dist)
+            setLocalesFiltrados(ordenados)
+            changeFiltrar(filtrar + 1)
+          }
+
+
+
+        }} >
+          <Text style={styles.text}>Ordenar por distancia</Text>
+        </Pressable>
+
+        <Pressable style={styles.button} onPress={() => {
+          if (filtrar == 0) {
+            const ordenados = locales.sort((a, b) => b.Asistencia - a.Asistencia)
+            setLocalesFiltrados(ordenados)
+            changeFiltrar(filtrar + 1)
+
+          } else {
+            const ordenados = locales.sort((a, b) => b.Asistencia - a.Asistencia)
+            setLocalesFiltrados(ordenados)
+            changeFiltrar(filtrar + 1)
+          }
+        }} >
+          <Text style={styles.text}>Ordenar por asistencia</Text>
         </Pressable>
 
         <ScrollView style={styles.container}>{list()}</ScrollView>
@@ -593,7 +611,7 @@ const styles = StyleSheet.create({
     borderBottomStartRadius: 500,
 
   },
-    input2: {
+  input2: {
     padding: 7,
     width: "80%",
     marginTop: 10,
