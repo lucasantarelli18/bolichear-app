@@ -26,7 +26,25 @@ export function VerEventosScreen({ route, navigation }) {
   const idDueno = 5;
 
   const fecha=new Date();
-  const soloFecha = fecha.getFullYear() + '-' + (fecha.getMonth()+1) + '-' + fecha.getDate()
+
+  if ((fecha.getMonth()+1) > 9) {
+    var mes = (fecha.getMonth()+1)
+  } else {
+    var mes = "0" + (fecha.getMonth()+1)
+  }
+
+  if (fecha.getDate() > 9) {
+    var dia = fecha.getDate()
+  } else {
+    var dia = "0" + fecha.getDate()
+  }
+
+  //const mes = (fecha.getMonth()+1);
+  //const dia = fecha.getDate();
+
+  const soloFecha = fecha.getFullYear() + '-' + mes + '-' + dia 
+
+  console.log(soloFecha)
 
   const [tieneAsist, setTieneAsist] = React.useState(false)
   const [tieneAsistEsteLocal, setTieneAsistEsteLocal] = React.useState(false)
@@ -37,8 +55,8 @@ export function VerEventosScreen({ route, navigation }) {
 
     Backend.getAsistenciasXUser(uniqueId)
     .then((items) => {
-        //console.log(items)
         const deHoy = items.filter(each => each.fecha == soloFecha)
+        console.log(items[0].fecha + "" + soloFecha)
         if(deHoy.length > 0){
           setTieneAsist(true)
           setVoy("VOY!")
@@ -50,7 +68,7 @@ export function VerEventosScreen({ route, navigation }) {
             setEstiloAsistencia(styles.buttonDelete)
           } 
         }
-        console.log(tieneAsist + ' ' + tieneAsistEsteLocal)
+        //console.log(tieneAsist + ' ' + tieneAsistEsteLocal)
       }),
 
     Backend.getEventosxIdLocal(idLocal)
@@ -98,7 +116,7 @@ export function VerEventosScreen({ route, navigation }) {
 
   // Mapeo y agrego los eventos y promos a dataEventos y dataPromos
   eventos.map((element) => {
-    console.log(element)
+    //console.log(element)
     if (idLocal == element.idLocal) {
       const fechaHoraInicio = Moment(element.fechaHoraInicio).format('DD/MM/YYYY [a las] HH:mm ');
       const fechaHoraFin = Moment(element.fechaHoraFin).format('DD/MM/YYYY [a las] HH:mm ');
