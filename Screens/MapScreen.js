@@ -388,7 +388,7 @@ export function MapScreen({ route, navigation }) {
 
         <ScrollView style={styles.container}>{list()}</ScrollView>
 
-{ token()._W.userToken == 0 ? 
+{ token()._W.userToken == 0 || token()._W.userToken == null ? 
 
   console.log("No esta logeado")
   

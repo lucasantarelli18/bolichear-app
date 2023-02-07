@@ -3,12 +3,47 @@ import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Image, Ima
 import AuthContext from "../AuthContext"
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
+import * as Backend from '../backlog';
 
 export function SignInScreen() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [todoss, setTodoss] = React.useState([]);
+  var todos = [];
 
   const { signIn, token } = React.useContext(AuthContext);
+
+  const log = () => {
+      console.log(todoss)
+      if (todoss.includes(username)){
+
+        Backend.getUsuariosLogin(username, password).then((items) => {
+          if(items.length > 0){
+            console.log(items[0].id)
+            signIn(items[0].id)
+          }else{
+            window.alert("Contraseña incorrecta")
+          }
+
+      })
+
+      } else {
+        window.alert("El usuario no está registrado")
+      }
+
+    }
+
+  React.useEffect(() => {
+    Backend.getUsuarios()
+      .then((items) => {
+        console.log(items)
+        for (const i in items) {
+            todos.push(items[i].nombre)
+        }
+        setTodoss(todos)
+      })
+
+  }, [])
 
   return (
 
@@ -36,7 +71,7 @@ export function SignInScreen() {
         <Pressable
           style={styles.container3}
                     //onPress={() => console.log(token()._W.userToken) }>
-          onPress={() => signIn({ username, password })}>
+          onPress={() => log()}>
           <LinearGradient
             // Button Linear Gradient
             colors={['#C2454A', '#A32934', '#680008']}

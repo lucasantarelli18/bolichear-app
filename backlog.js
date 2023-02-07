@@ -195,7 +195,10 @@ export const getTipoEventos = async () => {
 };
 
 export const getUsuarios = async () => {
-  let { data: Usuario, error } = await supabase.from("Usuario").select("*");
+  let { data: Usuario, error } = await supabase.from("Usuario")
+  .select("nombre")
+  .neq('nombre', 'null')
+  ;
   return Usuario;
 };
 
