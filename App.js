@@ -103,16 +103,10 @@ export default function App({ navigation }) {
 
   const authContext = React.useMemo(
     () => ({
-      signIn: async (data) => {
-        Backend.getUsuariosLogin(data.username, data.password).then((items) => {
-          if(items.length > 0){
-            console.log(items[0].id)
-            dispatch({ type: "SIGN_IN", token: items[0].id });
-          }else{
-            console.log("NO SE PUDO LOGEAR")
-          }
-        })
-
+      signIn: async (id) => {
+        console.log(state)
+        dispatch({ type: "SIGN_IN", token: id });
+      
         //dispatch({ type: "SIGN_IN", token: "dummy-auth-token" });
       },
       token: async () => {

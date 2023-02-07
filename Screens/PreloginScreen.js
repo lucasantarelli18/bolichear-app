@@ -3,10 +3,16 @@ import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Image, Ima
 import AuthContext from "../AuthContext"
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
+import * as Backend from '../backlog';
 
 export function PreloginScreen({ route, navigation }) {
 
   const { signInSinPass } = React.useContext(AuthContext);
+
+  const quieroBuscar = () => {
+        Backend.updateLogged(0)
+        signInSinPass({ })
+  }
 
   return (
     
@@ -18,7 +24,7 @@ export function PreloginScreen({ route, navigation }) {
       <View style={styles.container2}>
         <Pressable
           style={styles.container3}
-          onPress={() => signInSinPass({ })}>
+          onPress={() => quieroBuscar()}>
           <LinearGradient
             // Button Linear Gradient
             colors={['#C2454A', '#A32934', '#680008']}
