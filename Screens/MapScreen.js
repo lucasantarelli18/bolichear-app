@@ -139,6 +139,7 @@ export function MapScreen({ route, navigation }) {
             <Callout style={styles.cal} onPress={() => {
               navigation.navigate("VerEventos", {
                 idLocal: element.id,
+                insta: element.insta
               });
             }}>
               <View style={styles.bubble}>
@@ -162,6 +163,7 @@ export function MapScreen({ route, navigation }) {
             <Callout style={styles.cal} onPress={() => {
               navigation.navigate("VerEventos", {
                 idLocal: element.id,
+                insta: element.insta
               });
             }}>
               <View style={styles.bubble}>

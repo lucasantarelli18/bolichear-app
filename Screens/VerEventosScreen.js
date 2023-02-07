@@ -21,7 +21,7 @@ export function VerEventosScreen({ route, navigation }) {
   const [cantEventosActuales, setCantEventosActuales] = React.useState([]);
   const [cantPromos, setCantPromos] = React.useState([]);
   const [cant, setCant] = React.useState([]);
-  const { idLocal, latitud, longitud } = route.params;
+  const { idLocal, latitud, longitud, insta } = route.params;
   const { width } = Dimensions.get('window')
   const idDueno = 5;
 
@@ -139,14 +139,14 @@ export function VerEventosScreen({ route, navigation }) {
   });
 
   const localDueño = [];
-  const insta = [];
+  //const insta = [];
 
   if (cant) {
     locales.map((element) => {
 
       //console.log("id local del dueño 5", element.id)
 
-      insta.push(element.insta)
+      //insta.push(element.insta)
 
       localDueño.push(element.id)
     })
@@ -730,12 +730,19 @@ export function VerEventosScreen({ route, navigation }) {
           <Text style={styles.titleButton}>{voy}</Text>
         </Pressable>
 </View>
-
+        {
+          insta ?
+          <>
           <View style={styles.tabPress2}>
-            <Pressable style={styles.insta} onPress={() => openBrowserAsync("https://www.instagram.com/" + insta[0])} >
+            <Pressable style={styles.insta} onPress={() => openBrowserAsync("https://www.instagram.com/" + insta)} >
               <Text>INSTAGRAM</Text>
             </Pressable>
           </View>
+          </>
+         :
+          console.log(insta)
+        }
+          
 
           {cantPromos ?
             <View>
@@ -800,11 +807,19 @@ export function VerEventosScreen({ route, navigation }) {
         </Pressable>
 </View>
 
+        {
+          insta ?
+
+          <>
           <View style={styles.tabPress2}>
             <Pressable style={styles.insta} onPress={() => openBrowserAsync("https://www.instagram.com/" + insta)} >
               <Text>INSTAGRAM</Text>
             </Pressable>
           </View>
+          </>
+           :
+           console.log(insta)
+        }
 
           <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
           <View>{sinPromos()}</View>
