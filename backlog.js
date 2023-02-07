@@ -473,3 +473,25 @@ export const deleteEvento = async (idEvento) => {
     .delete()
     .match({ id: idEvento })
 }
+
+///////////////////////////////////////////////////////////////////////////////////
+
+/*export const getProvincias = async () => {
+  let { data: Provincia, error } = await supabase.from("Provincia").select("*");
+  return Provincia;
+};*/
+
+export const getControl = async () => {
+  let { data: Provincia, error } = await supabase.from("Control").select("*");
+  return Provincia;
+};
+
+
+export const updateLogged = async (idLogged) => {
+  const { data, error } = await supabase
+    .from('Control')
+    .update({
+      logged: idLogged
+    })
+    .eq('id', 1)
+}

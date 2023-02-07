@@ -18,7 +18,7 @@ export function MapScreen({ route, navigation }) {
   const [locales, setLocales] = React.useState([]);
   const [localesFiltrados, setLocalesFiltrados] = React.useState([]);
   const { calle, numero, localidad, latitud, longitud, rango } = route.params;
-
+  const [logeado, setLogeado] = React.useState('');
   const { token } = React.useContext(AuthContext);
 
   //console.log("Buenas, esta es la calle y el numero", calle, numero, localidad)
@@ -68,6 +68,11 @@ export function MapScreen({ route, navigation }) {
 
   const showMenu = () => setVisible(true);
   React.useEffect(() => {
+
+    Backend.getControl().then((items) => 
+      setLogeado(items[0].logged)
+      )
+
     Backend.getLocalxDomicilio()
       .then((items) => {
         //console.log(items)
@@ -388,14 +393,13 @@ export function MapScreen({ route, navigation }) {
 
         <ScrollView style={styles.container}>{list()}</ScrollView>
 
-{ token()._W.userToken == 0 || token()._W.userToken == null ? 
+{ logeado == 0 || logeado == '' ? 
 
   console.log("No esta logeado")
-  
+
 :
 
   <Pressable style={styles.button} onPress={() => {
-      console.log(token()._W.userToken);
           navigation.navigate('Locales', {
             latitud: latitud,
             longitud: longitud,
@@ -403,11 +407,12 @@ export function MapScreen({ route, navigation }) {
             idLocalidad: idLocalidad,
             calle: calle,
             numero: numero,
+            idDueno: logeado,
           });
         }}>
           <Text style={styles.text}>IR A MI LOCAL</Text>
   </Pressable>
-
+  
 }
 
         <View style={styles.tabCambio}>

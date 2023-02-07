@@ -11,7 +11,7 @@ export function SignInScreen() {
   const [todoss, setTodoss] = React.useState([]);
   var todos = [];
 
-  const { signIn, token } = React.useContext(AuthContext);
+  const { signIn, token, signUp } = React.useContext(AuthContext);
 
   const log = () => {
       console.log(todoss)
@@ -19,7 +19,8 @@ export function SignInScreen() {
 
         Backend.getUsuariosLogin(username, password).then((items) => {
           if(items.length > 0){
-            console.log(items[0].id)
+            //console.log(items[0].id)
+            Backend.updateLogged(items[0].id)
             signIn(items[0].id)
           }else{
             window.alert("Contraseña incorrecta")
@@ -34,9 +35,16 @@ export function SignInScreen() {
     }
 
   React.useEffect(() => {
-    Backend.getUsuarios()
+
+    Backend.getControl()
       .then((items) => {
         console.log(items)
+        //setLogeado(items[0].logged)
+      })
+
+    Backend.getUsuarios()
+      .then((items) => {
+        //console.log(items)
         for (const i in items) {
             todos.push(items[i].nombre)
         }

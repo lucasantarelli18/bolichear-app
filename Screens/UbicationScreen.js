@@ -10,10 +10,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import AuthContext from "../AuthContext"
 
+
 export function UbicationScreen({ navigation }) {
 
+  const [logeado, setLogeado] = React.useState('');
+
   const { token } = React.useContext(AuthContext);
-      console.log(token()._W.userToken);
+
   const [ubicacion, setUbicacion] = React.useState({
     calle: "Av. del Petroleo Argentino",
     numero: 417,
@@ -60,6 +63,15 @@ export function UbicationScreen({ navigation }) {
   const changeCambio = (elem) => {
     setCambio(elem);
   };
+
+ React.useEffect(() => {
+    Backend.getControl()
+      .then((items) => {
+        console.log(items)
+        setLogeado(items[0].logged)
+      })
+
+  }, [])
 
 
   if (cambio) {
