@@ -55,7 +55,8 @@ export const getLocalxDomicilio = async () => {
       id,
       fechaHoraInicio,
       fechaHoraFin,
-      idTipoEvento
+      idTipoEvento,
+      precio
     ),
     Asistencia(
       id,
