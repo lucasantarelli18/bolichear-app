@@ -328,90 +328,150 @@ export function MapScreen({ route, navigation }) {
       </View>
 */}
 
-        <Pressable style={styles.button} onPress={() => {
-          const array = locales
-          const arrayFiltrado = []
+        {visible ? (<View style={styles.container2}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+            <View>
+              <Text style={{
+                width: "100%", fontWeight: "bold",
+                fontSize: 10,
+                margin: 5
+              }}>Filtrar por</Text>
+            </View>
+            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+          </View>
 
-          if (valueTE == null) {
-            for (const i in array) {
-              arrayFiltrado.push(array[i])
-            }
-          } else if (valueTE == 0) {
-            for (const i in array) {
-              //console.log(array[i]);
-              if (array[i].Evento.length > 0) {
-                arrayFiltrado.push(array[i])
+          <View style={{ justifyContent: "center", width: "70%", flexDirection: 'row' }}>
+            <DropDownPicker
+              style={styles.input2}
+              open={openTE}
+              value={valueTE}
+              items={itemsTE}
+              setOpen={setOpenTE}
+              setValue={setValueTE}
+              setItems={setItemsTE}
+              placeholder="Tipo de evento"
+            />
+
+            <Pressable style={styles.button} onPress={() => {
+              const array = locales
+              const arrayFiltrado = []
+
+              if (valueTE == null) {
+                for (const i in array) {
+                  arrayFiltrado.push(array[i])
+                }
+              } else if (valueTE == 0) {
+                for (const i in array) {
+                  //console.log(array[i]);
+                  if (array[i].Evento.length > 0) {
+                    arrayFiltrado.push(array[i])
+                  }
+                }
+              } else {
+
+                for (const i in array) {
+                  const tiposDeEvento = []
+                  for (const j in array[i].Evento) {
+                    tiposDeEvento.push(array[i].Evento[j].idTipoEvento)
+                  }
+                  //console.log(tiposDeEvento)
+                  if (tiposDeEvento.includes(valueTE)) {
+                    arrayFiltrado.push(array[i])
+                  }
+
+                }
               }
-            }
-          } else {
 
-            for (const i in array) {
-              const tiposDeEvento = []
-              for (const j in array[i].Evento) {
-                tiposDeEvento.push(array[i].Evento[j].idTipoEvento)
+              setLocalesFiltrados(arrayFiltrado)
+
+              changeFiltrar(filtrar + 1)
+            }} >
+              <Text style={styles.text}>✔️</Text>
+            </Pressable>
+          </View>
+
+
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+            <View>
+              <Text style={{
+                width: "100%", fontWeight: "bold",
+                fontSize: 10,
+                margin: 5
+              }}>Ordenar por</Text>
+            </View>
+            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+          </View>
+
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Pressable style={styles.button3} onPress={() => {
+              if (filtrar == 0) {
+                const ordenados = locales.sort((a, b) => a.dist - b.dist)
+                setLocalesFiltrados(ordenados)
+                changeFiltrar(filtrar + 1)
+                console.log(locales.id)
+
+              } else {
+                const ordenados = localesFiltrados.sort((a, b) => a.dist - b.dist)
+                setLocalesFiltrados(ordenados)
+                changeFiltrar(filtrar + 1)
               }
-              //console.log(tiposDeEvento)
-              if (tiposDeEvento.includes(valueTE)) {
-                arrayFiltrado.push(array[i])
+
+
+
+            }} >
+              <Text style={styles.text}>Distancia</Text>
+            </Pressable>
+
+            <Pressable style={styles.button3} onPress={() => {
+              if (filtrar == 0) {
+                const ordenados = locales.sort((a, b) => b.Asistencia - a.Asistencia)
+                setLocalesFiltrados(ordenados)
+                changeFiltrar(filtrar + 1)
+
+              } else {
+                const ordenados = localesFiltrados.sort((a, b) => b.Asistencia - a.Asistencia)
+                setLocalesFiltrados(ordenados)
+                changeFiltrar(filtrar + 1)
               }
+            }} >
+              <Text style={styles.text}>Asistencia</Text>
+            </Pressable>
 
-            }
-          }
+            <Pressable style={styles.button3} onPress={() => {
+              if (filtrar == 0) {
+                const ordenados = localesFiltrados.sort((a, b) => b.Asistencia - a.Asistencia)
+                setLocalesFiltrados(ordenados)
+                changeFiltrar(filtrar + 1)
 
-          setLocalesFiltrados(arrayFiltrado)
+              } else {
+                const ordenados = localesFiltrados.sort((a, b) => b.Asistencia - a.Asistencia)
+                setLocalesFiltrados(ordenados)
+                changeFiltrar(filtrar + 1)
+              }
+            }} >
+              <Text style={styles.text}>Precio</Text>
+            </Pressable>
 
-          changeFiltrar(filtrar + 1)
-        }} >
-          <Text style={styles.text}>FILTRAR FIESTAS</Text>
-        </Pressable>
+
+          </View>
+
+          <Pressable style={styles.button4} onPress={hideMenu} >
+            <Text style={styles.text}>Ocultar Filtros</Text>
+          </Pressable>
 
 
-        <View style={styles.container2}>
-          <DropDownPicker
-            style={styles.input2}
-            open={openTE}
-            value={valueTE}
-            items={itemsTE}
-            setOpen={setOpenTE}
-            setValue={setValueTE}
-            setItems={setItemsTE}
-            placeholder="Tipo de evento"
-          />
         </View>
 
-        <Pressable style={styles.button} onPress={() => {
-          if (filtrar == 0) {
-            const ordenados = locales.sort((a, b) => a.dist - b.dist)
-            setLocalesFiltrados(ordenados)
-            changeFiltrar(filtrar + 1)
-            console.log(locales.id)
-
-          } else {
-            const ordenados = localesFiltrados.sort((a, b) => a.dist - b.dist)
-            setLocalesFiltrados(ordenados)
-            changeFiltrar(filtrar + 1)
-          }
+        ) : (
+          <Pressable style={styles.button4} onPress={showMenu} >
+            <Text style={styles.text}>Mostrar Filtros</Text>
+          </Pressable>
+        )}
 
 
 
-        }} >
-          <Text style={styles.text}>Ordenar por distancia</Text>
-        </Pressable>
-
-        <Pressable style={styles.button} onPress={() => {
-          if (filtrar == 0) {
-            const ordenados = locales.sort((a, b) => b.Asistencia - a.Asistencia)
-            setLocalesFiltrados(ordenados)
-            changeFiltrar(filtrar + 1)
-
-          } else {
-            const ordenados = locales.sort((a, b) => b.Asistencia - a.Asistencia)
-            setLocalesFiltrados(ordenados)
-            changeFiltrar(filtrar + 1)
-          }
-        }} >
-          <Text style={styles.text}>Ordenar por asistencia</Text>
-        </Pressable>
 
         <ScrollView style={styles.container}>{list()}</ScrollView>
 
@@ -448,6 +508,17 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '92%'
   },
+  container: {
+    width: "%",
+    backgroundColor: "black",
+  },
+  container2: {
+    width: '100%',
+    //backgroundColor: '#fff',
+    justifyContent: "center",
+    alignItems: "center",
+
+  },
   tabCambio: {
     //flex: 1,
     //width: '100%',
@@ -456,8 +527,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: "center",
     justifyContent: "center",
-    //borderColor: 'gray',
-    //borderTopWidth: 1,
+
   },
   tabPress: {
     //flex: 1,
@@ -466,6 +536,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: 'white',
+    borderColor: 'lightgray',
+    borderWidth: 1,
   },
   tabPress2: {
     //flex: 1,
@@ -475,7 +547,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: 'white',
     borderColor: 'lightgray',
-    borderLeftWidth: 1,
+    borderWidth: 1,
   },
   viewCien: {
     flex: 1,
@@ -579,7 +651,29 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     elevation: 3,
     backgroundColor: "black",
-    marginVertical: 10
+    marginVertical: 10,
+  },
+  button4: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 30,
+    elevation: 3,
+    backgroundColor: "black",
+    marginVertical: 10,
+    width: "95%"
+  },
+  button3: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 30,
+    elevation: 3,
+    backgroundColor: "black",
+    marginVertical: 10,
+    marginHorizontal: "2%",
   },
   button2: {
     alignItems: "center",
@@ -612,16 +706,13 @@ const styles = StyleSheet.create({
 
   },
   input2: {
-    padding: 7,
-    width: "80%",
+
+    width: "90%",
     marginTop: 10,
-    marginHorizontal: "10%",
-    alignItems: "center",
     borderRadius: 30,
     backgroundColor: '#f1f1f1',
     fontFamily: "Roboto-Medium",
     paddingStart: 30,
-
     fontSize: 16,
     elevation: 10,
   }
