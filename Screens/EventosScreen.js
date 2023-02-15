@@ -19,6 +19,7 @@ export function EventosScreen({ route, navigation }) {
   const [items, setItems] = useState([]);
   const [nombreEvento, setNombreEvento] = useState("");
   const [descripcion, setDescripcion] = useState("");
+  const [precio, setPrecio] = useState();
   const [faltaIngresoNombre, setFaltaIngresoNombre] = React.useState(true);
   const [isImage, setIsImage] = React.useState(false);
   const [horaInicio, setHoraInicio] = useState(null);
@@ -82,7 +83,7 @@ export function EventosScreen({ route, navigation }) {
         .then((items) => { items })
     }
   };
-  console.log("Este es la imagen", path)
+  console.log(precio)
   return (
     <ScrollView style={styles.container}>
       {/*Pide al usuario NOMBRE DEL EVENTO*/}
@@ -116,12 +117,21 @@ export function EventosScreen({ route, navigation }) {
       <View style={styles.container2}>
         <TextInput
           style={styles.input}
-          placeholder="Inserte la descripcion"
+          placeholder="Ingrese la descripcion"
           onChangeText={(nuevaDesc) => setDescripcion(nuevaDesc)}
           value={descripcion}
         />
       </View>
-
+      <Text style={styles.titulos}>Precio de la entrada</Text>
+      <View style={styles.container2}>
+        <TextInput
+          style={styles.input}
+          keyboardType="numeric"
+          placeholder="Ingrese el precio"
+          onChangeText={(nuevoPrecio) => setPrecio(nuevoPrecio)}
+          value={precio}
+        />
+      </View>
       {/*pide hora inicio y fin al usuario */}
       <Text style={styles.titulos}>Vigencia</Text>
       <View style={styles.container2}>
@@ -159,6 +169,7 @@ export function EventosScreen({ route, navigation }) {
         />
       </View>
 
+
       <Text style={styles.titulos}>Foto del Evento</Text>
       <View style={styles.container2}>
         {!isImage ?
@@ -188,7 +199,8 @@ export function EventosScreen({ route, navigation }) {
               horaFin,
               value,
               idLocal,
-              path
+              path,
+              precio
             ).then((items) => {
               Alert.alert("Evento creado"),
                 navigation.navigate('Locales', { idLocal: idLocal, latitud: latitud, longitud: longitud })
