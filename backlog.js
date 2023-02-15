@@ -8,7 +8,7 @@ export const getAsistenciasXUser = async (idUsuario) => {
     .from("Asistencia")
     .select("*")
     .eq('idUsuario', idUsuario)
-    //.eq('fecha', fecha)
+  //.eq('fecha', fecha)
   return Asistencia;
 };
 
@@ -399,7 +399,7 @@ export const updatePromocion = async (id, nombrePromo, descrip, fHInicio, fHFin,
 
 
 
-export const updateEvento = async (id,nombre, descrip, fHInicio, fHFin, idTipoEvento,path) => {
+export const updateEvento = async (id, nombre, descrip, fHInicio, fHFin, idTipoEvento, path) => {
   const { data, error } = await supabase
     .from('Evento')
     .update({
@@ -459,9 +459,17 @@ export const deletePromoXLocal = async (idLocal) => {
     .match({ idLocal: idLocal })
 }
 
+export const deleteAsistenciaXLocal = async (idLocal) => {
+  const { data, error } = await supabase
+    .from('Asistencia')
+    .delete()
+    .match({ idLocal: idLocal })
+}
+
 export const deleteLocal = async (idLocal) => {
   deletePromoXLocal(idLocal);
   deleteEventoXLocal(idLocal);
+  deleteAsistenciaXLocal(idLocal);
   const { data, error } = await supabase
     .from('Local')
     .delete()
