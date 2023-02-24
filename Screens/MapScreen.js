@@ -101,6 +101,15 @@ export function MapScreen({ route, navigation }) {
                 asistDelLocal++;
               }
             }
+            let preciomayor = 0
+            for (const k in items[i].Evento) {
+              if (items[i].Evento[k].precio > preciomayor) {
+                preciomayor = items[i].Evento[k].precio
+              }
+            }
+            console.log(preciomayor)
+            mapa.set(items[i].id, preciomayor)
+            items[i].precio = preciomayor
             mapa.set(items[i].id, asistDelLocal)
             items[i].Asistencia = asistDelLocal
             console.log(items[i])
@@ -449,18 +458,19 @@ export function MapScreen({ route, navigation }) {
 
             <Pressable style={styles.button3} onPress={() => {
               if (filtrar == 0) {
-                const ordenados = localesFiltrados.sort((a, b) => b.Asistencia - a.Asistencia)
+                const ordenados = locales.sort((a, b) => b.precio - a.precio)
                 setLocalesFiltrados(ordenados)
                 changeFiltrar(filtrar + 1)
 
               } else {
-                const ordenados = localesFiltrados.sort((a, b) => b.Asistencia - a.Asistencia)
+                const ordenados = localesFiltrados.sort((a, b) => b.precio - a.precio)
                 setLocalesFiltrados(ordenados)
                 changeFiltrar(filtrar + 1)
               }
             }} >
-              <Text style={styles.text}>Precio</Text>
+              <Text style={styles.text}>{">"} Precio</Text>
             </Pressable>
+
 
 
           </View>

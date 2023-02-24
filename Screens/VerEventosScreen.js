@@ -25,12 +25,12 @@ export function VerEventosScreen({ route, navigation }) {
   const { width } = Dimensions.get('window')
   const idDueno = 5;
 
-  const fecha=new Date();
+  const fecha = new Date();
 
-  if ((fecha.getMonth()+1) > 9) {
-    var mes = (fecha.getMonth()+1)
+  if ((fecha.getMonth() + 1) > 9) {
+    var mes = (fecha.getMonth() + 1)
   } else {
-    var mes = "0" + (fecha.getMonth()+1)
+    var mes = "0" + (fecha.getMonth() + 1)
   }
 
   if (fecha.getDate() > 9) {
@@ -42,7 +42,7 @@ export function VerEventosScreen({ route, navigation }) {
   //const mes = (fecha.getMonth()+1);
   //const dia = fecha.getDate();
 
-  const soloFecha = fecha.getFullYear() + '-' + mes + '-' + dia 
+  const soloFecha = fecha.getFullYear() + '-' + mes + '-' + dia
 
   console.log(soloFecha)
 
@@ -54,35 +54,35 @@ export function VerEventosScreen({ route, navigation }) {
   React.useEffect(() => {
 
     Backend.getAsistenciasXUser(uniqueId)
-    .then((items) => {
+      .then((items) => {
         const deHoy = items.filter(each => each.fecha == soloFecha)
         console.log(items[0].fecha + "" + soloFecha)
-        if(deHoy.length > 0){
+        if (deHoy.length > 0) {
           setTieneAsist(true)
           setVoy("VOY!")
           setEstiloAsistencia(styles.buttonDisabled)
           const deEsteLocal = deHoy.filter(each => each.idLocal == idLocal)
-          if (deEsteLocal.length > 0){
+          if (deEsteLocal.length > 0) {
             setTieneAsistEsteLocal(true)
             setVoy("NO VOY")
             setEstiloAsistencia(styles.buttonDelete)
-          } 
+          }
         }
         //console.log(tieneAsist + ' ' + tieneAsistEsteLocal)
       }),
 
-    Backend.getEventosxIdLocal(idLocal)
-      .then((items) => {
-        setEventos(items)
-        if (items.length > 0) {
-          setCantEventos(true);
-        } else {
-          setCantEventos(false);
-          sinEventos();
-        }
-        //console.log(items.length)
+      Backend.getEventosxIdLocal(idLocal)
+        .then((items) => {
+          setEventos(items)
+          if (items.length > 0) {
+            setCantEventos(true);
+          } else {
+            setCantEventos(false);
+            sinEventos();
+          }
+          //console.log(items.length)
 
-      }),
+        }),
       Backend.getPromosxIdLocal(idLocal)
         .then((items) => {
           setPromociones(items)
@@ -127,10 +127,11 @@ export function VerEventosScreen({ route, navigation }) {
           idLocal: element.idLocal,
           title: element.nombre,
           description: element.descripcion,
-          image:  element.path,
+          image: element.path,
           fechaInicio: fechaHoraInicio,
           fechaFin: fechaHoraFin,
-          idTipoEvento: element.idTipoEvento
+          idTipoEvento: element.idTipoEvento,
+          precio: element.precio,
         }
       )
     }
@@ -173,11 +174,11 @@ export function VerEventosScreen({ route, navigation }) {
   }
 
   const funcionAsistencia = () => {
-    if(tieneAsist && tieneAsistEsteLocal) {
+    if (tieneAsist && tieneAsistEsteLocal) {
       Backend.deleteAsistencia(uniqueId)
       setEstiloAsistencia(styles.button2)
       setVoy("VOY!")
-    } else if (tieneAsist){
+    } else if (tieneAsist) {
       console.log("Tiene asist en OTRO local")
     } else {
       Backend.insertAsistencia(soloFecha, idLocal, uniqueId)
@@ -186,8 +187,8 @@ export function VerEventosScreen({ route, navigation }) {
     }
   }
 
-  const evento = () =>{
-    eventos.map((item) =>{
+  const evento = () => {
+    eventos.map((item) => {
       return (
         <SafeAreaView style={{
           backgroundColor: "#e8ded3",
@@ -204,6 +205,9 @@ export function VerEventosScreen({ route, navigation }) {
           <Text style={styles.titleText}>{item.title}</Text>
           <Text style={styles.descriptionText}>
             {item.description}
+          </Text>
+          <Text style={styles.descriptionText}>
+            {item.precio}
           </Text>
           <Text style={styles.fechaText}>
             Vigente desde el {item.fechaInicio}
@@ -251,8 +255,8 @@ export function VerEventosScreen({ route, navigation }) {
 
       );
     })
-    
-  } 
+
+  }
 
   const sinEventos = () => {
     return (
@@ -309,17 +313,27 @@ export function VerEventosScreen({ route, navigation }) {
           decelerationRate='fast'
           style={{ marginBottom: 20 }}
           renderItem={({ item }) => {
-            const dia = item.fechaFin.substring(0,2)
-            const mes = item.fechaFin.substring(3,5)
-            const anio = item.fechaFin.substring(6,10)
-            const FechaFin = anio + '-'+ mes +'-'+dia
-            const hora = item.fechaFin.substring(17,19)
-            const mins = item.fechaFin.substring(20,22)
+            const dia = item.fechaFin.substring(0, 2)
+            const mes = item.fechaFin.substring(3, 5)
+            const anio = item.fechaFin.substring(6, 10)
+            const FechaFin = anio + '-' + mes + '-' + dia
+            const hora = item.fechaFin.substring(17, 19)
+            const mins = item.fechaFin.substring(20, 22)
             const seg = '00'
-            const horaFin = hora +':'+mins+':'+seg
-            const fechaYHoraFinal= FechaFin + ' '+horaFin 
+            const horaFin = hora + ':' + mins + ':' + seg
+            const fechaYHoraFinal = FechaFin + ' ' + horaFin
 
-            if((new Date(FechaFin)) >= fecha){
+            const diaI = item.fechaInicio.substring(0, 2)
+            const mesI = item.fechaInicio.substring(3, 5)
+            const anioI = item.fechaInicio.substring(6, 10)
+            const FechaInicio = anioI + '-' + mesI + '-' + diaI
+            const horaI = item.fechaInicio.substring(17, 19)
+            const minsI = item.fechaInicio.substring(20, 22)
+            const segI = '00'
+            const horaInicio = horaI + ':' + minsI + ':' + segI
+            const fechaYHoraInicio = FechaInicio + ' ' + horaInicio
+
+            if ((new Date(FechaFin)) >= fecha) {
               //console.log('EVENTO',item.idTipoEvento)
 
               return (
@@ -332,12 +346,15 @@ export function VerEventosScreen({ route, navigation }) {
                 }}>
 
                   <Image
-                    source={{uri: item.image}}
+                    source={{ uri: item.image }}
                     style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
                   />
                   <Text style={styles.titleText}>{item.title}</Text>
                   <Text style={styles.descriptionText}>
                     {item.description}
+                  </Text>
+                  <Text style={styles.PrecioText}>
+                    Precio: ${item.precio}
                   </Text>
                   <Text style={styles.fechaText}>
                     Vigente desde el {item.fechaInicio}
@@ -378,20 +395,20 @@ export function VerEventosScreen({ route, navigation }) {
                       </Pressable>
                       <Pressable
                         style={styles.button2}
-                        onPress={() =>
-                          {
-                            navigation.navigate("EditarEvento", {
-                              nombre: item.title,
-                              descripcion: item.description,
-                              fechaHoraInicio: fechaYHoraFinal,
-                              fechaHoraFin: fechaYHoraFinal,
-                              id: item.id,
-                              imagen: item.image,
-                              idEvento: item.idTipoEvento
-                          
+                        onPress={() => {
+                          navigation.navigate("EditarEvento", {
+                            nombre: item.title,
+                            descripcion: item.description,
+                            fechaHoraInicio: fechaYHoraInicio,
+                            fechaHoraFin: fechaYHoraFinal,
+                            id: item.id,
+                            imagen: item.image,
+                            idEvento: item.idTipoEvento,
+                            precio: item.precio,
 
-                            });
-                            }}
+
+                          });
+                        }}
                       >
                         <Text style={styles.titleButton}>Editar</Text>
                       </Pressable>
@@ -404,9 +421,9 @@ export function VerEventosScreen({ route, navigation }) {
 
               );
 
-            }else{
-        
-              if((new Date(FechaFin)) < fecha){
+            } else {
+
+              if ((new Date(FechaFin)) < fecha) {
 
                 return (
                   <SafeAreaView style={{
@@ -419,12 +436,15 @@ export function VerEventosScreen({ route, navigation }) {
                   }}>
 
                     <Image
-                      source={{uri: item.image}}
+                      source={{ uri: item.image }}
                       style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
                     />
                     <Text style={styles.titleText}>{item.title}</Text>
                     <Text style={styles.descriptionText}>
                       {item.description}
+                    </Text>
+                    <Text style={styles.PrecioText}>
+                      Precio: ${item.precio}
                     </Text>
                     <Text style={styles.fechaText}>
                       Vigente desde el {item.fechaInicio}
@@ -464,24 +484,23 @@ export function VerEventosScreen({ route, navigation }) {
                           <Text style={styles.titleButton}>Eliminar</Text>
                         </Pressable>
                         <Pressable
-                        style={styles.button2}
-                        onPress={() =>
-                        
-                          {
+                          style={styles.button2}
+                          onPress={() => {
                             navigation.navigate("EditarEvento", {
                               nombre: item.title,
                               descripcion: item.description,
-                              fechaHoraInicio: fechaYHoraFinal,
+                              fechaHoraInicio: fechaYHoraInicio,
                               fechaHoraFin: fechaYHoraFinal,
                               id: item.id,
                               imagen: item.image,
-                              idTipoEvento: item.idTipoEvento
+                              idTipoEvento: item.idTipoEvento,
+                              precio: item.precio,
 
                             });
-                            }}
-                      >
-                        <Text style={styles.titleButton}>Editar</Text>
-                      </Pressable>
+                          }}
+                        >
+                          <Text style={styles.titleButton}>Editar</Text>
+                        </Pressable>
                       </View>
                       :
                       console.log(fecha)
@@ -500,7 +519,7 @@ export function VerEventosScreen({ route, navigation }) {
           } />
       </View >
     )
-  
+
   }
 
 
@@ -520,94 +539,28 @@ export function VerEventosScreen({ route, navigation }) {
           decelerationRate='fast'
           style={{ marginBottom: 20 }}
           renderItem={({ item }) => {
-            const dia = item.fechaFin.substring(0,2)
-            const mes = item.fechaFin.substring(3,5)
-            const anio = item.fechaFin.substring(6,10)
-            const hora = item.fechaFin.substring(17,19)
-            const mins = item.fechaFin.substring(20,22)
+            const dia = item.fechaFin.substring(0, 2)
+            const mes = item.fechaFin.substring(3, 5)
+            const anio = item.fechaFin.substring(6, 10)
+            const hora = item.fechaFin.substring(17, 19)
+            const mins = item.fechaFin.substring(20, 22)
             const seg = '00'
-            const FechaFin = anio + '-'+ mes +'-'+dia
-            const horaFin = hora +':'+mins+':'+seg
-            const fechaYHoraFinal= FechaFin + ' '+horaFin 
+            const FechaFin = anio + '-' + mes + '-' + dia
+            const horaFin = hora + ':' + mins + ':' + seg
+            const fechaYHoraFinal = FechaFin + ' ' + horaFin
+
+            const diaI = item.fechaInicio.substring(0, 2)
+            const mesI = item.fechaInicio.substring(3, 5)
+            const anioI = item.fechaInicio.substring(6, 10)
+            const FechaInicio = anioI + '-' + mesI + '-' + diaI
+            const horaI = item.fechaInicio.substring(17, 19)
+            const minsI = item.fechaInicio.substring(20, 22)
+            const segI = '00'
+            const horaInicio = horaI + ':' + minsI + ':' + segI
+            const fechaYHoraInicio = FechaInicio + ' ' + horaInicio
+
             //console.log((fechaYHoraFinal))
-            if((new Date(FechaFin)) >= fecha){
-            return (
-              //console.log(item),
-              <SafeAreaView style={{
-                backgroundColor: "#e8ded3",
-                width: width * 0.8 - 20,
-                marginHorizontal: 10,
-                paddingBottom: 20,
-                borderRadius: 12,
-              }}>
-                <Image
-                  source={{uri: item.image}}
-                  style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
-                />
-                <Text style={styles.titleText}>{item.title}</Text>
-                <Text style={styles.descriptionText}>
-                  {item.description}
-                </Text>
-                <Text style={styles.fechaText}>
-                  Vigente desde el {item.fechaInicio}
-                  Hasta el {item.fechaFin}
-                </Text>
-                {item.idLocal == localDueño[0] ?
-                  <View style={{ alignItems: 'center' }}>
-                    <Pressable
-                      style={styles.button2}
-                      onPress={() => Alert.alert(
-                        "Eliminar",
-                        "¿Desea eliminar la promoción?",
-                        [
-                          {
-                            text: "Cancelar",
-                            onPress: () => console.log("Cancel Pressed"),
-                            style: "cancel"
-                          },
-                          {
-                            text: "Aceptar",
-                            onPress: () => Backend.deletePromocion(item.id).then((items) => Alert.alert("Promoción eliminada con éxito"), navigation.dispatch({
-                              ...StackActions.replace('VerEventos', {
-                                idLocal: idLocal, latitud: latitud, longitud: longitud
-                              }),
-                              source: route.key,
-                              target: navigation.getState().key,
-
-                            }))
-                          }
-                        ]
-                      )}
-                    >
-                      <Text style={styles.titleButton}>Eliminar</Text>
-                    </Pressable>
-                    <Pressable
-                        style={styles.button2}
-                        onPress={() =>
-                          {
-                            navigation.navigate("EditarPromocion", {
-                              nombre: item.title,
-                              descripcion: item.description,
-                              fechaHoraInicio: fechaYHoraFinal,
-                              fechaHoraFin: fechaYHoraFinal,
-                              id: item.id,
-                              imagen: item.image,
-                              idLocal: item.idLocal
-                              
-                            });
-                            }}
-                      >
-                        <Text style={styles.titleButton}>Editar</Text>
-                      </Pressable>
-                  </View>
-                  :
-                  console.log('bien')
-                }
-              </SafeAreaView>
-            );}else{
-              //console.log(new Date(FechaFin), fecha)
-              if((new Date(FechaFin)) < fecha){
-
+            if ((new Date(FechaFin)) >= fecha) {
               return (
                 //console.log(item),
                 <SafeAreaView style={{
@@ -618,7 +571,7 @@ export function VerEventosScreen({ route, navigation }) {
                   borderRadius: 12,
                 }}>
                   <Image
-                    source={item.image}
+                    source={{ uri: item.image }}
                     style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
                   />
                   <Text style={styles.titleText}>{item.title}</Text>
@@ -653,8 +606,6 @@ export function VerEventosScreen({ route, navigation }) {
 
                               }))
                             }
-
-
                           ]
                         )}
                       >
@@ -662,19 +613,18 @@ export function VerEventosScreen({ route, navigation }) {
                       </Pressable>
                       <Pressable
                         style={styles.button2}
-                        onPress={() =>
-                          {
-                            navigation.navigate("EditarPromocion", {
-                              nombre: item.title,
-                              descripcion: item.description,
-                              fechaHoraInicio: fechaYHoraFinal,
-                              fechaHoraFin: fechaYHoraFinal,
-                              id: item.id,
-                              imagen: item.idPromocion,
-                              idLocal: item.idLocal
-                              
-                            });
-                            }}
+                        onPress={() => {
+                          navigation.navigate("EditarPromocion", {
+                            nombre: item.title,
+                            descripcion: item.description,
+                            fechaHoraInicio: fechaYHoraInicio,
+                            fechaHoraFin: fechaYHoraFinal,
+                            id: item.id,
+                            imagen: item.image,
+                            idLocal: item.idLocal
+
+                          });
+                        }}
                       >
                         <Text style={styles.titleButton}>Editar</Text>
                       </Pressable>
@@ -684,6 +634,85 @@ export function VerEventosScreen({ route, navigation }) {
                   }
                 </SafeAreaView>
               );
+            } else {
+              //console.log(new Date(FechaFin), fecha)
+              if ((new Date(FechaFin)) < fecha) {
+
+                return (
+                  //console.log(item),
+                  <SafeAreaView style={{
+                    backgroundColor: "#e8ded3",
+                    width: width * 0.8 - 20,
+                    marginHorizontal: 10,
+                    paddingBottom: 20,
+                    borderRadius: 12,
+                  }}>
+                    <Image
+                      source={item.image}
+                      style={{ margin: "2%", width: "96%", height: 200, borderRadius: 12 }}
+                    />
+                    <Text style={styles.titleText}>{item.title}</Text>
+                    <Text style={styles.descriptionText}>
+                      {item.description}
+                    </Text>
+                    <Text style={styles.fechaText}>
+                      Vigente desde el {item.fechaInicio}
+                      Hasta el {item.fechaFin}
+                    </Text>
+                    {item.idLocal == localDueño[0] ?
+                      <View style={{ alignItems: 'center' }}>
+                        <Pressable
+                          style={styles.button2}
+                          onPress={() => Alert.alert(
+                            "Eliminar",
+                            "¿Desea eliminar la promoción?",
+                            [
+                              {
+                                text: "Cancelar",
+                                onPress: () => console.log("Cancel Pressed"),
+                                style: "cancel"
+                              },
+                              {
+                                text: "Aceptar",
+                                onPress: () => Backend.deletePromocion(item.id).then((items) => Alert.alert("Promoción eliminada con éxito"), navigation.dispatch({
+                                  ...StackActions.replace('VerEventos', {
+                                    idLocal: idLocal, latitud: latitud, longitud: longitud
+                                  }),
+                                  source: route.key,
+                                  target: navigation.getState().key,
+
+                                }))
+                              }
+
+
+                            ]
+                          )}
+                        >
+                          <Text style={styles.titleButton}>Eliminar</Text>
+                        </Pressable>
+                        <Pressable
+                          style={styles.button2}
+                          onPress={() => {
+                            navigation.navigate("EditarPromocion", {
+                              nombre: item.title,
+                              descripcion: item.description,
+                              fechaHoraInicio: fechaYHoraInicio,
+                              fechaHoraFin: fechaYHoraFinal,
+                              id: item.id,
+                              imagen: item.idPromocion,
+                              idLocal: item.idLocal
+
+                            });
+                          }}
+                        >
+                          <Text style={styles.titleButton}>Editar</Text>
+                        </Pressable>
+                      </View>
+                      :
+                      console.log('bien')
+                    }
+                  </SafeAreaView>
+                );
               }
 
             }
@@ -693,7 +722,7 @@ export function VerEventosScreen({ route, navigation }) {
     )
   }
 
-    
+
 
   const sinPromos = () => {
     return (
@@ -740,14 +769,14 @@ export function VerEventosScreen({ route, navigation }) {
       <View>
         <ScrollView>
 
-<View style={{ alignItems: 'center' }}>
-        <Pressable
-        style={estiloAsistencia}
-        onPress={() => funcionAsistencia()}
-        >
-          <Text style={styles.titleButton}>{voy}</Text>
-        </Pressable>
-</View>
+          <View style={{ alignItems: 'center' }}>
+            <Pressable
+              style={estiloAsistencia}
+              onPress={() => funcionAsistencia()}
+            >
+              <Text style={styles.titleButton}>{voy}</Text>
+            </Pressable>
+          </View>
 
           <View style={styles.tabPress2}>
             <Pressable style={styles.insta} onPress={() => openBrowserAsync("https://www.instagram.com/" + insta[0])} >
@@ -809,14 +838,14 @@ export function VerEventosScreen({ route, navigation }) {
       <View>
         <ScrollView>
 
-<View style={{ alignItems: 'center' }}>
-        <Pressable
-        style={estiloAsistencia}
-        onPress={() => funcionAsistencia()}
-        >
-          <Text style={styles.titleButton}>{voy}</Text>
-        </Pressable>
-</View>
+          <View style={{ alignItems: 'center' }}>
+            <Pressable
+              style={estiloAsistencia}
+              onPress={() => funcionAsistencia()}
+            >
+              <Text style={styles.titleButton}>{voy}</Text>
+            </Pressable>
+          </View>
 
           <View style={styles.tabPress2}>
             <Pressable style={styles.insta} onPress={() => openBrowserAsync("https://www.instagram.com/" + insta)} >
@@ -953,5 +982,10 @@ const styles = StyleSheet.create({
   deshabilitar: {
     opacity: 0.5,
 
-  }
+  },
+  PrecioText: {
+    paddingStart: 10,
+    fontSize: 15,
+    fontWeight: "bold",
+  },
 });

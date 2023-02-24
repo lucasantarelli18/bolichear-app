@@ -14,16 +14,18 @@ import DropDownPicker from "react-native-dropdown-picker";
 
 export function EditarEventoScreen({ route, navigation: { goBack } }) {
 
-  const { nombre, descripcion, fechaHoraInicio, fechaHoraFin, id, imagen, idTipoEvento } = route.params;
+  const { nombre, descripcion, fechaHoraInicio, fechaHoraFin, id, imagen, idTipoEvento, precio } = route.params;
 
   const [modificaNombre, setModificaNombre] = React.useState(false);
   const [modificaDescripcion, setModificaDescripcion] = React.useState(false);
+  const [modificaPrecio, setModificaPrecio] = React.useState(false);
   const [modificaFoto, setModificaFoto] = React.useState(false);
   const [modificaFechaInicio, setModificaFechaInicio] = React.useState(false);
   const [modificaFechaFin, setModificaFechaFin] = React.useState(false);
   const [modificaIdEvento, setModificaIdEvento] = React.useState(true);
   const [nombreEvento, setNombreEvento] = React.useState(nombre);
   const [descripcionEvento, setDescripcionEvento] = React.useState(descripcion);
+  const [precioEvento, setPrecioEvento] = React.useState(precio);
   const [fechaInicio, setFechaInicio] = React.useState(fechaHoraInicio);
   const [fechaFin, setFechaFin] = React.useState(fechaHoraFin);
   const [image, setImage] = React.useState(imagen);
@@ -35,7 +37,11 @@ export function EditarEventoScreen({ route, navigation: { goBack } }) {
   const [value, setValue] = React.useState(idTipoEvento);
   const [items, setItems] = React.useState([]);
 
-
+  if (precio == null) {
+    setPrecioEvento("0")
+  }
+  console.log(fechaHoraInicio)
+  console.log(fechaHoraFin)
   React.useEffect(() => {
 
 
@@ -49,7 +55,6 @@ export function EditarEventoScreen({ route, navigation: { goBack } }) {
     });
 
   }, []);
-
 
   const showDateTimePicker = () => {
     setFechaYHoraIncioMuestra(true);
@@ -135,6 +140,20 @@ export function EditarEventoScreen({ route, navigation: { goBack } }) {
           />
         </View>
 
+        <Text style={styles.titulos}>Precio de la entrada</Text>
+        <View style={styles.container2}>
+          <TextInput
+            style={styles.input}
+            defaultValue={String(precioEvento)}
+            keyboardType="numeric"
+            onChangeText={(text) => {
+              setPrecioEvento(text),
+                setModificaPrecio(true)
+              console.log(precioEvento)
+            }}
+          />
+        </View>
+
         <Text style={styles.titulos}>Vigencia</Text>
         <View style={styles.container2}>
           <Pressable style={styles.buttonF} title="Inicio" onPress={showDateTimePicker}>
@@ -161,6 +180,7 @@ export function EditarEventoScreen({ route, navigation: { goBack } }) {
           <DateTimePickerModal
             isVisible={fechaYHoraFinMuestra}
             mode="datetime"
+            defaultValue={fechaFin}
             onConfirm={(datetime) => { hideDateTimePicker2(); setFechaFin(Moment(datetime).format('YYYY-MM-DD HH:mm:ss')), setModificaFechaFin(true) }}
             onCancel={hideDateTimePicker2}
           />
@@ -186,9 +206,9 @@ export function EditarEventoScreen({ route, navigation: { goBack } }) {
 
 
         <Pressable onPress={() => {
-          if (modificaNombre || modificaFoto || modificaDescripcion || modificaFechaFin || modificaFechaInicio || modificaIdEvento) {
-            console.log(id + " " + nombreEvento + " " + descripcionEvento + " " + fechaInicio + " " + fechaFin + ' ' + image)
-            Backend.updateEvento(id, nombreEvento, descripcionEvento, fechaInicio, fechaFin, value, image)
+          if (modificaNombre || modificaFoto || modificaDescripcion || modificaFechaFin || modificaFechaInicio || modificaIdEvento || modificaPrecio) {
+            console.log(id + " " + nombreEvento + " " + descripcionEvento + " " + fechaInicio + " " + fechaFin + ' ' + image + ' ' + precioEvento)
+            Backend.updateEvento(id, nombreEvento, descripcionEvento, fechaInicio, fechaFin, value, image, precioEvento)
               .then((items) => {
                 //console.log(items)
                 Alert.alert('Datos modificados con éxito!')
