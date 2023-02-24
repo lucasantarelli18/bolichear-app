@@ -3,12 +3,55 @@ import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Image, Ima
 import AuthContext from "../AuthContext"
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
+import * as Backend from '../backlog';
 
 export function SignInScreen() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [todoss, setTodoss] = React.useState([]);
+  var todos = [];
 
-  const { signIn } = React.useContext(AuthContext);
+  const { signIn, token, signUp } = React.useContext(AuthContext);
+
+  const log = () => {
+      console.log(todoss)
+      if (todoss.includes(username)){
+
+        Backend.getUsuariosLogin(username, password).then((items) => {
+          if(items.length > 0){
+            //console.log(items[0].id)
+            Backend.updateLogged(items[0].id)
+            signIn(items[0].id)
+          }else{
+            window.alert("Contraseña incorrecta")
+          }
+
+      })
+
+      } else {
+        window.alert("El usuario no está registrado")
+      }
+
+    }
+
+  React.useEffect(() => {
+
+    Backend.getControl()
+      .then((items) => {
+        console.log(items)
+        //setLogeado(items[0].logged)
+      })
+
+    Backend.getUsuarios()
+      .then((items) => {
+        //console.log(items)
+        for (const i in items) {
+            todos.push(items[i].nombre)
+        }
+        setTodoss(todos)
+      })
+
+  }, [])
 
   return (
 
@@ -35,7 +78,8 @@ export function SignInScreen() {
         <Text style={styles.texto}>Olvidé mi contraseña</Text>
         <Pressable
           style={styles.container3}
-          onPress={() => signIn({ username, password })}>
+                    //onPress={() => console.log(token()._W.userToken) }>
+          onPress={() => log()}>
           <LinearGradient
             // Button Linear Gradient
             colors={['#C2454A', '#A32934', '#680008']}

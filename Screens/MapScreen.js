@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Checkbox } from 'react-native-paper';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import DropDownPicker from "react-native-dropdown-picker";
+import AuthContext from "../AuthContext"
 
 export function MapScreen({ route, navigation }) {
 
@@ -21,6 +22,8 @@ export function MapScreen({ route, navigation }) {
   const [locales, setLocales] = React.useState([]);
   const [localesFiltrados, setLocalesFiltrados] = React.useState([]);
   const { calle, numero, localidad, latitud, longitud, rango } = route.params;
+  const [logeado, setLogeado] = React.useState('');
+  const { token } = React.useContext(AuthContext);
 
   //console.log("Buenas, esta es la calle y el numero", calle, numero, localidad)
 
@@ -42,33 +45,38 @@ export function MapScreen({ route, navigation }) {
   const [openTE, setOpenTE] = useState(false);
   const [valueTE, setValueTE] = useState(null);
   const [itemsTE, setItemsTE] = useState([
-    {label: "Todos", value: 0},
-    {label: "Fiesta", value: 1},
-    {label: "Show en vivo", value: 2},
-    {label: "Tematica", value: 3},
-    {label: "Noche cachengue", value: 4},
-    {label: "Noche electronica", value: 5}    
-    ]);
-/*
-  const [openTL, setOpenTL] = useState(false);
-  const [valueTL, setValueTL] = useState(null);
-  const [itemsTL, setItemsTL] = useState([
-    {label: "Todos", value: 0},
-    {label: "Boliche", value: 1},
-    {label: "Bar", value: 2}
-    ]);
-  const [openPR, setOpenPR] = useState(false);
-  const [valuePR, setValuePR] = useState(null);
-  const [itemsPR, setItemsPR] = useState([
-    {label: "Todos", value: 0},
-    {label: "Ascendente", value: 1},
-    {label: "Descendente", value: 2}
-    ]);
-*/
+    { label: "Todos", value: 0 },
+    { label: "Fiesta", value: 1 },
+    { label: "Show en vivo", value: 2 },
+    { label: "Tematica", value: 3 },
+    { label: "Noche cachengue", value: 4 },
+    { label: "Noche electronica", value: 5 }
+  ]);
+  /*
+    const [openTL, setOpenTL] = useState(false);
+    const [valueTL, setValueTL] = useState(null);
+    const [itemsTL, setItemsTL] = useState([
+      {label: "Todos", value: 0},
+      {label: "Boliche", value: 1},
+      {label: "Bar", value: 2}
+      ]);
+    const [openPR, setOpenPR] = useState(false);
+    const [valuePR, setValuePR] = useState(null);
+    const [itemsPR, setItemsPR] = useState([
+      {label: "Todos", value: 0},
+      {label: "Ascendente", value: 1},
+      {label: "Descendente", value: 2}
+      ]);
+  */
   const hideMenu = () => setVisible(false);
 
   const showMenu = () => setVisible(true);
   React.useEffect(() => {
+
+    Backend.getControl().then((items) => 
+      setLogeado(items[0].logged)
+      )
+
     Backend.getLocalxDomicilio()
       .then((items) => {
         //console.log(items)
@@ -81,19 +89,30 @@ export function MapScreen({ route, navigation }) {
           const val = Math.pow(latMts, 2) + Math.pow(lonMts, 2);
           const dist = Math.sqrt(val);
           const distkm = (dist / 1000).toFixed(2);
-         
+
           if (dist < rango) {
             //console.log("dentro del rango")
             //distancia.push(items[i].dist = distkm).sort((a,b)=> a -b)
             console.log(items[i].dist = distkm)
             //console.log(items[i])
             let asistDelLocal = 0
-            for (const j in items[i].Asistencia){
-              if(items[i].Asistencia[j].created_at.split('T')[0] == date.toISOString().split('T')[0]){
+            for (const j in items[i].Asistencia) {
+              if (items[i].Asistencia[j].created_at.split('T')[0] == date.toISOString().split('T')[0]) {
                 asistDelLocal++;
               }
             }
+            let preciomayor = 0
+            for (const k in items[i].Evento) {
+              if (items[i].Evento[k].precio > preciomayor) {
+                preciomayor = items[i].Evento[k].precio
+              }
+            }
+            console.log(preciomayor)
+            mapa.set(items[i].id, preciomayor)
+            items[i].precio = preciomayor
             mapa.set(items[i].id, asistDelLocal)
+            items[i].Asistencia = asistDelLocal
+            console.log(items[i])
             arr.push(items[i])
           } else {
             //console.log("fuera del rango")
@@ -178,7 +197,6 @@ export function MapScreen({ route, navigation }) {
 
     } else if (filtrar == 0) {
       return locales.map((element) => {
-        //console.log(element.dist)
         return (
           <Pressable
             onPress={() => {
@@ -302,7 +320,7 @@ export function MapScreen({ route, navigation }) {
         </View>
 
 
-{/*
+        {/*
       <View style={styles.container2}>
         <DropDownPicker
           style={styles.input2}
@@ -329,77 +347,161 @@ export function MapScreen({ route, navigation }) {
       </View>
 */}
 
-        <Pressable style={styles.button} onPress={() => {
-          const array = locales
-          const arrayFiltrado = []
+        {visible ? (<View style={styles.container2}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+            <View>
+              <Text style={{
+                width: "100%", fontWeight: "bold",
+                fontSize: 10,
+                margin: 5
+              }}>Filtrar por</Text>
+            </View>
+            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+          </View>
 
-          if (valueTE == null) {
-            for (const i in array){
-              arrayFiltrado.push(array[i])
-            }
-          } else if (valueTE == 0) {
-            for (const i in array){
-            //console.log(array[i]);
-            if (array[i].Evento.length > 0) {
-              arrayFiltrado.push(array[i])
-            }}
-          } else {
-            
-              for (const i in array){
-                const tiposDeEvento = []    
-                for (const j in array[i].Evento){
-                  tiposDeEvento.push(array[i].Evento[j].idTipoEvento)
-                }
-                //console.log(tiposDeEvento)
-                if (tiposDeEvento.includes(valueTE)) {
+          <View style={{ justifyContent: "center", width: "70%", flexDirection: 'row' }}>
+            <DropDownPicker
+              style={styles.input2}
+              open={openTE}
+              value={valueTE}
+              items={itemsTE}
+              setOpen={setOpenTE}
+              setValue={setValueTE}
+              setItems={setItemsTE}
+              placeholder="Tipo de evento"
+            />
+
+            <Pressable style={styles.button} onPress={() => {
+              const array = locales
+              const arrayFiltrado = []
+
+              if (valueTE == null) {
+                for (const i in array) {
                   arrayFiltrado.push(array[i])
-                } 
+                }
+              } else if (valueTE == 0) {
+                for (const i in array) {
+                  //console.log(array[i]);
+                  if (array[i].Evento.length > 0) {
+                    arrayFiltrado.push(array[i])
+                  }
+                }
+              } else {
 
-            }
-            }
-          
-          setLocalesFiltrados(arrayFiltrado)
+                for (const i in array) {
+                  const tiposDeEvento = []
+                  for (const j in array[i].Evento) {
+                    tiposDeEvento.push(array[i].Evento[j].idTipoEvento)
+                  }
+                  //console.log(tiposDeEvento)
+                  if (tiposDeEvento.includes(valueTE)) {
+                    arrayFiltrado.push(array[i])
+                  }
 
-          changeFiltrar(filtrar+1)
-        } } >
-            <Text style={styles.text}>FILTRAR FIESTAS</Text>
-        </Pressable>
+                }
+              }
+
+              setLocalesFiltrados(arrayFiltrado)
+
+              changeFiltrar(filtrar + 1)
+            }} >
+              <Text style={styles.text}>✔️</Text>
+            </Pressable>
+          </View>
 
 
-      <View style={styles.container2}>
-        <DropDownPicker
-          style={styles.input2}
-          open={openTE}
-          value={valueTE}
-          items={itemsTE}
-          setOpen={setOpenTE}
-          setValue={setValueTE}
-          setItems={setItemsTE}
-          placeholder="Tipo de evento"
-        />
-      </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+            <View>
+              <Text style={{
+                width: "100%", fontWeight: "bold",
+                fontSize: 10,
+                margin: 5
+              }}>Ordenar por</Text>
+            </View>
+            <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
+          </View>
 
-      <Pressable style={styles.button} onPress={() => {
-         if(filtrar == 0){
-            const ordenados = locales.sort((a,b) => a.dist - b.dist) 
-            setLocalesFiltrados(ordenados)
-            changeFiltrar(filtrar+1)
-     
-         } else {
-            const ordenados = localesFiltrados.sort((a,b) => a.dist - b.dist)
-            setLocalesFiltrados(ordenados)
-            changeFiltrar(filtrar+1)
-         }
-         
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Pressable style={styles.button3} onPress={() => {
+              if (filtrar == 0) {
+                const ordenados = locales.sort((a, b) => a.dist - b.dist)
+                setLocalesFiltrados(ordenados)
+                changeFiltrar(filtrar + 1)
+                console.log(locales.id)
 
-          
-        } } >
-            <Text style={styles.text}>Ordenar por distancia</Text>
-        </Pressable>
+              } else {
+                const ordenados = localesFiltrados.sort((a, b) => a.dist - b.dist)
+                setLocalesFiltrados(ordenados)
+                changeFiltrar(filtrar + 1)
+              }
+
+
+
+            }} >
+              <Text style={styles.text}>Distancia</Text>
+            </Pressable>
+
+            <Pressable style={styles.button3} onPress={() => {
+              if (filtrar == 0) {
+                const ordenados = locales.sort((a, b) => b.Asistencia - a.Asistencia)
+                setLocalesFiltrados(ordenados)
+                changeFiltrar(filtrar + 1)
+
+              } else {
+                const ordenados = localesFiltrados.sort((a, b) => b.Asistencia - a.Asistencia)
+                setLocalesFiltrados(ordenados)
+                changeFiltrar(filtrar + 1)
+              }
+            }} >
+              <Text style={styles.text}>Asistencia</Text>
+            </Pressable>
+
+            <Pressable style={styles.button3} onPress={() => {
+              if (filtrar == 0) {
+                const ordenados = locales.sort((a, b) => b.precio - a.precio)
+                setLocalesFiltrados(ordenados)
+                changeFiltrar(filtrar + 1)
+
+              } else {
+                const ordenados = localesFiltrados.sort((a, b) => b.precio - a.precio)
+                setLocalesFiltrados(ordenados)
+                changeFiltrar(filtrar + 1)
+              }
+            }} >
+              <Text style={styles.text}>{">"} Precio</Text>
+            </Pressable>
+
+
+
+          </View>
+
+          <Pressable style={styles.button4} onPress={hideMenu} >
+            <Text style={styles.text}>Ocultar Filtros</Text>
+          </Pressable>
+
+
+        </View>
+
+        ) : (
+          <Pressable style={styles.button4} onPress={showMenu} >
+            <Text style={styles.text}>Mostrar Filtros</Text>
+          </Pressable>
+        )}
+
+
+
 
         <ScrollView style={styles.container}>{list()}</ScrollView>
 
-        <Pressable style={styles.button} onPress={() => {
+{ logeado == 0 || logeado == '' ? 
+
+  console.log("No esta logeado")
+
+:
+
+  <Pressable style={styles.button} onPress={() => {
           navigation.navigate('Locales', {
             latitud: latitud,
             longitud: longitud,
@@ -407,10 +509,14 @@ export function MapScreen({ route, navigation }) {
             idLocalidad: idLocalidad,
             calle: calle,
             numero: numero,
+            idDueno: logeado,
           });
         }}>
           <Text style={styles.text}>IR A MI LOCAL</Text>
-        </Pressable>
+  </Pressable>
+  
+}
+
         <View style={styles.tabCambio}>
           <Pressable style={styles.tabPress} onPress={() => changeCambio(true)}>
             <Text>Mapa</Text>
@@ -432,6 +538,17 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '92%'
   },
+  container: {
+    width: "%",
+    backgroundColor: "black",
+  },
+  container2: {
+    width: '100%',
+    //backgroundColor: '#fff',
+    justifyContent: "center",
+    alignItems: "center",
+
+  },
   tabCambio: {
     //flex: 1,
     //width: '100%',
@@ -440,8 +557,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: "center",
     justifyContent: "center",
-    //borderColor: 'gray',
-    //borderTopWidth: 1,
+
   },
   tabPress: {
     //flex: 1,
@@ -450,6 +566,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: 'white',
+    borderColor: 'lightgray',
+    borderWidth: 1,
   },
   tabPress2: {
     //flex: 1,
@@ -459,7 +577,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: 'white',
     borderColor: 'lightgray',
-    borderLeftWidth: 1,
+    borderWidth: 1,
   },
   viewCien: {
     flex: 1,
@@ -563,7 +681,29 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     elevation: 3,
     backgroundColor: "black",
-    marginVertical: 10
+    marginVertical: 10,
+  },
+  button4: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 30,
+    elevation: 3,
+    backgroundColor: "black",
+    marginVertical: 10,
+    width: "95%"
+  },
+  button3: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 30,
+    elevation: 3,
+    backgroundColor: "black",
+    marginVertical: 10,
+    marginHorizontal: "2%",
   },
   button2: {
     alignItems: "center",
@@ -595,17 +735,14 @@ const styles = StyleSheet.create({
     borderBottomStartRadius: 500,
 
   },
-    input2: {
-    padding: 7,
-    width: "80%",
+  input2: {
+
+    width: "90%",
     marginTop: 10,
-    marginHorizontal: "10%",
-    alignItems: "center",
     borderRadius: 30,
     backgroundColor: '#f1f1f1',
     fontFamily: "Roboto-Medium",
     paddingStart: 30,
-
     fontSize: 16,
     elevation: 10,
   }

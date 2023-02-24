@@ -8,7 +8,7 @@ export const getAsistenciasXUser = async (idUsuario) => {
     .from("Asistencia")
     .select("*")
     .eq('idUsuario', idUsuario)
-    //.eq('fecha', fecha)
+  //.eq('fecha', fecha)
   return Asistencia;
 };
 
@@ -55,7 +55,8 @@ export const getLocalxDomicilio = async () => {
       id,
       fechaHoraInicio,
       fechaHoraFin,
-      idTipoEvento
+      idTipoEvento,
+      precio
     ),
     Asistencia(
       id,
@@ -210,8 +211,22 @@ export const getTipoEventos = async () => {
 };
 
 export const getUsuarios = async () => {
-  let { data: Usuario, error } = await supabase.from("Usuario").select("*");
+  let { data: Usuario, error } = await supabase.from("Usuario")
+  .select("nombre")
+  .neq('nombre', 'null')
+  ;
   return Usuario;
+};
+
+export const getUsuariosLogin = async (mail, pass) => {
+let { data: Usuario, error } = await supabase
+    .from('Usuario')
+    .select(`
+    *
+  `)
+    .eq("nombre", mail)
+    .eq("password", pass)
+  return Usuario
 };
 
 //Inserts
@@ -323,7 +338,8 @@ export const insertEvento = async (
   fHoraFin,
   idTipoEvento,
   idLocal,
-  path
+  path,
+  precio
 ) => {
   const { data, error } = await supabase.from("Evento").insert([
     {
@@ -333,7 +349,8 @@ export const insertEvento = async (
       fechaHoraFin: fHoraFin,
       idTipoEvento: idTipoEvento,
       idLocal: idLocal,
-      path: path
+      path: path,
+      precio: precio
     },
   ]);
 };
@@ -399,7 +416,7 @@ export const updatePromocion = async (id, nombrePromo, descrip, fHInicio, fHFin,
 
 
 
-export const updateEvento = async (id,nombre, descrip, fHInicio, fHFin, idTipoEvento,path) => {
+export const updateEvento = async (id, nombre, descrip, fHInicio, fHFin, idTipoEvento, path, precio) => {
   const { data, error } = await supabase
     .from('Evento')
     .update({
@@ -408,7 +425,8 @@ export const updateEvento = async (id,nombre, descrip, fHInicio, fHFin, idTipoEv
       fechaHoraInicio: fHInicio,
       fechaHoraFin: fHFin,
       idTipoEvento: idTipoEvento,
-      path: path
+      path: path,
+      precio: precio
     })
     .eq('id', id)
 }
@@ -459,9 +477,17 @@ export const deletePromoXLocal = async (idLocal) => {
     .match({ idLocal: idLocal })
 }
 
+export const deleteAsistenciaXLocal = async (idLocal) => {
+  const { data, error } = await supabase
+    .from('Asistencia')
+    .delete()
+    .match({ idLocal: idLocal })
+}
+
 export const deleteLocal = async (idLocal) => {
   deletePromoXLocal(idLocal);
   deleteEventoXLocal(idLocal);
+  deleteAsistenciaXLocal(idLocal);
   const { data, error } = await supabase
     .from('Local')
     .delete()
@@ -473,4 +499,26 @@ export const deleteEvento = async (idEvento) => {
     .from('Evento')
     .delete()
     .match({ id: idEvento })
+}
+
+///////////////////////////////////////////////////////////////////////////////////
+
+/*export const getProvincias = async () => {
+  let { data: Provincia, error } = await supabase.from("Provincia").select("*");
+  return Provincia;
+};*/
+
+export const getControl = async () => {
+  let { data: Provincia, error } = await supabase.from("Control").select("*");
+  return Provincia;
+};
+
+
+export const updateLogged = async (idLogged) => {
+  const { data, error } = await supabase
+    .from('Control')
+    .update({
+      logged: idLogged
+    })
+    .eq('id', 1)
 }
