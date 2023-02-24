@@ -210,8 +210,22 @@ export const getTipoEventos = async () => {
 };
 
 export const getUsuarios = async () => {
-  let { data: Usuario, error } = await supabase.from("Usuario").select("*");
+  let { data: Usuario, error } = await supabase.from("Usuario")
+  .select("nombre")
+  .neq('nombre', 'null')
+  ;
   return Usuario;
+};
+
+export const getUsuariosLogin = async (mail, pass) => {
+let { data: Usuario, error } = await supabase
+    .from('Usuario')
+    .select(`
+    *
+  `)
+    .eq("nombre", mail)
+    .eq("password", pass)
+  return Usuario
 };
 
 //Inserts
@@ -473,4 +487,26 @@ export const deleteEvento = async (idEvento) => {
     .from('Evento')
     .delete()
     .match({ id: idEvento })
+}
+
+///////////////////////////////////////////////////////////////////////////////////
+
+/*export const getProvincias = async () => {
+  let { data: Provincia, error } = await supabase.from("Provincia").select("*");
+  return Provincia;
+};*/
+
+export const getControl = async () => {
+  let { data: Provincia, error } = await supabase.from("Control").select("*");
+  return Provincia;
+};
+
+
+export const updateLogged = async (idLogged) => {
+  const { data, error } = await supabase
+    .from('Control')
+    .update({
+      logged: idLogged
+    })
+    .eq('id', 1)
 }

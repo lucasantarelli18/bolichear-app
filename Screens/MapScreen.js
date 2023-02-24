@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Checkbox } from 'react-native-paper';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import DropDownPicker from "react-native-dropdown-picker";
+import AuthContext from "../AuthContext"
 
 export function MapScreen({ route, navigation }) {
 
@@ -21,6 +22,8 @@ export function MapScreen({ route, navigation }) {
   const [locales, setLocales] = React.useState([]);
   const [localesFiltrados, setLocalesFiltrados] = React.useState([]);
   const { calle, numero, localidad, latitud, longitud, rango } = route.params;
+  const [logeado, setLogeado] = React.useState('');
+  const { token } = React.useContext(AuthContext);
 
   //console.log("Buenas, esta es la calle y el numero", calle, numero, localidad)
 
@@ -69,6 +72,11 @@ export function MapScreen({ route, navigation }) {
 
   const showMenu = () => setVisible(true);
   React.useEffect(() => {
+
+    Backend.getControl().then((items) => 
+      setLogeado(items[0].logged)
+      )
+
     Backend.getLocalxDomicilio()
       .then((items) => {
         //console.log(items)
@@ -475,7 +483,13 @@ export function MapScreen({ route, navigation }) {
 
         <ScrollView style={styles.container}>{list()}</ScrollView>
 
-        <Pressable style={styles.button} onPress={() => {
+{ logeado == 0 || logeado == '' ? 
+
+  console.log("No esta logeado")
+
+:
+
+  <Pressable style={styles.button} onPress={() => {
           navigation.navigate('Locales', {
             latitud: latitud,
             longitud: longitud,
@@ -483,10 +497,14 @@ export function MapScreen({ route, navigation }) {
             idLocalidad: idLocalidad,
             calle: calle,
             numero: numero,
+            idDueno: logeado,
           });
         }}>
           <Text style={styles.text}>IR A MI LOCAL</Text>
-        </Pressable>
+  </Pressable>
+  
+}
+
         <View style={styles.tabCambio}>
           <Pressable style={styles.tabPress} onPress={() => changeCambio(true)}>
             <Text>Mapa</Text>

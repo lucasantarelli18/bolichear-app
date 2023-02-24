@@ -17,10 +17,10 @@ import * as Backend from "../backlog";
 //import Constants from 'expo-constants';
 
 export function LocalesScreen({ route, navigation }) {
-  const { latitud, longitud, localidad, idLocalidad, calle, numero } = route.params;
+  const { latitud, longitud, localidad, idLocalidad, calle, numero, idDueno } = route.params;
 
   //traer del login
-  const idDueno = 5;
+  //const idDueno = 5;
 
   //console.log("Buenas, esta es la calle y el numero", calle, numero, idLocalidad, localidad)
   //traer del home
@@ -95,7 +95,7 @@ export function LocalesScreen({ route, navigation }) {
 
   const list = () => {
     return locales.map((element) => {
-      console.log(element)
+      //console.log(element)
       //console.log("LISTAAAAAAAAA LOCAL", element);
       return (
         <ScrollView style={styles.container2}>
